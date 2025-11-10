@@ -24,3 +24,19 @@
         :allow "fullscreen;accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture;web-share")))))
 
 (org-link-set-parameters "youtube" :export #'one-ox-link-youtube)
+
+(defun one-ox-link-image (link description type info)
+  "Export custom image link `[[image:path/to/file.png][optional caption]]'."
+  (let* ((src (if (string-prefix-p "/" link)
+                  link
+                (concat "/images/" link))) ;; assume images live in /images/
+         (alt (or description (file-name-base link))))
+    (jack-html
+     `(:figure
+       (:img (@ :src ,src
+                :alt ,alt
+                :style "max-width:100%;border-radius:8px;"))
+       ,(when description
+          `(:figcaption ,description))))))
+
+(org-link-set-parameters "image" :export #'one-ox-link-image)

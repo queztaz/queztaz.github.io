@@ -5,6 +5,8 @@
 :END:
 # <2025-11-02 Sun 20:15>
 
+image:homepage.png
+
 Hi all (^_^)/
 
 I'm Peter, 23, and I enjoy computers & philosophy.
@@ -85,34 +87,34 @@ including the solutions that left me with a working system.
 
 *** Create an external app
 
-# [[./Nb2G.png]]
+image:emacs-with-bidirectional-google-calendar-sync/Nb2G.png
 
 *** Assign app name
 Give it a name such as "Emacs G-CAL". The rest of the settings can be left as
 default. *Add your email address as a test user before completing the setup*.
 
-# [[./vsip.png]]
+image:emacs-with-bidirectional-google-calendar-sync/vsip.png
 
 *** Leave scopes default
 Leave this page unchanged
-# [[./c10H.png]]
+image:emacs-with-bidirectional-google-calendar-sync/c10H.png
 
 *** Create test users
 Add yourself as a test user
 
-# [[./yZgB.png]]
+image:emacs-with-bidirectional-google-calendar-sync/yZgB.png
 
-# [[./pkMF.png]]
+image:emacs-with-bidirectional-google-calendar-sync/pkMF.png
 
 *** Create the API Credential
 - Click on Credentials>Create Credentials>Create OAuth Client ID
 
-# [[./y8BS.png]]
+image:emacs-with-bidirectional-google-calendar-sync/y8BS.png
 
 Application type is desktop. Copy your client ID and client secret to a text
 file after completing this step.
 
-# [[./ebd4.png]]
+image:emacs-with-bidirectional-google-calendar-sync/ebd4.png
 
 
 *** Enable the API
@@ -1414,7 +1416,7 @@ settings. This prevents rendering glitches.
 - Press "C-b" to open the firefox sidebar. Use the drop down to switch from the
   bookmarks view to Bitwarden. Login afterward.
 
-# [[./QI4X.png]]
+image:adding-bitwarden-to-the-pinephone-pro/QI4X.png
 
 ** Getting the extension ID
 Navigate to about:debugging#/runtime/this-firefox
@@ -1422,7 +1424,7 @@ Navigate to about:debugging#/runtime/this-firefox
 Scroll down until you see the extension ID and copy it to a text file. We'll
 need it later.
 
- # [[./I293.png]]
+image:adding-bitwarden-to-the-pinephone-pro/I293.png
 
 ** Creating the .desktop file
 This is the meat of it all. Create the following desktop file and paste in these content
@@ -1487,11 +1489,11 @@ the red cable matches below. This will be the exact setup you need to flash the
 BIOS. Check your hardware connections and even 
 
 
-[[./12Fz.gpg]]
+image:corebooting-thinkpad-x220-with-CH341A-programmer/12Fz.jpg
 
-[[./6PIP.jpg]]
+image:corebooting-thinkpad-x220-with-CH341A-programmer/6PIP.jpg
 
-[[3vEa.jpg]]
+image:corebooting-thinkpad-x220-with-CH341A-programmer/3vEA.jpg
 
 ** Step 4 - Installing Coreboot
 I followed Bryce's guide for the rest. The only important thing I did was
