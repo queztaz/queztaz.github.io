@@ -1,0 +1,374 @@
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1" /><link rel="stylesheet" type="text/css" href="/one.css" /><title>Windows/Automatic CHKDSK Scans Using Powershell & Email Alerts</title></head><body><div id="sidebar-left" onclick="followSidebarLink()"><div><div>Pages</div></div><ul><li><a href="/">Homepage</a></li><li><a href="/blog/inventory/">Queztaz/Tech Inventory</a></li><li><a href="/blog/emacs-with-bidirectional-google-calendar-sync/">Emacs/Emacs With BiDirectional Google Calendar Sync</a></li><li><a href="/blog/emacs-with-mu4e-and-multiple-gmail-accounts">Emacs/Setting up Mu4e and Multiple Gmail Accounts</a></li><li><a href="/blog/emacs-eww-hacks/">Emacs/EWW Hacks</a></li><li><a href="/blog/creating-offline-debian-mirror/">Linux/Creating an Offline Debian Mirror Repository</a></li><li><a href="/blog/migrate-wiki-js-to-another-server/">Linux/Migrate Wiki.js to Another Server</a></li><li><a href="/blog/adding-bitwarden-to-the-pinephone-pro/">Linux/Adding Bitwarden to the Pinephone Pro</a></li><li><a href="/blog/pbp-custom-kernel/">Pinebook Pro/Custom Kernel</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Keyboard Firmware Update</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Netbsd Installation</a></li><li><a href="/blog/pbp-setting-up-zram/">Pinebook Pro/Setting Up Zram</a></li><li><a href="/blog/pbp-troubleshooting-common-issues">Pinebook Troubleshooting/Pro Common Issues</a></li><li><a href="/blog/pbp-use-nvme-as-root">Pinebook Pro/Use NVME as Root</a></li><li><a href="/blog/pbp-write-to-spi-flash">Pinebook Pro/Write to SPI Flash</a></li><li><a href="/blog/qemu-chroot-into-different-architecture">Qemu/Chroot Into a Different Architecture</a></li><li><a href="/blog/qemu-chroot-into-img-file">Qemu/Choot Into an Img File</a></li><li><a href="/blog/qemu-mount-virtual-images">Qemu/Mount Virtual Images</a></li><li><a href="/blog/qemu-windows-xp-fix-smb-not-working">Qemu/Windows Xp Fix Smb Not Working</a></li><li><a href="/blog/qemu-windows-xp-installation">Qemu/Windows Xp Installation</a></li><li><a href="/blog/tg1672G-default-wifi-password">Misc/Finding the Default Wireless Password to TG1672G Routers</a></li><li><a href="/blog/portable-ollama-installation">Misc/Running Ollama Portably</a></li><li><a href="/blog/cloning-bios-drive-to-uefi-with-disimilar-hardware">Windows/Cloning a Bios Boot Drive to Disimilar Hardware with UEFI</a></li><li><a href="/blog/automating-chkdsk-scan-with-powershell-and-email-alerts">Windows/Automatic CHKDSK Scans Using Powershell & Email Alerts</a></li><li><a href="/blog/creating-decent-portable-terminal">Windows/Creating a Decent Portable Terminal</a></li><li><a href="/blog/template">Windows/Merging HyperV Snapshots With Powershell</a></li><li><a href="/blog/simulating-bad-blocks-on-ntfs-drive">Windows/Simulating Bad Blocks on NTFS Filesystems</a></li><li><a href="/blog/windows-server-create-and-view-storport-trace">Windows/Creating and Viewing a Storport on Windows Server</a></li><li><a href="/blog/mikrotik-creating-client-to-site-vpn">Mikrotik/Creating a Client to Site VPN With</a></li><li><a href="/blog/mikrotik-securing-router-with-firewall">Mikrotik/Securing Router With Firewall</a></li><li><a href="/blog/mikrotik-setup-dynamic-dns-with-no-ip-api">Mikrotik Setup Dynamically Changing IP With No-IP Api</a></li></ul></div><div id="sidebar-main"></div><div id="sidebar-header"><svg id="hamburger" viewBox="0 0 24 24" onclick="sidebarShow()"><path d="M21,6H3V5h18V6z M21,11H3v1h18V11z M21,17H3v1h18V17z"></path></svg><a href="/">Homepage</a></div><div id="sidebar-content"><div id="sidebar"><ul><li><a href="/">Homepage</a></li><li><a href="/blog/inventory/">Queztaz/Tech Inventory</a></li><li><a href="/blog/emacs-with-bidirectional-google-calendar-sync/">Emacs/Emacs With BiDirectional Google Calendar Sync</a></li><li><a href="/blog/emacs-with-mu4e-and-multiple-gmail-accounts">Emacs/Setting up Mu4e and Multiple Gmail Accounts</a></li><li><a href="/blog/emacs-eww-hacks/">Emacs/EWW Hacks</a></li><li><a href="/blog/creating-offline-debian-mirror/">Linux/Creating an Offline Debian Mirror Repository</a></li><li><a href="/blog/migrate-wiki-js-to-another-server/">Linux/Migrate Wiki.js to Another Server</a></li><li><a href="/blog/adding-bitwarden-to-the-pinephone-pro/">Linux/Adding Bitwarden to the Pinephone Pro</a></li><li><a href="/blog/pbp-custom-kernel/">Pinebook Pro/Custom Kernel</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Keyboard Firmware Update</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Netbsd Installation</a></li><li><a href="/blog/pbp-setting-up-zram/">Pinebook Pro/Setting Up Zram</a></li><li><a href="/blog/pbp-troubleshooting-common-issues">Pinebook Troubleshooting/Pro Common Issues</a></li><li><a href="/blog/pbp-use-nvme-as-root">Pinebook Pro/Use NVME as Root</a></li><li><a href="/blog/pbp-write-to-spi-flash">Pinebook Pro/Write to SPI Flash</a></li><li><a href="/blog/qemu-chroot-into-different-architecture">Qemu/Chroot Into a Different Architecture</a></li><li><a href="/blog/qemu-chroot-into-img-file">Qemu/Choot Into an Img File</a></li><li><a href="/blog/qemu-mount-virtual-images">Qemu/Mount Virtual Images</a></li><li><a href="/blog/qemu-windows-xp-fix-smb-not-working">Qemu/Windows Xp Fix Smb Not Working</a></li><li><a href="/blog/qemu-windows-xp-installation">Qemu/Windows Xp Installation</a></li><li><a href="/blog/tg1672G-default-wifi-password">Misc/Finding the Default Wireless Password to TG1672G Routers</a></li><li><a href="/blog/portable-ollama-installation">Misc/Running Ollama Portably</a></li><li><a href="/blog/cloning-bios-drive-to-uefi-with-disimilar-hardware">Windows/Cloning a Bios Boot Drive to Disimilar Hardware with UEFI</a></li><li><a href="/blog/automating-chkdsk-scan-with-powershell-and-email-alerts">Windows/Automatic CHKDSK Scans Using Powershell & Email Alerts</a></li><li><a href="/blog/creating-decent-portable-terminal">Windows/Creating a Decent Portable Terminal</a></li><li><a href="/blog/template">Windows/Merging HyperV Snapshots With Powershell</a></li><li><a href="/blog/simulating-bad-blocks-on-ntfs-drive">Windows/Simulating Bad Blocks on NTFS Filesystems</a></li><li><a href="/blog/windows-server-create-and-view-storport-trace">Windows/Creating and Viewing a Storport on Windows Server</a></li><li><a href="/blog/mikrotik-creating-client-to-site-vpn">Mikrotik/Creating a Client to Site VPN With</a></li><li><a href="/blog/mikrotik-securing-router-with-firewall">Mikrotik/Securing Router With Firewall</a></li><li><a href="/blog/mikrotik-setup-dynamic-dns-with-no-ip-api">Mikrotik Setup Dynamically Changing IP With No-IP Api</a></li></ul></div><article><div class="title"><h1>Windows/Automatic CHKDSK Scans Using Powershell & Email Alerts</h1></div><div class="toc"><div><div>Table of content</div><div>
+<ul>
+<li><a href="#one-17f06ba728">Note</a></li>
+<li><a href="#one-591c80c742">How to implement with RMM</a></li>
+<li><a href="#one-ef49d18c38">Running standalone</a></li>
+<li><a href="#one-c6ac980bd">Source Code</a></li>
+</ul>
+</div></div></div><div><p>Directions for using a Powershell script I wrote to schedule automatic CHKDSK
+scans whenever an NTFS or DISK error appears in the event log.
+</p>
+
+<p>If corruption occurs more than once per week, an email is sent out to your
+desired address. SFC &amp; DISM scans are scheduled for 10PM. CHKDSKs on the corrupt
+drive are scheduled for 12AM
+</p>
+
+<p>It can be run through a scheduled task locally or deployed as a response policy
+in remote management software.
+</p>
+</div>
+<div><h2 id="one-17f06ba728">Note</h2><div><p>This can be run standalone, although ideally you set it up as an automatic
+response in your RMM software. There are fail-safes in place to prevent the
+script from running multiple times due to alert spam.
+</p>
+
+<p><b><b>Important</b></b>: A python EXE file is used to send the emails out. The source code
+to script is on my github <a href="https://github.com/peterunix/Python-Sendmail">LINK</a>. The build in this project is compiled from that.
+</p>
+</div>
+</div>
+<div><h2 id="one-591c80c742">How to implement with RMM</h2><div><ul><li><p>Edit the script and add your SMTP credentials on the last line.
+</p>
+</li>
+<li><p>Add this script as a component in your RMM
+</p>
+</li>
+<li><p>Update your RMM and have the script be a response to the following event
+errors
+</p>
+</li>
+</ul>
+
+<pre><code class="one-hl one-hl-block">Get-EventLog -LogName System -EntryType Error -Source Ntfs -Message &quot;A corruption was discovered in the file system structure on volume*&quot; -ErrorAction &apos;SilentlyContinue&apos;
+Get-EventLog -LogName System -EntryType Error -Source Disk -Message &quot;The device, *has a bad block*&quot; -ErrorAction &apos;SilentlyContinue&apos;
+Get-EventLog -LogName System -EntryType Error -Source Disk -Message &quot;The driver detected a controller error on*&quot; -ErrorAction &apos;SilentlyContinue&apos;</code></pre>
+</div>
+</div>
+<div><h2 id="one-ef49d18c38">Running standalone</h2><div><p>You can schedule this to run automatically on your PC through the task
+scheduler. My suggestion is have it run daily at some arbitrary hour.
+</p>
+
+<p>Edit or remove the lines for email alerts
+</p>
+</div>
+</div>
+<div><h2 id="one-c6ac980bd">Source Code</h2><div><p>Repository: <a href="https://github.com/peterunix/PS-ScheduleCHKDSKandScans">https://github.com/peterunix/PS-ScheduleCHKDSKandScans</a>
+</p>
+
+<pre><code class="one-hl one-hl-block">
+<span class="one-hl-comment-delimiter">&lt;#</span><span class="one-hl-comment">
+.SYNOPSIS
+Scans the event log for drive errors. Schedules SFC &amp; DISM Scan to run
+at 10PM and CHKDSKs at 12AM.
+
+.DESCRIPTION
+Event logs are created with timestamps of when the script ran
+successfully and scheduled a CHKDSK.  Additionally, the file
+C:\Windows\LastChkdsk.txt is created with the same event log
+data. This file's timestamp is checked to make sure the chkdsk doesn't
+run more than once a week. If the last CHKDSK was within the week, an
+email will be sent out VIA SMTP to your address. In theory, a drive
+with frequently corrupt blocks is failing hence the email alert.
+
+The way bad drives are identified is through searching the event log
+and then locating the drive using the event logs message data. Hard
+coded is the pattern matching and proper commands to find the drive
+associated with a bad block error.
+
+If you wish to extend this script to include more event log
+detections, the _LocateEvents and _Schedulechkdsk functions are what
+you're interested in
+
+.NOTES
+Best practice is to configure this as an automatic response to your
+device monitoring alerts in RMM. There's are failsafe methods to
+ensure that this script doesn't run multiple times for the same alert.
+
+.LINK
+Github: https://github.com/peterunix/PS-ScheduleCHKDSKandScans
+#&gt;</span>
+
+<span class="one-hl-keyword">function</span> _CreateEventLogEntry<span class="one-hl-rainbow-delimiters-depth-1">{</span>
+<span class="one-hl-comment-delimiter">&lt;#</span><span class="one-hl-comment">
+Create a custom event log. Used later on when reporting the time and
+reason a CHKDSK scan was done
+#&gt;</span>
+    <span class="one-hl-keyword">param</span> <span class="one-hl-rainbow-delimiters-depth-2">(</span>
+        <span class="one-hl-rainbow-delimiters-depth-3">[</span>Parameter<span class="one-hl-rainbow-delimiters-depth-4">(</span>Mandatory=<span class="one-hl-builtin">$true</span><span class="one-hl-rainbow-delimiters-depth-4">)</span><span class="one-hl-rainbow-delimiters-depth-3">]</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-3">[</span></span><span class="one-hl-type">string</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-3">]</span></span><span class="one-hl-variable-name">$Message</span>,
+        <span class="one-hl-rainbow-delimiters-depth-3">[</span>Parameter<span class="one-hl-rainbow-delimiters-depth-4">(</span>Mandatory=<span class="one-hl-builtin">$true</span><span class="one-hl-rainbow-delimiters-depth-4">)</span><span class="one-hl-rainbow-delimiters-depth-3">]</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-3">[</span></span><span class="one-hl-type">string</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-3">]</span></span><span class="one-hl-variable-name">$LogName</span>,
+        <span class="one-hl-rainbow-delimiters-depth-3">[</span>Parameter<span class="one-hl-rainbow-delimiters-depth-4">(</span>Mandatory=<span class="one-hl-builtin">$true</span><span class="one-hl-rainbow-delimiters-depth-4">)</span><span class="one-hl-rainbow-delimiters-depth-3">]</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-3">[</span></span><span class="one-hl-type">string</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-3">]</span></span><span class="one-hl-variable-name">$LogType</span>,
+        <span class="one-hl-rainbow-delimiters-depth-3">[</span>Parameter<span class="one-hl-rainbow-delimiters-depth-4">(</span>Mandatory=<span class="one-hl-builtin">$true</span><span class="one-hl-rainbow-delimiters-depth-4">)</span><span class="one-hl-rainbow-delimiters-depth-3">]</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-3">[</span></span><span class="one-hl-type">string</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-3">]</span></span><span class="one-hl-variable-name">$LogSource</span>
+    <span class="one-hl-rainbow-delimiters-depth-2">)</span>
+    <span class="one-hl-comment"># Define the log name and source
+</span>    <span class="one-hl-comment"># Check if the source exists; if not, create it
+</span>    <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-2">(</span><span class="one-hl-builtin">-not</span> <span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-3">[</span></span><span class="one-hl-type">System.Diagnostics.EventLog</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-3">]</span></span>::SourceExists<span class="one-hl-rainbow-delimiters-depth-3">(</span><span class="one-hl-variable-name">$LogSource</span><span class="one-hl-rainbow-delimiters-depth-3">)</span><span class="one-hl-rainbow-delimiters-depth-2">){</span>
+        <span class="one-hl-function-name">New-EventLog</span> <span class="one-hl-constant">-LogName</span> <span class="one-hl-variable-name">$LogName</span> <span class="one-hl-constant">-Source</span> <span class="one-hl-variable-name">$LogSource</span>
+    <span class="one-hl-rainbow-delimiters-depth-2">}</span>
+    <span class="one-hl-comment"># Define the event message and event ID
+</span>    <span class="one-hl-variable-name">$eventID</span> = 1000
+    <span class="one-hl-comment"># Convert the string LogType to EventLogEntryType
+</span>    <span class="one-hl-variable-name">$entryType</span> = <span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-2">[</span></span><span class="one-hl-type">System.Diagnostics.EventLogEntryType</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-2">]</span></span>::Information
+    <span class="one-hl-keyword">switch</span> <span class="one-hl-rainbow-delimiters-depth-2">(</span><span class="one-hl-variable-name">$LogType</span><span class="one-hl-rainbow-delimiters-depth-2">)</span> <span class="one-hl-rainbow-delimiters-depth-2">{</span>
+        <span class="one-hl-string">"Error"</span> <span class="one-hl-rainbow-delimiters-depth-3">{</span> <span class="one-hl-variable-name">$entryType</span> = <span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-4">[</span></span><span class="one-hl-type">System.Diagnostics.EventLogEntryType</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-4">]</span></span>::Error <span class="one-hl-rainbow-delimiters-depth-3">}</span>
+        <span class="one-hl-string">"Warning"</span> <span class="one-hl-rainbow-delimiters-depth-3">{</span> <span class="one-hl-variable-name">$entryType</span> = <span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-4">[</span></span><span class="one-hl-type">System.Diagnostics.EventLogEntryType</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-4">]</span></span>::Warning <span class="one-hl-rainbow-delimiters-depth-3">}</span>
+        <span class="one-hl-string">"Information"</span> <span class="one-hl-rainbow-delimiters-depth-3">{</span> <span class="one-hl-variable-name">$entryType</span> = <span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-4">[</span></span><span class="one-hl-type">System.Diagnostics.EventLogEntryType</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-4">]</span></span>::Information <span class="one-hl-rainbow-delimiters-depth-3">}</span>
+        <span class="one-hl-string">"SuccessAudit"</span> <span class="one-hl-rainbow-delimiters-depth-3">{</span> <span class="one-hl-variable-name">$entryType</span> = <span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-4">[</span></span><span class="one-hl-type">System.Diagnostics.EventLogEntryType</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-4">]</span></span>::SuccessAudit <span class="one-hl-rainbow-delimiters-depth-3">}</span>
+        <span class="one-hl-string">"FailureAudit"</span> <span class="one-hl-rainbow-delimiters-depth-3">{</span> <span class="one-hl-variable-name">$entryType</span> = <span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-4">[</span></span><span class="one-hl-type">System.Diagnostics.EventLogEntryType</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-4">]</span></span>::FailureAudit <span class="one-hl-rainbow-delimiters-depth-3">}</span>
+        <span class="one-hl-keyword">default</span> <span class="one-hl-rainbow-delimiters-depth-3">{</span> <span class="one-hl-keyword">throw</span> <span class="one-hl-string">"Invalid LogType: $LogType"</span> <span class="one-hl-rainbow-delimiters-depth-3">}</span>
+    <span class="one-hl-rainbow-delimiters-depth-2">}</span>
+    <span class="one-hl-comment"># Write the informational event to the log
+</span>    <span class="one-hl-function-name">Write-EventLog</span> <span class="one-hl-constant">-LogName</span> <span class="one-hl-variable-name">$LogName</span> <span class="one-hl-constant">-Source</span> <span class="one-hl-variable-name">$LogSource</span> <span class="one-hl-constant">-EventId</span> <span class="one-hl-variable-name">$eventID</span> <span class="one-hl-constant">-EntryType</span> <span class="one-hl-variable-name">$entryType</span> <span class="one-hl-constant">-Message</span> <span class="one-hl-variable-name">$message</span>
+<span class="one-hl-rainbow-delimiters-depth-1">}</span>
+
+<span class="one-hl-comment-delimiter"># </span><span class="one-hl-comment">Lists the hard disk name (\\device\harddisvolume4) and the drive letter its mounted to (C:)
+</span><span class="one-hl-keyword">function</span> _GetHarddiskVolumes<span class="one-hl-rainbow-delimiters-depth-1">{</span>
+<span class="one-hl-comment-delimiter">&lt;#</span><span class="one-hl-comment">
+Returns a list of hard disk names (\\device\harddiskvolume4) and the
+drive letter its mounted to. It's used to find the drive letter by
+searching the hard disk name given in the event log
+#&gt;</span>
+    <span class="one-hl-comment"># Build System Assembly in order to call Kernel32:QueryDosDevice.
+</span>    <span class="one-hl-variable-name">$DynAssembly</span> = <span class="one-hl-function-name">New-Object</span> System.Reflection.AssemblyName<span class="one-hl-rainbow-delimiters-depth-2">(</span><span class="one-hl-string">'SysUtils'</span><span class="one-hl-rainbow-delimiters-depth-2">)</span>
+    <span class="one-hl-variable-name">$AssemblyBuilder</span> = <span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-2">[</span></span><span class="one-hl-type">AppDomain</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-2">]</span></span>::CurrentDomain.DefineDynamicAssembly<span class="one-hl-rainbow-delimiters-depth-2">(</span><span class="one-hl-variable-name">$DynAssembly</span>, <span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-3">[</span></span><span class="one-hl-type">Reflection.Emit.AssemblyBuilderAccess</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-3">]</span></span>::Run<span class="one-hl-rainbow-delimiters-depth-2">)</span>
+    <span class="one-hl-variable-name">$ModuleBuilder</span> = <span class="one-hl-variable-name">$AssemblyBuilder</span>.DefineDynamicModule<span class="one-hl-rainbow-delimiters-depth-2">(</span><span class="one-hl-string">'SysUtils'</span>, <span class="one-hl-builtin">$False</span><span class="one-hl-rainbow-delimiters-depth-2">)</span>
+    <span class="one-hl-comment"># Define [Kernel32]::QueryDosDevice method
+</span>    <span class="one-hl-variable-name">$TypeBuilder</span> = <span class="one-hl-variable-name">$ModuleBuilder</span>.DefineType<span class="one-hl-rainbow-delimiters-depth-2">(</span><span class="one-hl-string">'Kernel32'</span>, <span class="one-hl-string">'Public, Class'</span><span class="one-hl-rainbow-delimiters-depth-2">)</span>
+    <span class="one-hl-variable-name">$PInvokeMethod</span> = <span class="one-hl-variable-name">$TypeBuilder</span>.DefinePInvokeMethod<span class="one-hl-rainbow-delimiters-depth-2">(</span><span class="one-hl-string">'QueryDosDevice'</span>, <span class="one-hl-string">'kernel32.dll'</span>, <span class="one-hl-rainbow-delimiters-depth-3">(</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-4">[</span></span><span class="one-hl-type">Reflection.MethodAttributes</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-4">]</span></span>::Public <span class="one-hl-builtin">-bor</span> <span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-4">[</span></span><span class="one-hl-type">Reflection.MethodAttributes</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-4">]</span></span>::Static<span class="one-hl-rainbow-delimiters-depth-3">)</span>, <span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-3">[</span></span><span class="one-hl-type">Reflection.CallingConventions</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-3">]</span></span>::Standard, <span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-3">[</span></span><span class="one-hl-type">UInt32</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-3">]</span></span>, <span class="one-hl-rainbow-delimiters-depth-3">[</span>Type<span class="one-hl-rainbow-delimiters-depth-4">[]</span><span class="one-hl-rainbow-delimiters-depth-3">]</span>@<span class="one-hl-rainbow-delimiters-depth-3">(</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-4">[</span></span><span class="one-hl-type">String</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-4">]</span></span>, <span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-4">[</span></span><span class="one-hl-type">Text.StringBuilder</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-4">]</span></span>, <span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-4">[</span></span><span class="one-hl-type">UInt32</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-4">]</span></span><span class="one-hl-rainbow-delimiters-depth-3">)</span>, <span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-3">[</span></span><span class="one-hl-type">Runtime.InteropServices.CallingConvention</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-3">]</span></span>::Winapi, <span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-3">[</span></span><span class="one-hl-type">Runtime.InteropServices.CharSet</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-3">]</span></span>::Auto<span class="one-hl-rainbow-delimiters-depth-2">)</span>
+    <span class="one-hl-variable-name">$DllImportConstructor</span> = <span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-2">[</span></span><span class="one-hl-type">Runtime.InteropServices.DllImportAttribute</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-2">]</span></span>.GetConstructor<span class="one-hl-rainbow-delimiters-depth-2">(</span>@<span class="one-hl-rainbow-delimiters-depth-3">(</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-4">[</span></span><span class="one-hl-type">String</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-4">]</span></span><span class="one-hl-rainbow-delimiters-depth-3">)</span><span class="one-hl-rainbow-delimiters-depth-2">)</span>
+    <span class="one-hl-variable-name">$SetLastError</span> = <span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-2">[</span></span><span class="one-hl-type">Runtime.InteropServices.DllImportAttribute</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-2">]</span></span>.GetField<span class="one-hl-rainbow-delimiters-depth-2">(</span><span class="one-hl-string">'SetLastError'</span><span class="one-hl-rainbow-delimiters-depth-2">)</span>
+    <span class="one-hl-variable-name">$SetLastErrorCustomAttribute</span> = <span class="one-hl-function-name">New-Object</span> Reflection.Emit.CustomAttributeBuilder<span class="one-hl-rainbow-delimiters-depth-2">(</span><span class="one-hl-variable-name">$DllImportConstructor</span>, @<span class="one-hl-rainbow-delimiters-depth-3">(</span><span class="one-hl-string">'kernel32.dll'</span><span class="one-hl-rainbow-delimiters-depth-3">)</span>, <span class="one-hl-rainbow-delimiters-depth-3">[</span>Reflection.FieldInfo<span class="one-hl-rainbow-delimiters-depth-4">[]</span><span class="one-hl-rainbow-delimiters-depth-3">]</span>@<span class="one-hl-rainbow-delimiters-depth-3">(</span><span class="one-hl-variable-name">$SetLastError</span><span class="one-hl-rainbow-delimiters-depth-3">)</span>, @<span class="one-hl-rainbow-delimiters-depth-3">(</span><span class="one-hl-builtin">$true</span><span class="one-hl-rainbow-delimiters-depth-3">)</span><span class="one-hl-rainbow-delimiters-depth-2">)</span>
+    <span class="one-hl-variable-name">$PInvokeMethod</span>.SetCustomAttribute<span class="one-hl-rainbow-delimiters-depth-2">(</span><span class="one-hl-variable-name">$SetLastErrorCustomAttribute</span><span class="one-hl-rainbow-delimiters-depth-2">)</span>
+    <span class="one-hl-variable-name">$Kernel32</span> = <span class="one-hl-variable-name">$TypeBuilder</span>.CreateType<span class="one-hl-rainbow-delimiters-depth-2">()</span>
+    <span class="one-hl-variable-name">$Max</span> = 65536
+    <span class="one-hl-variable-name">$StringBuilder</span> = <span class="one-hl-function-name">New-Object</span> System.Text.StringBuilder<span class="one-hl-rainbow-delimiters-depth-2">(</span><span class="one-hl-variable-name">$Max</span><span class="one-hl-rainbow-delimiters-depth-2">)</span>
+    <span class="one-hl-function-name">Get-WmiObject</span> Win32_Volume | ? <span class="one-hl-rainbow-delimiters-depth-2">{</span> <span class="one-hl-builtin">$_</span>.DriveLetter <span class="one-hl-rainbow-delimiters-depth-2">}</span> | % <span class="one-hl-rainbow-delimiters-depth-2">{</span>
+        <span class="one-hl-variable-name">$ReturnLength</span> = $Kernel32::QueryDosDevice<span class="one-hl-rainbow-delimiters-depth-3">(</span><span class="one-hl-builtin">$_</span>.DriveLetter, <span class="one-hl-variable-name">$StringBuilder</span>, <span class="one-hl-variable-name">$Max</span><span class="one-hl-rainbow-delimiters-depth-3">)</span>
+        <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-3">(</span><span class="one-hl-variable-name">$ReturnLength</span><span class="one-hl-rainbow-delimiters-depth-3">){</span>
+            <span class="one-hl-variable-name">$DriveMapping</span> = @<span class="one-hl-rainbow-delimiters-depth-4">{</span>
+                DriveLetter = <span class="one-hl-builtin">$_</span>.DriveLetter
+                DevicePath = <span class="one-hl-variable-name">$StringBuilder</span>.ToString<span class="one-hl-rainbow-delimiters-depth-5">()</span>
+            <span class="one-hl-rainbow-delimiters-depth-4">}</span>
+            <span class="one-hl-function-name">New-Object</span> PSObject <span class="one-hl-constant">-Property</span> <span class="one-hl-variable-name">$DriveMapping</span>
+        <span class="one-hl-rainbow-delimiters-depth-3">}</span>
+    <span class="one-hl-rainbow-delimiters-depth-2">}</span>
+<span class="one-hl-rainbow-delimiters-depth-1">}</span>
+
+<span class="one-hl-keyword">function</span> _LocateEvents<span class="one-hl-rainbow-delimiters-depth-1">{</span>
+<span class="one-hl-comment-delimiter">&lt;#</span><span class="one-hl-comment">
+Finds event related to disk errors. Returns a string with the type of
+disk error it is. This is used in the CHKDSK function and different
+code is ran to find the drive based off the event log.
+
+It only returns the most recent event. If there are two different
+drives alerting at the same time, only one of the drives will be
+scanned.
+#&gt;</span>
+    <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-2">(</span><span class="one-hl-builtin">$EVENT</span> = <span class="one-hl-function-name">Get-EventLog</span> <span class="one-hl-constant">-LogName</span> System <span class="one-hl-constant">-EntryType</span> Error <span class="one-hl-constant">-Source</span> Ntfs <span class="one-hl-constant">-Message</span> <span class="one-hl-string">"A corruption was discovered in the file system structure on volume*"</span> <span class="one-hl-constant">-ErrorAction</span> <span class="one-hl-string">'SilentlyContinue'</span> | Select <span class="one-hl-constant">-First</span> 1<span class="one-hl-rainbow-delimiters-depth-2">){</span>
+        <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-3">(</span><span class="one-hl-builtin">$EVENT</span>.TimeGenerated <span class="one-hl-builtin">-gt</span> <span class="one-hl-rainbow-delimiters-depth-4">(</span><span class="one-hl-function-name">Get-Date</span><span class="one-hl-rainbow-delimiters-depth-4">)</span>.AddDays<span class="one-hl-rainbow-delimiters-depth-4">(</span>-1<span class="one-hl-rainbow-delimiters-depth-4">)</span><span class="one-hl-rainbow-delimiters-depth-3">){</span>
+            <span class="one-hl-variable-name">$EVENTTYPE</span> = <span class="one-hl-string">"NTFS"</span>
+            <span class="one-hl-keyword">return</span> @<span class="one-hl-rainbow-delimiters-depth-4">(</span><span class="one-hl-builtin">$EVENT</span>, <span class="one-hl-variable-name">$EVENTTYPE</span><span class="one-hl-rainbow-delimiters-depth-4">)</span>
+        <span class="one-hl-rainbow-delimiters-depth-3">}</span><span class="one-hl-rainbow-delimiters-depth-2">}</span>
+
+    <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-2">(</span><span class="one-hl-builtin">$EVENT</span> = <span class="one-hl-function-name">Get-EventLog</span> <span class="one-hl-constant">-LogName</span> System <span class="one-hl-constant">-EntryType</span> Error <span class="one-hl-constant">-Source</span> Disk <span class="one-hl-constant">-Message</span> <span class="one-hl-string">"The device, *has a bad block*"</span> <span class="one-hl-constant">-ErrorAction</span> <span class="one-hl-string">'SilentlyContinue'</span> | Select <span class="one-hl-constant">-First</span> 1<span class="one-hl-rainbow-delimiters-depth-2">){</span>
+        <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-3">(</span><span class="one-hl-builtin">$EVENT</span>.TimeGenerated <span class="one-hl-builtin">-gt</span> <span class="one-hl-rainbow-delimiters-depth-4">(</span><span class="one-hl-function-name">Get-Date</span><span class="one-hl-rainbow-delimiters-depth-4">)</span>.AddDays<span class="one-hl-rainbow-delimiters-depth-4">(</span>-1<span class="one-hl-rainbow-delimiters-depth-4">)</span><span class="one-hl-rainbow-delimiters-depth-3">){</span>
+            <span class="one-hl-variable-name">$EVENTTYPE</span> = <span class="one-hl-string">"Bad Block"</span>
+            <span class="one-hl-keyword">return</span> @<span class="one-hl-rainbow-delimiters-depth-4">(</span><span class="one-hl-builtin">$EVENT</span>, <span class="one-hl-variable-name">$EVENTTYPE</span><span class="one-hl-rainbow-delimiters-depth-4">)</span>
+        <span class="one-hl-rainbow-delimiters-depth-3">}</span>
+    <span class="one-hl-rainbow-delimiters-depth-2">}</span>
+
+    <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-2">(</span><span class="one-hl-builtin">$EVENT</span> = <span class="one-hl-function-name">Get-EventLog</span> <span class="one-hl-constant">-LogName</span> System <span class="one-hl-constant">-EntryType</span> Error <span class="one-hl-constant">-Source</span> Disk <span class="one-hl-constant">-Message</span> <span class="one-hl-string">"The driver detected a controller error on*"</span> <span class="one-hl-constant">-ErrorAction</span> <span class="one-hl-string">'SilentlyContinue'</span> | Select <span class="one-hl-constant">-First</span> 1<span class="one-hl-rainbow-delimiters-depth-2">){</span>
+        <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-3">(</span><span class="one-hl-builtin">$EVENT</span>.TimeGenerated <span class="one-hl-builtin">-gt</span> <span class="one-hl-rainbow-delimiters-depth-4">(</span><span class="one-hl-function-name">Get-Date</span><span class="one-hl-rainbow-delimiters-depth-4">)</span>.AddDays<span class="one-hl-rainbow-delimiters-depth-4">(</span>-1<span class="one-hl-rainbow-delimiters-depth-4">)</span><span class="one-hl-rainbow-delimiters-depth-3">){</span>
+            <span class="one-hl-variable-name">$EVENTTYPE</span> = <span class="one-hl-string">"Driver Detection"</span>
+            <span class="one-hl-keyword">return</span> @<span class="one-hl-rainbow-delimiters-depth-4">(</span><span class="one-hl-builtin">$EVENT</span>, <span class="one-hl-variable-name">$EVENTTYPE</span><span class="one-hl-rainbow-delimiters-depth-4">)</span>
+        <span class="one-hl-rainbow-delimiters-depth-3">}</span>
+    <span class="one-hl-rainbow-delimiters-depth-2">}</span>
+
+    <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-2">(</span><span class="one-hl-builtin">$EVENT</span> <span class="one-hl-builtin">-eq</span> <span class="one-hl-builtin">$null</span><span class="one-hl-rainbow-delimiters-depth-2">){</span>
+        <span class="one-hl-string">"No disk error events found. Exiting gracefully"</span>
+        <span class="one-hl-keyword">Exit</span> 1
+    <span class="one-hl-rainbow-delimiters-depth-2">}</span>
+<span class="one-hl-rainbow-delimiters-depth-1">}</span>
+
+
+<span class="one-hl-keyword">function</span> _ScheduleDismSFC<span class="one-hl-rainbow-delimiters-depth-1">{</span>
+<span class="one-hl-comment-delimiter">&lt;#</span><span class="one-hl-comment">
+Schedules an SFC and DISM to run at 10PM.
+#&gt;</span>
+    <span class="one-hl-variable-name">$taskName</span> = <span class="one-hl-string">"Schedule SFC &amp; DISM at 10PM"</span>
+    <span class="one-hl-variable-name">$taskExists</span> = <span class="one-hl-function-name">Get-ScheduledTask</span> | <span class="one-hl-function-name">Where-Object</span> <span class="one-hl-rainbow-delimiters-depth-2">{</span><span class="one-hl-builtin">$_</span>.TaskName <span class="one-hl-builtin">-match</span> <span class="one-hl-variable-name">$taskname</span> <span class="one-hl-rainbow-delimiters-depth-2">}</span>
+
+    <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-2">(</span><span class="one-hl-variable-name">$taskExists</span><span class="one-hl-rainbow-delimiters-depth-2">){</span>
+        <span class="one-hl-string">"The task for $taskName already exists"</span>
+    <span class="one-hl-rainbow-delimiters-depth-2">}</span> <span class="one-hl-keyword">else</span><span class="one-hl-rainbow-delimiters-depth-2">{</span>
+        <span class="one-hl-variable-name">$action</span> = <span class="one-hl-function-name">New-ScheduledTaskAction</span> <span class="one-hl-constant">-Execute</span> <span class="one-hl-string">'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -command "sfc /scannow ; dism /online /cleanup-image /restorehealth"'</span>
+        <span class="one-hl-variable-name">$trigger</span> = <span class="one-hl-function-name">New-ScheduledTaskTrigger</span> <span class="one-hl-constant">-Once</span> <span class="one-hl-constant">-At</span> 10pm
+        <span class="one-hl-variable-name">$task</span> = <span class="one-hl-function-name">Register-ScheduledTask</span> <span class="one-hl-constant">-TaskName</span> <span class="one-hl-variable-name">$taskName</span> <span class="one-hl-constant">-Trigger</span> <span class="one-hl-variable-name">$trigger</span> <span class="one-hl-constant">-Action</span> <span class="one-hl-variable-name">$action</span> <span class="one-hl-constant">-User</span> System
+        <span class="one-hl-variable-name">$task</span> | <span class="one-hl-function-name">Set-ScheduledTask</span>
+    <span class="one-hl-rainbow-delimiters-depth-2">}</span>
+<span class="one-hl-rainbow-delimiters-depth-1">}</span>
+
+<span class="one-hl-keyword">function</span> _ScheduleCHKDSK<span class="one-hl-rainbow-delimiters-depth-1">{</span>
+<span class="one-hl-comment-delimiter">&lt;#</span><span class="one-hl-comment">
+Schedules an SFC scan and then uses the returned values of the
+_LocateEvents function to find the drive that needs to be repaired.
+
+Different code is required to find the drive from the event, hence the
+switch statement.
+#&gt;</span>
+    <span class="one-hl-comment"># Depending on the type of error, different code will run to find the drive
+</span>    <span class="one-hl-builtin">$EVENT</span>,<span class="one-hl-variable-name">$EVENTTYPE</span> = _LocateEvents
+    <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-2">(</span><span class="one-hl-builtin">$EVENT</span> <span class="one-hl-builtin">-eq</span> <span class="one-hl-builtin">$null</span><span class="one-hl-rainbow-delimiters-depth-2">){</span>
+        <span class="one-hl-string">"Didn't locate an event for a drive error thats occurred within the last 24 hours. Exiting gracefully"</span>
+        <span class="one-hl-string">"No changes were made."</span>
+        <span class="one-hl-keyword">Exit</span> 1
+    <span class="one-hl-rainbow-delimiters-depth-2">}</span>
+
+    _ScheduleDismSFC
+    <span class="one-hl-variable-name">$taskName</span> = <span class="one-hl-string">"Schedule CHKDSK at 12AM"</span>
+
+
+    <span class="one-hl-keyword">switch</span><span class="one-hl-rainbow-delimiters-depth-2">(</span><span class="one-hl-variable-name">$EVENTTYPE</span><span class="one-hl-rainbow-delimiters-depth-2">){</span>
+        <span class="one-hl-string">"NTFS"</span><span class="one-hl-rainbow-delimiters-depth-3">{</span>
+            <span class="one-hl-comment"># Check if CHKDSK task already exists
+</span>            <span class="one-hl-variable-name">$taskExists</span> = <span class="one-hl-function-name">Get-ScheduledTask</span> | <span class="one-hl-function-name">Where-Object</span> <span class="one-hl-rainbow-delimiters-depth-4">{</span><span class="one-hl-builtin">$_</span>.TaskName <span class="one-hl-builtin">-match</span> <span class="one-hl-variable-name">$taskName</span> <span class="one-hl-rainbow-delimiters-depth-4">}</span>
+            <span class="one-hl-comment"># Create task if it doesn't exist
+</span>            <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-4">(</span><span class="one-hl-variable-name">$taskExists</span> <span class="one-hl-builtin">-eq</span> <span class="one-hl-builtin">$null</span><span class="one-hl-rainbow-delimiters-depth-4">){</span>
+                <span class="one-hl-comment"># Find the volume letter from the event
+</span>                <span class="one-hl-variable-name">$eventString</span>=<span class="one-hl-rainbow-delimiters-depth-5">(</span><span class="one-hl-builtin">$EVENT</span><span class="one-hl-rainbow-delimiters-depth-5">)</span>.message | <span class="one-hl-function-name">Select-String</span> <span class="one-hl-constant">-Pattern</span> <span class="one-hl-string">"[A-Z]:"</span> <span class="one-hl-constant">-AllMatches</span>
+                <span class="one-hl-variable-name">$driveLetter</span>=<span class="one-hl-rainbow-delimiters-depth-5">(</span><span class="one-hl-variable-name">$eventString</span>.Matches | Select <span class="one-hl-constant">-First</span> 1<span class="one-hl-rainbow-delimiters-depth-5">)</span>.value
+                <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-5">(</span><span class="one-hl-variable-name">$driveLetter</span> <span class="one-hl-builtin">-match</span> <span class="one-hl-string">"C:"</span><span class="one-hl-rainbow-delimiters-depth-5">){</span>
+                    <span class="one-hl-variable-name">$action</span> = <span class="one-hl-function-name">New-ScheduledTaskAction</span> <span class="one-hl-constant">-Execute</span> <span class="one-hl-string">"C:\Windows\System32\cmd.exe /c 'echo y | chkdsk.exe /x /f $driveLetter &amp; shutdown /r /t 0 /f'"</span>
+                <span class="one-hl-rainbow-delimiters-depth-5">}</span> <span class="one-hl-keyword">else</span><span class="one-hl-rainbow-delimiters-depth-5">{</span>
+                    <span class="one-hl-variable-name">$action</span> = <span class="one-hl-function-name">New-ScheduledTaskAction</span> <span class="one-hl-constant">-Execute</span> <span class="one-hl-string">"C:\Windows\System32\cmd.exe /c 'echo y | chkdsk.exe /x /f $driveLetter'"</span>
+                <span class="one-hl-rainbow-delimiters-depth-5">}</span>
+                <span class="one-hl-comment"># Schedule the task
+</span>                <span class="one-hl-variable-name">$trigger</span> = <span class="one-hl-function-name">New-ScheduledTaskTrigger</span> <span class="one-hl-constant">-Once</span> <span class="one-hl-constant">-At</span> 12AM
+                <span class="one-hl-variable-name">$settings</span> = <span class="one-hl-function-name">New-ScheduledTaskSettingsSet</span> -StartWhenAvailable:<span class="one-hl-builtin">$true</span>
+                <span class="one-hl-variable-name">$task</span> = <span class="one-hl-function-name">Register-ScheduledTask</span> <span class="one-hl-constant">-TaskName</span> <span class="one-hl-variable-name">$taskName</span> <span class="one-hl-constant">-Trigger</span> <span class="one-hl-variable-name">$trigger</span> <span class="one-hl-constant">-Action</span> <span class="one-hl-variable-name">$action</span> <span class="one-hl-constant">-User</span> System <span class="one-hl-constant">-Settings</span> <span class="one-hl-variable-name">$settings</span>
+                <span class="one-hl-variable-name">$task</span> | <span class="one-hl-function-name">Set-ScheduledTask</span>
+                <span class="one-hl-comment"># Recreating the logfile show a scan was done
+</span>                <span class="one-hl-function-name">Write-Host</span> <span class="one-hl-string">"Corrupt Volume Chkdsk Scheduled: $driveLetter $(Get-Date)"</span>
+                <span class="one-hl-function-name">Add-Content</span> <span class="one-hl-string">"Corrupt Volume Chkdsk Scheduled: $driveLetter $(Get-Date)"</span> <span class="one-hl-constant">-Path</span> <span class="one-hl-variable-name">$TXTLOG</span> | <span class="one-hl-function-name">Out-Null</span>
+                _CreateEventLogEntry <span class="one-hl-constant">-LogName</span> <span class="one-hl-string">"Application"</span> <span class="one-hl-constant">-LogSource</span> <span class="one-hl-string">"ChkdskScript"</span> <span class="one-hl-constant">-Message</span> <span class="one-hl-string">"Corrupt Volume Chkdsk Scheduled: $driveLetter $(Get-Date)"</span> <span class="one-hl-constant">-LogType</span> <span class="one-hl-string">"Information"</span>
+            <span class="one-hl-rainbow-delimiters-depth-4">}</span> <span class="one-hl-keyword">else</span><span class="one-hl-rainbow-delimiters-depth-4">{</span><span class="one-hl-string">"CHKDSK Scheduled task already exists. Exiting"</span> ; <span class="one-hl-keyword">Exit</span> 1<span class="one-hl-rainbow-delimiters-depth-4">}</span>
+        <span class="one-hl-rainbow-delimiters-depth-3">}</span>
+        <span class="one-hl-string">"Bad Block"</span><span class="one-hl-rainbow-delimiters-depth-3">{</span>
+            <span class="one-hl-comment"># Check if CHKDSK task already exists
+</span>            <span class="one-hl-variable-name">$taskExists</span> = <span class="one-hl-function-name">Get-ScheduledTask</span> | <span class="one-hl-function-name">Where-Object</span> <span class="one-hl-rainbow-delimiters-depth-4">{</span><span class="one-hl-builtin">$_</span>.TaskName <span class="one-hl-builtin">-match</span> <span class="one-hl-variable-name">$taskName</span> <span class="one-hl-rainbow-delimiters-depth-4">}</span>
+            <span class="one-hl-comment"># Create task if it doesn't exist
+</span>            <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-4">(</span><span class="one-hl-variable-name">$taskExists</span> <span class="one-hl-builtin">-eq</span> <span class="one-hl-builtin">$null</span><span class="one-hl-rainbow-delimiters-depth-4">){</span>
+                <span class="one-hl-variable-name">$eventString</span> = <span class="one-hl-builtin">$EVENT</span>.Message | <span class="one-hl-function-name">Select-String</span> <span class="one-hl-constant">-Pattern</span> <span class="one-hl-string">"\\device\\Harddisk[1-100]\\..."</span> <span class="one-hl-constant">-AllMatches</span>
+                <span class="one-hl-variable-name">$driveName</span> = <span class="one-hl-rainbow-delimiters-depth-5">(</span><span class="one-hl-variable-name">$eventString</span>.Matches | Select <span class="one-hl-constant">-First</span> 1<span class="one-hl-rainbow-delimiters-depth-5">)</span>.value
+                <span class="one-hl-variable-name">$driveNumber</span> = <span class="one-hl-variable-name">$driveName</span>.Substring<span class="one-hl-rainbow-delimiters-depth-5">(</span><span class="one-hl-variable-name">$driveName</span>.<span class="one-hl-function-name">length-1</span><span class="one-hl-rainbow-delimiters-depth-5">)</span>
+                <span class="one-hl-variable-name">$driveLetter</span> = <span class="one-hl-rainbow-delimiters-depth-5">(</span>_GetHarddiskVolumes | <span class="one-hl-keyword">Where</span> <span class="one-hl-rainbow-delimiters-depth-6">{</span><span class="one-hl-builtin">$_</span>.DevicePath <span class="one-hl-builtin">-like</span> <span class="one-hl-string">"*$driveNumber"</span><span class="one-hl-rainbow-delimiters-depth-6">}</span><span class="one-hl-rainbow-delimiters-depth-5">)</span>.DriveLetter
+                <span class="one-hl-comment"># Reboot if the OS drive is scanned. Otherwise don't.
+</span>                <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-5">(</span><span class="one-hl-variable-name">$driveLetter</span> <span class="one-hl-builtin">-match</span> <span class="one-hl-string">"C:"</span><span class="one-hl-rainbow-delimiters-depth-5">){</span>
+                    <span class="one-hl-variable-name">$action</span> = <span class="one-hl-function-name">New-ScheduledTaskAction</span> <span class="one-hl-constant">-Execute</span> <span class="one-hl-string">"C:\Windows\System32\cmd.exe /c 'echo y | chkdsk.exe /x /f $driveLetter &amp; shutdown /r /t 0 /f'"</span>
+                <span class="one-hl-rainbow-delimiters-depth-5">}</span> <span class="one-hl-keyword">else</span><span class="one-hl-rainbow-delimiters-depth-5">{</span>
+                    <span class="one-hl-variable-name">$action</span> = <span class="one-hl-function-name">New-ScheduledTaskAction</span> <span class="one-hl-constant">-Execute</span> <span class="one-hl-string">"C:\Windows\System32\cmd.exe /c 'echo y | chkdsk.exe /x /f $driveLetter'"</span>
+                <span class="one-hl-rainbow-delimiters-depth-5">}</span>
+                <span class="one-hl-variable-name">$trigger</span> = <span class="one-hl-function-name">New-ScheduledTaskTrigger</span> <span class="one-hl-constant">-Once</span> <span class="one-hl-constant">-At</span> 11pm
+                <span class="one-hl-variable-name">$settings</span> = <span class="one-hl-function-name">New-ScheduledTaskSettingsSet</span> -StartWhenAvailable:<span class="one-hl-builtin">$true</span>
+                <span class="one-hl-variable-name">$task</span> = <span class="one-hl-function-name">Register-ScheduledTask</span> <span class="one-hl-constant">-TaskName</span> <span class="one-hl-variable-name">$taskName</span> <span class="one-hl-constant">-Trigger</span> <span class="one-hl-variable-name">$trigger</span> <span class="one-hl-constant">-Action</span> <span class="one-hl-variable-name">$action</span> <span class="one-hl-constant">-User</span> System <span class="one-hl-constant">-Settings</span> <span class="one-hl-variable-name">$settings</span>
+                <span class="one-hl-variable-name">$task</span> | <span class="one-hl-function-name">Set-ScheduledTask</span>
+                <span class="one-hl-comment"># Recreating the logfile show a scan was done
+</span>                <span class="one-hl-function-name">Write-Host</span> <span class="one-hl-string">"Corrupt Disk Chkdsk Scheduled: $driveName $driveNumber $driveLetter $(Get-Date)"</span>
+                <span class="one-hl-function-name">Add-Content</span> <span class="one-hl-string">"Corrupt Disk Chkdsk Scheduled: $driveName $driveNumber $driveLetter $(Get-Date)"</span> <span class="one-hl-constant">-Path</span> <span class="one-hl-variable-name">$TXTLOG</span> | <span class="one-hl-function-name">Out-Null</span>
+                _CreateEventLogEntry <span class="one-hl-constant">-LogName</span> <span class="one-hl-string">"Application"</span> <span class="one-hl-constant">-LogSource</span> <span class="one-hl-string">"ChkdskScript"</span> <span class="one-hl-constant">-Message</span> <span class="one-hl-string">"Corrupt Disk Chkdsk Scheduled: $driveName $driveNumber $driveLetter $(Get-Date)"</span> <span class="one-hl-constant">-LogType</span> <span class="one-hl-string">"Information"</span>
+            <span class="one-hl-rainbow-delimiters-depth-4">}</span> <span class="one-hl-keyword">else</span><span class="one-hl-rainbow-delimiters-depth-4">{</span><span class="one-hl-string">"CHKDSK Scheduled task already exists. Exiting"</span> ; <span class="one-hl-keyword">Exit</span> 1<span class="one-hl-rainbow-delimiters-depth-4">}</span>
+        <span class="one-hl-rainbow-delimiters-depth-3">}</span>
+        <span class="one-hl-string">"Driver Detection"</span><span class="one-hl-rainbow-delimiters-depth-3">{</span>
+            <span class="one-hl-comment"># Check if CHKDSK task already exists
+</span>            <span class="one-hl-variable-name">$taskExists</span> = <span class="one-hl-function-name">Get-ScheduledTask</span> | <span class="one-hl-function-name">Where-Object</span> <span class="one-hl-rainbow-delimiters-depth-4">{</span><span class="one-hl-builtin">$_</span>.TaskName <span class="one-hl-builtin">-match</span> <span class="one-hl-variable-name">$taskName</span> <span class="one-hl-rainbow-delimiters-depth-4">}</span>
+            <span class="one-hl-comment"># Create task if it doesn't exist
+</span>            <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-4">(</span><span class="one-hl-variable-name">$taskExists</span> <span class="one-hl-builtin">-eq</span> <span class="one-hl-builtin">$null</span><span class="one-hl-rainbow-delimiters-depth-4">){</span>
+                <span class="one-hl-variable-name">$eventString</span> = <span class="one-hl-builtin">$EVENT</span>.Message | <span class="one-hl-function-name">Select-String</span> <span class="one-hl-constant">-Pattern</span> <span class="one-hl-string">"\\device\\Harddisk[1-100]\\..."</span> <span class="one-hl-constant">-AllMatches</span>
+                <span class="one-hl-variable-name">$driveName</span> = <span class="one-hl-rainbow-delimiters-depth-5">(</span><span class="one-hl-variable-name">$eventString</span>.Matches | Select <span class="one-hl-constant">-First</span> 1<span class="one-hl-rainbow-delimiters-depth-5">)</span>.value
+                <span class="one-hl-variable-name">$driveNumber</span> = <span class="one-hl-variable-name">$driveName</span>.Substring<span class="one-hl-rainbow-delimiters-depth-5">(</span><span class="one-hl-variable-name">$driveName</span>.<span class="one-hl-function-name">length-1</span><span class="one-hl-rainbow-delimiters-depth-5">)</span>
+                <span class="one-hl-variable-name">$driveLetter</span> = <span class="one-hl-rainbow-delimiters-depth-5">(</span><span class="one-hl-function-name">Get-CimInstance</span> <span class="one-hl-constant">-ClassName</span> Win32_DiskDrive |
+                  <span class="one-hl-function-name">Where-Object</span> <span class="one-hl-rainbow-delimiters-depth-6">{</span><span class="one-hl-builtin">$_</span>.DeviceID <span class="one-hl-builtin">-like</span> <span class="one-hl-string">"*$driveNumber"</span><span class="one-hl-rainbow-delimiters-depth-6">}</span> |
+                  <span class="one-hl-function-name">Get-CimAssociatedInstance</span> <span class="one-hl-constant">-Association</span> Win32_DiskDriveToDiskPartition |
+                  <span class="one-hl-function-name">Get-CimAssociatedInstance</span> <span class="one-hl-constant">-Association</span> Win32_LogicalDiskToPartition |
+                  <span class="one-hl-function-name">Select-Object</span> DeviceID<span class="one-hl-rainbow-delimiters-depth-5">)</span>.DeviceID
+                <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-5">(</span><span class="one-hl-variable-name">$driveLetter</span> <span class="one-hl-builtin">-match</span> <span class="one-hl-string">"C:"</span><span class="one-hl-rainbow-delimiters-depth-5">){</span>
+                    <span class="one-hl-variable-name">$action</span> = <span class="one-hl-function-name">New-ScheduledTaskAction</span> <span class="one-hl-constant">-Execute</span> <span class="one-hl-string">"C:\Windows\System32\cmd.exe /c 'echo y | chkdsk.exe /x /f $driveLetter &amp; shutdown /r /t 0 /f'"</span>
+                <span class="one-hl-rainbow-delimiters-depth-5">}</span> <span class="one-hl-keyword">else</span><span class="one-hl-rainbow-delimiters-depth-5">{</span>
+                    <span class="one-hl-variable-name">$action</span> = <span class="one-hl-function-name">New-ScheduledTaskAction</span> <span class="one-hl-constant">-Execute</span> <span class="one-hl-string">"C:\Windows\System32\cmd.exe /c 'echo y | chkdsk.exe /x /f $driveLetter'"</span>
+                <span class="one-hl-rainbow-delimiters-depth-5">}</span>
+                <span class="one-hl-variable-name">$trigger</span> = <span class="one-hl-function-name">New-ScheduledTaskTrigger</span> <span class="one-hl-constant">-Once</span> <span class="one-hl-constant">-At</span> 11pm
+                <span class="one-hl-variable-name">$settings</span> = <span class="one-hl-function-name">New-ScheduledTaskSettingsSet</span> -StartWhenAvailable:<span class="one-hl-builtin">$true</span>
+                <span class="one-hl-variable-name">$task</span> = <span class="one-hl-function-name">Register-ScheduledTask</span> <span class="one-hl-constant">-TaskName</span> <span class="one-hl-variable-name">$taskName</span> <span class="one-hl-constant">-Trigger</span> <span class="one-hl-variable-name">$trigger</span> <span class="one-hl-constant">-Action</span> <span class="one-hl-variable-name">$action</span> <span class="one-hl-constant">-User</span> System <span class="one-hl-constant">-Settings</span> <span class="one-hl-variable-name">$settings</span>
+                <span class="one-hl-variable-name">$task</span> | <span class="one-hl-function-name">Set-ScheduledTask</span>
+                <span class="one-hl-comment"># Recreating the logfile show a scan was done
+</span>                <span class="one-hl-function-name">Write-Host</span> <span class="one-hl-string">"Corrupt Disk Chkdsk Scheduled: $driveName $driveNumber $driveLetter $(Get-Date)"</span>
+                <span class="one-hl-function-name">Add-Content</span> <span class="one-hl-string">"Corrupt Disk Chkdsk Scheduled: $driveName $driveNumber $driveLetter $(Get-Date)"</span> <span class="one-hl-constant">-Path</span> <span class="one-hl-variable-name">$TXTLOG</span> | <span class="one-hl-function-name">Out-Null</span>
+                _CreateEventLogEntry <span class="one-hl-constant">-LogName</span> <span class="one-hl-string">"Application"</span> <span class="one-hl-constant">-LogSource</span> <span class="one-hl-string">"ChkdskScript"</span> <span class="one-hl-constant">-Message</span> <span class="one-hl-string">"Corrupt Disk Chkdsk Scheduled: $driveName $driveNumber $driveLetter $(Get-Date)"</span> <span class="one-hl-constant">-LogType</span> <span class="one-hl-string">"Information"</span>
+            <span class="one-hl-rainbow-delimiters-depth-4">}</span> <span class="one-hl-keyword">else</span><span class="one-hl-rainbow-delimiters-depth-4">{</span><span class="one-hl-string">"CHKDSK Scheduled task already exists. Exiting"</span> ; <span class="one-hl-keyword">Exit</span> 1<span class="one-hl-rainbow-delimiters-depth-4">}</span>
+        <span class="one-hl-rainbow-delimiters-depth-3">}</span>
+    <span class="one-hl-rainbow-delimiters-depth-2">}</span>
+<span class="one-hl-rainbow-delimiters-depth-1">}</span>
+
+<span class="one-hl-keyword">function</span> _Main<span class="one-hl-rainbow-delimiters-depth-1">{</span>
+    <span class="one-hl-keyword">param</span> <span class="one-hl-rainbow-delimiters-depth-2">(</span>
+        <span class="one-hl-rainbow-delimiters-depth-3">[</span>Parameter<span class="one-hl-rainbow-delimiters-depth-4">(</span>Mandatory=<span class="one-hl-builtin">$true</span><span class="one-hl-rainbow-delimiters-depth-4">)</span><span class="one-hl-rainbow-delimiters-depth-3">]</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-3">[</span></span><span class="one-hl-type">string</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-3">]</span></span><span class="one-hl-variable-name">$Email</span>,
+        <span class="one-hl-rainbow-delimiters-depth-3">[</span>Parameter<span class="one-hl-rainbow-delimiters-depth-4">(</span>Mandatory=<span class="one-hl-builtin">$true</span><span class="one-hl-rainbow-delimiters-depth-4">)</span><span class="one-hl-rainbow-delimiters-depth-3">]</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-3">[</span></span><span class="one-hl-type">string</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-3">]</span></span><span class="one-hl-variable-name">$Password</span>,
+        <span class="one-hl-rainbow-delimiters-depth-3">[</span>Parameter<span class="one-hl-rainbow-delimiters-depth-4">(</span>Mandatory=<span class="one-hl-builtin">$true</span><span class="one-hl-rainbow-delimiters-depth-4">)</span><span class="one-hl-rainbow-delimiters-depth-3">]</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-3">[</span></span><span class="one-hl-type">string</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-3">]</span></span><span class="one-hl-variable-name">$SMTPServer</span>,
+        <span class="one-hl-rainbow-delimiters-depth-3">[</span>Parameter<span class="one-hl-rainbow-delimiters-depth-4">(</span>Mandatory=<span class="one-hl-builtin">$true</span><span class="one-hl-rainbow-delimiters-depth-4">)</span><span class="one-hl-rainbow-delimiters-depth-3">]</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-3">[</span></span><span class="one-hl-type">string</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-3">]</span></span><span class="one-hl-variable-name">$SMTPPort</span>,
+        <span class="one-hl-rainbow-delimiters-depth-3">[</span>Parameter<span class="one-hl-rainbow-delimiters-depth-4">(</span>Mandatory=<span class="one-hl-builtin">$true</span><span class="one-hl-rainbow-delimiters-depth-4">)</span><span class="one-hl-rainbow-delimiters-depth-3">]</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-3">[</span></span><span class="one-hl-type">string</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-3">]</span></span><span class="one-hl-variable-name">$Recipient</span>
+    <span class="one-hl-rainbow-delimiters-depth-2">)</span>
+    <span class="one-hl-comment"># Scheduling the scans to run only if the last CHKDSK scan was done more than a week ago
+</span>    <span class="one-hl-variable-name">$TXTLOG</span> = <span class="one-hl-string">"C:\Windows\LastChkdsk.txt"</span>
+    <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-2">(</span><span class="one-hl-function-name">Test-Path</span> <span class="one-hl-variable-name">$TXTLOG</span><span class="one-hl-rainbow-delimiters-depth-2">){</span>
+        <span class="one-hl-variable-name">$TXTLOGATTRIBUTES</span> = <span class="one-hl-function-name">Get-Item</span> <span class="one-hl-variable-name">$TXTLOG</span> <span class="one-hl-constant">-ErrorAction</span> SilentlyContinue
+        <span class="one-hl-comment"># If the log file is younger than 7 days...
+</span>        <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-3">(</span><span class="one-hl-variable-name">$TXTLOGATTRIBUTES</span>.LastWriteTime <span class="one-hl-builtin">-gt</span> <span class="one-hl-rainbow-delimiters-depth-4">(</span><span class="one-hl-function-name">Get-Date</span><span class="one-hl-rainbow-delimiters-depth-4">)</span>.AddDays<span class="one-hl-rainbow-delimiters-depth-4">(</span>-7<span class="one-hl-rainbow-delimiters-depth-4">)</span><span class="one-hl-rainbow-delimiters-depth-3">){</span>
+            _CreateEventLogEntry <span class="one-hl-constant">-LogName</span> <span class="one-hl-string">"Application"</span> <span class="one-hl-constant">-LogSource</span> <span class="one-hl-string">"ChkdskScript"</span> <span class="one-hl-constant">-Message</span> <span class="one-hl-string">"Corrupt Volume Chkdsk Scheduled: $driveLetter $(Get-Date)"</span> <span class="one-hl-constant">-LogType</span> <span class="one-hl-string">"Information"</span>
+            <span class="one-hl-string">"Last scan was run on: "</span> + <span class="one-hl-variable-name">$TXTLOGATTRIBUTES</span>.LastWriteTime
+            <span class="one-hl-string">"No action was taken since it was last done less than 7 days ago"</span>
+            <span class="one-hl-string">"This incident will be recorded since bad blocks are no bueno"</span>
+
+            <span class="one-hl-comment"># Sending the report email
+</span>            &amp; .\sendmail.exe <span class="one-hl-constant">-I</span> smtp.gmail.com <span class="one-hl-constant">-i</span> <span class="one-hl-variable-name">$SMTPPort</span> <span class="one-hl-constant">-u</span> <span class="one-hl-variable-name">$Email</span> <span class="one-hl-constant">-p</span> <span class="one-hl-variable-name">$Password</span> <span class="one-hl-constant">-r</span> <span class="one-hl-variable-name">$Recipient</span> <span class="one-hl-constant">-s</span> <span class="one-hl-string">"Datto Possible Disk Failure"</span> <span class="one-hl-constant">-m</span> `
+              <span class="one-hl-string">"
+                The CHKDSK Monitor already repaired this drive.
+                An alert popped up again, which may indicate drive failure.
+                Check this computer out!
+
+                Site Name: $</span><span class="one-hl-underline"><span class="one-hl-type">env</span></span><span class="one-hl-string">:CS_PROFILE_NAME
+                Site UID: $</span><span class="one-hl-underline"><span class="one-hl-type">env</span></span><span class="one-hl-string">:CS_PROFILE_UID
+                Device Name: $</span><span class="one-hl-underline"><span class="one-hl-type">env</span></span><span class="one-hl-string">:COMPUTERNAME
+                Device Description: $</span><span class="one-hl-underline"><span class="one-hl-type">env</span></span><span class="one-hl-string">:CS_PROFILE_DESC
+                Domain: $</span><span class="one-hl-underline"><span class="one-hl-type">env</span></span><span class="one-hl-string">:CS_DOMAIN
+                "</span>
+        <span class="one-hl-rainbow-delimiters-depth-3">}</span> <span class="one-hl-keyword">else</span><span class="one-hl-rainbow-delimiters-depth-3">{</span>
+            <span class="one-hl-comment"># Run the CHKDSK if $TXTLOG is older than 7 days
+</span>            _ScheduleCHKDSK
+        <span class="one-hl-rainbow-delimiters-depth-3">}</span>
+    <span class="one-hl-rainbow-delimiters-depth-2">}</span> <span class="one-hl-keyword">else</span> <span class="one-hl-rainbow-delimiters-depth-2">{</span>
+        <span class="one-hl-comment"># Run the CHKDSK if $TXTLOG doesn't exist
+</span>        <span class="one-hl-string">"Could not find $TXTLOG. Running the script for the first time"</span>
+        _ScheduleCHKDSK
+    <span class="one-hl-rainbow-delimiters-depth-2">}</span>
+<span class="one-hl-rainbow-delimiters-depth-1">}</span>
+
+
+
+_Main <span class="one-hl-constant">-Email</span> EMAIL@EMAIL.COM <span class="one-hl-constant">-Password</span> PASSWORDHERE <span class="one-hl-constant">-SMTPServer</span> smtp.gmail.com <span class="one-hl-constant">-SMTPPort</span> 587 <span class="one-hl-constant">-Recipient</span> <span class="one-hl-string">"RECIPIENT@EMAIL.com"</span></code></pre>
+</div>
+</div>
+<div class="nav"><a href="/blog/cloning-bios-drive-to-uefi-with-disimilar-hardware">PREV</a><a href="/blog/creating-offline-debian-mirror/">RANDOM</a><a href="/blog/creating-decent-portable-terminal">NEXT</a></div></article></div></body><script>
+function sidebarShow() {
+  if (window.innerWidth < 481)
+    document.getElementById('sidebar-left').style.width = '75vw';
+  else {
+    document.getElementById('sidebar-left').style.width = 'min(300px, 34vw)';
+  }
+  document.getElementById('sidebar-main').setAttribute('onclick', 'sidebarHide()');
+  document.getElementById('sidebar-main').style.display = 'block';
+}
+function sidebarHide() {
+  document.getElementById('sidebar-left').style.width = '0';
+  document.getElementById('sidebar-main').style.display = 'none';
+}
+</script></html>

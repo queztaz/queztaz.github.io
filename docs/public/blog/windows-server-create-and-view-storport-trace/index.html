@@ -1,0 +1,463 @@
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1" /><link rel="stylesheet" type="text/css" href="/one.css" /><title>Windows/Creating and Viewing a Storport on Windows Server</title></head><body><div id="sidebar-left" onclick="followSidebarLink()"><div><div>Pages</div></div><ul><li><a href="/">Homepage</a></li><li><a href="/blog/inventory/">Queztaz/Tech Inventory</a></li><li><a href="/blog/emacs-with-bidirectional-google-calendar-sync/">Emacs/Emacs With BiDirectional Google Calendar Sync</a></li><li><a href="/blog/emacs-with-mu4e-and-multiple-gmail-accounts">Emacs/Setting up Mu4e and Multiple Gmail Accounts</a></li><li><a href="/blog/emacs-eww-hacks/">Emacs/EWW Hacks</a></li><li><a href="/blog/creating-offline-debian-mirror/">Linux/Creating an Offline Debian Mirror Repository</a></li><li><a href="/blog/migrate-wiki-js-to-another-server/">Linux/Migrate Wiki.js to Another Server</a></li><li><a href="/blog/adding-bitwarden-to-the-pinephone-pro/">Linux/Adding Bitwarden to the Pinephone Pro</a></li><li><a href="/blog/pbp-custom-kernel/">Pinebook Pro/Custom Kernel</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Keyboard Firmware Update</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Netbsd Installation</a></li><li><a href="/blog/pbp-setting-up-zram/">Pinebook Pro/Setting Up Zram</a></li><li><a href="/blog/pbp-troubleshooting-common-issues">Pinebook Troubleshooting/Pro Common Issues</a></li><li><a href="/blog/pbp-use-nvme-as-root">Pinebook Pro/Use NVME as Root</a></li><li><a href="/blog/pbp-write-to-spi-flash">Pinebook Pro/Write to SPI Flash</a></li><li><a href="/blog/qemu-chroot-into-different-architecture">Qemu/Chroot Into a Different Architecture</a></li><li><a href="/blog/qemu-chroot-into-img-file">Qemu/Choot Into an Img File</a></li><li><a href="/blog/qemu-mount-virtual-images">Qemu/Mount Virtual Images</a></li><li><a href="/blog/qemu-windows-xp-fix-smb-not-working">Qemu/Windows Xp Fix Smb Not Working</a></li><li><a href="/blog/qemu-windows-xp-installation">Qemu/Windows Xp Installation</a></li><li><a href="/blog/tg1672G-default-wifi-password">Misc/Finding the Default Wireless Password to TG1672G Routers</a></li><li><a href="/blog/portable-ollama-installation">Misc/Running Ollama Portably</a></li><li><a href="/blog/cloning-bios-drive-to-uefi-with-disimilar-hardware">Windows/Cloning a Bios Boot Drive to Disimilar Hardware with UEFI</a></li><li><a href="/blog/automating-chkdsk-scan-with-powershell-and-email-alerts">Windows/Automatic CHKDSK Scans Using Powershell & Email Alerts</a></li><li><a href="/blog/creating-decent-portable-terminal">Windows/Creating a Decent Portable Terminal</a></li><li><a href="/blog/template">Windows/Merging HyperV Snapshots With Powershell</a></li><li><a href="/blog/simulating-bad-blocks-on-ntfs-drive">Windows/Simulating Bad Blocks on NTFS Filesystems</a></li><li><a href="/blog/windows-server-create-and-view-storport-trace">Windows/Creating and Viewing a Storport on Windows Server</a></li><li><a href="/blog/mikrotik-creating-client-to-site-vpn">Mikrotik/Creating a Client to Site VPN With</a></li><li><a href="/blog/mikrotik-securing-router-with-firewall">Mikrotik/Securing Router With Firewall</a></li><li><a href="/blog/mikrotik-setup-dynamic-dns-with-no-ip-api">Mikrotik Setup Dynamically Changing IP With No-IP Api</a></li></ul></div><div id="sidebar-main"></div><div id="sidebar-header"><svg id="hamburger" viewBox="0 0 24 24" onclick="sidebarShow()"><path d="M21,6H3V5h18V6z M21,11H3v1h18V11z M21,17H3v1h18V17z"></path></svg><a href="/">Homepage</a></div><div id="sidebar-content"><div id="sidebar"><ul><li><a href="/">Homepage</a></li><li><a href="/blog/inventory/">Queztaz/Tech Inventory</a></li><li><a href="/blog/emacs-with-bidirectional-google-calendar-sync/">Emacs/Emacs With BiDirectional Google Calendar Sync</a></li><li><a href="/blog/emacs-with-mu4e-and-multiple-gmail-accounts">Emacs/Setting up Mu4e and Multiple Gmail Accounts</a></li><li><a href="/blog/emacs-eww-hacks/">Emacs/EWW Hacks</a></li><li><a href="/blog/creating-offline-debian-mirror/">Linux/Creating an Offline Debian Mirror Repository</a></li><li><a href="/blog/migrate-wiki-js-to-another-server/">Linux/Migrate Wiki.js to Another Server</a></li><li><a href="/blog/adding-bitwarden-to-the-pinephone-pro/">Linux/Adding Bitwarden to the Pinephone Pro</a></li><li><a href="/blog/pbp-custom-kernel/">Pinebook Pro/Custom Kernel</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Keyboard Firmware Update</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Netbsd Installation</a></li><li><a href="/blog/pbp-setting-up-zram/">Pinebook Pro/Setting Up Zram</a></li><li><a href="/blog/pbp-troubleshooting-common-issues">Pinebook Troubleshooting/Pro Common Issues</a></li><li><a href="/blog/pbp-use-nvme-as-root">Pinebook Pro/Use NVME as Root</a></li><li><a href="/blog/pbp-write-to-spi-flash">Pinebook Pro/Write to SPI Flash</a></li><li><a href="/blog/qemu-chroot-into-different-architecture">Qemu/Chroot Into a Different Architecture</a></li><li><a href="/blog/qemu-chroot-into-img-file">Qemu/Choot Into an Img File</a></li><li><a href="/blog/qemu-mount-virtual-images">Qemu/Mount Virtual Images</a></li><li><a href="/blog/qemu-windows-xp-fix-smb-not-working">Qemu/Windows Xp Fix Smb Not Working</a></li><li><a href="/blog/qemu-windows-xp-installation">Qemu/Windows Xp Installation</a></li><li><a href="/blog/tg1672G-default-wifi-password">Misc/Finding the Default Wireless Password to TG1672G Routers</a></li><li><a href="/blog/portable-ollama-installation">Misc/Running Ollama Portably</a></li><li><a href="/blog/cloning-bios-drive-to-uefi-with-disimilar-hardware">Windows/Cloning a Bios Boot Drive to Disimilar Hardware with UEFI</a></li><li><a href="/blog/automating-chkdsk-scan-with-powershell-and-email-alerts">Windows/Automatic CHKDSK Scans Using Powershell & Email Alerts</a></li><li><a href="/blog/creating-decent-portable-terminal">Windows/Creating a Decent Portable Terminal</a></li><li><a href="/blog/template">Windows/Merging HyperV Snapshots With Powershell</a></li><li><a href="/blog/simulating-bad-blocks-on-ntfs-drive">Windows/Simulating Bad Blocks on NTFS Filesystems</a></li><li><a href="/blog/windows-server-create-and-view-storport-trace">Windows/Creating and Viewing a Storport on Windows Server</a></li><li><a href="/blog/mikrotik-creating-client-to-site-vpn">Mikrotik/Creating a Client to Site VPN With</a></li><li><a href="/blog/mikrotik-securing-router-with-firewall">Mikrotik/Securing Router With Firewall</a></li><li><a href="/blog/mikrotik-setup-dynamic-dns-with-no-ip-api">Mikrotik Setup Dynamically Changing IP With No-IP Api</a></li></ul></div><article><div class="title"><h1>Windows/Creating and Viewing a Storport on Windows Server</h1></div><div class="toc"><div><div>Table of content</div><div>
+<ul>
+<li><a href="#one-30be9ae163">Tracing</a>
+<ul>
+<li><a href="#one-f8a6f500df">Creating a StorPort trace using logman.exe</a></li>
+<li><a href="#one-b41544b468">Viewing the trace data (Event Viewer Method)</a></li>
+<li><a href="#one-1038d44b2">Viewing the trace data (StorportPACMAN.ps1 Method)</a></li>
+<li><a href="#one-6ba6c136db">Preparing our storport.etl file</a></li>
+</ul>
+</li>
+</ul>
+</div></div></div><div><p>Trace
+Site under construction. This page has to be re-read and remembered. I believe
+this is to use a excel template to parse a storport trace. It will calculate the
+latency of SAS drives though I think the output was weirdly documented along
+with the template.
+</p>
+</div>
+<div><h2 id="one-30be9ae163">Tracing</h2><div><h3 id="one-f8a6f500df">Creating a StorPort trace using logman.exe</h3><div><p>LOGMAN.EXE is CLI utility for creating data collector sets.
+A data collector set can be thought of as a container for choosing which performance counters or trace events to log.
+All the logged data from the data collector will be stored in a single file.
+</p>
+
+<p>A performance counter provides high-level, numeric, metrics for system behavior.
+There are performance counters for CPU utilization, search indexing, disk utilization, processes, etc.
+It provides general information on how parts of your computer are behaving.
+</p>
+
+<p>Traces events are low-level events that get reported when something <i>note worthy</i> happens with a system component or application.
+The Windows kernel may report each time a DLL is loaded, unloaded, a process starts/stops, etc.
+In this case, the StorPort driver trace reports things like latency, byte length, IO return codes, etc.
+</p>
+
+<p>Everything we&apos;re doing here can be done through the PERFMON.EXE GUI
+</p>
+
+<pre><code class="one-hl one-hl-block"><span class="one-hl-comment-delimiter"># </span><span class="one-hl-comment">Creating the TraceLog
+</span>LOGMAN.EXE create trace <span class="one-hl-string">"storport"</span> -ow -o c:\PerfLogs\storport.etl -p <span class="one-hl-string">"Microsoft-Windows-StorPort"</span> 0xffffffffffffffff 0xff -nb 16 16 -bs 1024 -mode Circular -f bincirc -max 512 -ets
+
+<span class="one-hl-comment-delimiter"># </span><span class="one-hl-comment">Starting the trace log
+</span>LOGMAN.EXE start storport -ets
+
+<span class="one-hl-comment-delimiter"># </span><span class="one-hl-comment">When you feel like you captured the issue in the log, stop it.
+</span>LOGMAN.EXE stop storport -ets</code></pre>
+
+<pre><code class="one-hl one-hl-block"><span class="one-hl-comment-delimiter"># </span><span class="one-hl-comment">ARGUMENTS DEFINED
+</span>*-ow* Overwrite an existing logfile
+
+*-o* Path for the existing log
+
+*-p* TODO
+
+*HexCodes* TODO
+
+*-nb* Number of event trace buffers
+
+*-bs* Event trace buffer size
+
+*-mode Circular* The event trace logger mode. Circular means the log file overwrites the oldest data constantly.
+
+*-f bincirc* Log format. We<span class="one-hl-string">'re using the circular binary format
+
+*-max 512* The max size in megabytes.
+
+*-ets* Send commands to Event Trace Sessions directly without saving or scheduling.</span></code></pre>
+</div>
+</div>
+<div><h3 id="one-b41544b468">Viewing the trace data (Event Viewer Method)</h3><div><p>We used LOGMAN to create a trace log and store the output to C:/PerfLogs/storport.etl.
+Here&apos;s how you can open the file with Eventviewer
+</p>
+
+<ul><li><p>Open EventViewer
+</p>
+</li>
+<li><p>Click Action&gt;OpenSavedLog
+</p>
+</li>
+<li><p>Navigate to your storport.etc file, open it, and click the option to copy the data to an event log.
+</p>
+</li>
+<li><p>Click on any log and select the &quot;Details&quot; tab
+</p>
+</li>
+</ul>
+
+<p>The event property you&apos;re looking for is &quot;RequestDuration_100ns&quot;.
+This is the TODOTODOTODO.
+The measurement is done in nano-seconds.
+To convert it to milliseconds, divide the value by 10,000
+</p>
+
+<pre><code class="one-hl one-hl-block"><span class="one-hl-comment-delimiter"># </span><span class="one-hl-comment">22860ns is equal to 22ms
+</span>+ System 
+- EventData 
+  RequestDuration_100ns 22860 
+  Irp 0xffffe10c1e9f7a20 
+  Command 53 
+  SrbStatus 1 
+  OriginalIrp 0x0 
+  Port 0 
+  Bus 0 
+  Target 0 
+  LUN 0 
+  ScsiStatus 0 
+  ByteLengthOfTransfer 0 
+  BuildIoDuration_100ns 21 
+  StartIoDuration_100ns 121 </code></pre>
+
+<p>Less than 9ms = Excellent performance
+</p>
+
+<p>Less than 15ms = Good Performance
+</p>
+
+<p>Less than 25ms = Normal 
+</p>
+
+<p>More than 25ms = Poor Performance
+</p>
+</div>
+</div>
+<div><h3 id="one-1038d44b2">Viewing the trace data (StorportPACMAN.ps1 Method)</h3><div><p>StorportPacman.PS1 is a powershell script written by Paul Reynolds at Microsoft.
+It parses the STORPORT.ETL file into an organized, human readable, CSV file.
+</p>
+
+<p>For archival purposes, I&apos;m including a full copy and paste of it here.
+</p>
+
+<pre><code class="one-hl one-hl-block"><span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">StorportPACMAN ported to Windows Powershell
+</span><span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">Paul Reynolds PaulRey@microsoft.com -&gt; Improvements: Robin Hermann (RHE)
+</span><span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">version 1.1 updated for 2012 R2
+</span><span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">version 1.2 updated with performance enhancments
+</span><span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">version 1.3 updated to make filter for storport data more robust
+</span><span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">version 1.4 updated to make filter for storport data able to use storport ets trace data (insightweb)
+</span><span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">version 1.5 updated to include addition strings to flag storport data
+</span><span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">version 1.6 updated to fix bug in parameter errors
+</span><span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">version 1.7 updated to fix Excel 2016 ACE provider bug that converts hex to decimal on the fly
+</span><span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">version 1.8 updated to allow flexibility in installation directory 
+</span><span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">version 1.9 updated to clean up leading and trailing spaces in header information and data, which caused problems in an Office 2016 update regression issue
+</span><span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">version 2.0 updated to show warnings if data has any records with SCSI Status not 0 and/or SRB Status not 1
+</span><span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">version 3.0 RHE: updated to a function for more agility
+</span><span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">version 3.1 RHE: add more parameters and fix the with $MyInvocation, $MyInvocation is an automatic variable populated at script run time, then if you execute $MyInvocation.MyCommand.Path in a powershell console or ISE isn't populated
+</span> 
+<span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">You must run the script not the script content only!
+</span> 
+Function Convert-ETWTraceToReadableFileCSV <span class="one-hl-rainbow-delimiters-depth-1">{</span>
+    <span class="one-hl-rainbow-delimiters-depth-2">[</span>CmdletBinding<span class="one-hl-rainbow-delimiters-depth-3">()</span><span class="one-hl-rainbow-delimiters-depth-2">]</span>
+ 
+    <span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">read in parameters for requestdurationvalue and ETL location
+</span>    Param<span class="one-hl-rainbow-delimiters-depth-2">(</span>
+        <span class="one-hl-rainbow-delimiters-depth-3">[</span>Parameter<span class="one-hl-rainbow-delimiters-depth-4">(</span><span class="one-hl-variable-name">Position</span>=0,<span class="one-hl-variable-name">mandatory</span>=$<span class="one-hl-variable-name">false</span>,<span class="one-hl-variable-name">HelpMessage</span>=<span class="one-hl-string">"Path to the Skript and the Excel PowerPivot Templates (storport2012.xlsx)"</span><span class="one-hl-rainbow-delimiters-depth-4">)</span><span class="one-hl-rainbow-delimiters-depth-3">][</span>string<span class="one-hl-rainbow-delimiters-depth-3">]</span>$<span class="one-hl-variable-name">WorkFolderPath</span> = <span class="one-hl-string">"C:\StorPortPACMAN"</span>,
+        <span class="one-hl-rainbow-delimiters-depth-3">[</span>Parameter<span class="one-hl-rainbow-delimiters-depth-4">(</span><span class="one-hl-variable-name">Position</span>=1,<span class="one-hl-variable-name">mandatory</span>=$<span class="one-hl-variable-name">false</span><span class="one-hl-rainbow-delimiters-depth-4">)</span><span class="one-hl-rainbow-delimiters-depth-3">][</span>string<span class="one-hl-rainbow-delimiters-depth-3">]</span>$<span class="one-hl-variable-name">Filter</span>,
+        <span class="one-hl-rainbow-delimiters-depth-3">[</span>Parameter<span class="one-hl-rainbow-delimiters-depth-4">(</span><span class="one-hl-variable-name">Position</span>=2,<span class="one-hl-variable-name">mandatory</span>=$<span class="one-hl-variable-name">false</span><span class="one-hl-rainbow-delimiters-depth-4">)</span><span class="one-hl-rainbow-delimiters-depth-3">][</span>string<span class="one-hl-rainbow-delimiters-depth-3">]</span>$<span class="one-hl-variable-name">ETL</span>,
+        <span class="one-hl-rainbow-delimiters-depth-3">[</span>Parameter<span class="one-hl-rainbow-delimiters-depth-4">(</span><span class="one-hl-variable-name">Position</span>=3,<span class="one-hl-variable-name">mandatory</span>=$<span class="one-hl-variable-name">false</span>,<span class="one-hl-variable-name">HelpMessage</span>=<span class="one-hl-string">"If you already converted the ETL to CSV"</span><span class="one-hl-rainbow-delimiters-depth-4">)</span><span class="one-hl-rainbow-delimiters-depth-3">][</span>string<span class="one-hl-rainbow-delimiters-depth-3">]</span>$<span class="one-hl-variable-name">RAWXPerfCSVPath</span> = $<span class="one-hl-variable-name">WorkFolderPath</span> + <span class="one-hl-string">'\raw-xperf.csv'</span>
+    <span class="one-hl-rainbow-delimiters-depth-2">)</span>
+ 
+    process <span class="one-hl-rainbow-delimiters-depth-2">{</span>
+        <span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">edit this string for future change to storport data headers 
+</span>        $<span class="one-hl-variable-name">strStorportData</span> = @<span class="one-hl-rainbow-delimiters-depth-3">(</span><span class="one-hl-string">'Microsoft-Windows-StorPort/Miniport'</span>,<span class="one-hl-string">'Microsoft-Windows-StorPort/Port /Info'</span>,<span class="one-hl-string">'Microsoft-Windows-StorPort/Port/win:Info'</span>,<span class="one-hl-string">'Microsoft-Windows-StorPort/TaskMiniportIORequestServiceTime'</span><span class="one-hl-rainbow-delimiters-depth-3">)</span>;
+ 
+        <span class="one-hl-rainbow-delimiters-depth-3">[</span>System.Reflection.Assembly<span class="one-hl-rainbow-delimiters-depth-3">]</span>::LoadWithPartialName<span class="one-hl-rainbow-delimiters-depth-3">(</span><span class="one-hl-string">"System.Windows.Forms"</span><span class="one-hl-rainbow-delimiters-depth-3">)</span>
+ 
+        $<span class="one-hl-variable-name">storportpacmandirectory</span> = $<span class="one-hl-variable-name">WorkFolderPath</span> <span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">Split-Path -Parent $MyInvocation.MyCommand.Path #"C:\StorPortPACMAN" 
+</span>        $<span class="one-hl-variable-name">requestduration_multiplier</span> = 1 <span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">this will change to 10,000 if the OS is Server 2012 due to differences in requestduration units (milliseconds in 2008, 100ns in 2012)
+</span> 
+        <span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">test if requestdurationvalue is present and a valid integer
+</span>        If <span class="one-hl-rainbow-delimiters-depth-3">(</span>$<span class="one-hl-variable-name">filter</span> -eq <span class="one-hl-string">''</span><span class="one-hl-rainbow-delimiters-depth-3">){</span>
+            $<span class="one-hl-variable-name">requestdurationvalue</span> = 1000000 <span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">default to 1000000 if not present(do NOT use commas)
+</span>        <span class="one-hl-rainbow-delimiters-depth-3">}</span> <span class="one-hl-keyword">else</span> <span class="one-hl-rainbow-delimiters-depth-3">{</span>
+            If<span class="one-hl-rainbow-delimiters-depth-4">(</span><span class="one-hl-rainbow-delimiters-depth-5">(</span>$<span class="one-hl-variable-name">filter</span> -as <span class="one-hl-rainbow-delimiters-depth-6">[</span>Int64<span class="one-hl-rainbow-delimiters-depth-6">]</span><span class="one-hl-rainbow-delimiters-depth-5">)</span> -eq $<span class="one-hl-variable-name">null</span><span class="one-hl-rainbow-delimiters-depth-4">)</span> <span class="one-hl-rainbow-delimiters-depth-4">{</span>
+                <span class="one-hl-rainbow-delimiters-depth-5">[</span>System.Windows.Forms.MessageBox<span class="one-hl-rainbow-delimiters-depth-5">]</span>::Show<span class="one-hl-rainbow-delimiters-depth-5">(</span><span class="one-hl-string">'The request duration filter is either not a valid integer or has commas.'</span><span class="one-hl-rainbow-delimiters-depth-5">)</span>
+                <span class="one-hl-keyword">exit</span>
+            <span class="one-hl-rainbow-delimiters-depth-4">}</span> <span class="one-hl-keyword">else</span> <span class="one-hl-rainbow-delimiters-depth-4">{</span>
+                $<span class="one-hl-variable-name">requestdurationvalue</span> = <span class="one-hl-rainbow-delimiters-depth-5">[</span>Int64<span class="one-hl-rainbow-delimiters-depth-5">]</span>$<span class="one-hl-variable-name">filter</span>
+            <span class="one-hl-rainbow-delimiters-depth-4">}</span>
+        <span class="one-hl-rainbow-delimiters-depth-3">}</span>
+ 
+        If <span class="one-hl-rainbow-delimiters-depth-3">(</span>$<span class="one-hl-variable-name">RAWPerfCSVPath</span> -eq <span class="one-hl-string">''</span><span class="one-hl-rainbow-delimiters-depth-3">)</span> <span class="one-hl-rainbow-delimiters-depth-3">{</span>
+            <span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">test if etl file is present and a valid file
+</span>            If<span class="one-hl-rainbow-delimiters-depth-4">(</span>$<span class="one-hl-variable-name">etl</span> -eq <span class="one-hl-string">''</span><span class="one-hl-rainbow-delimiters-depth-4">)</span> <span class="one-hl-rainbow-delimiters-depth-4">{</span>
+                $<span class="one-hl-variable-name">ETLlocation</span> = $<span class="one-hl-variable-name">storportpacmandirectory</span> + <span class="one-hl-string">'\storport.etl'</span>
+                If <span class="one-hl-rainbow-delimiters-depth-5">(</span>-not <span class="one-hl-rainbow-delimiters-depth-6">(</span>Test-Path $<span class="one-hl-variable-name">ETLlocation</span> -PathType leaf<span class="one-hl-rainbow-delimiters-depth-6">)</span><span class="one-hl-rainbow-delimiters-depth-5">)</span> <span class="one-hl-rainbow-delimiters-depth-5">{</span>
+                    <span class="one-hl-rainbow-delimiters-depth-6">[</span>System.Windows.Forms.MessageBox<span class="one-hl-rainbow-delimiters-depth-6">]</span>::Show<span class="one-hl-rainbow-delimiters-depth-6">(</span><span class="one-hl-string">'Sorry, but the file "Storport.etl" was not found.  Is it named correctly and in the storportpacman directory?'</span><span class="one-hl-rainbow-delimiters-depth-6">)</span>
+                    <span class="one-hl-keyword">exit</span>
+                <span class="one-hl-rainbow-delimiters-depth-5">}</span>
+            <span class="one-hl-rainbow-delimiters-depth-4">}</span> <span class="one-hl-keyword">else</span> <span class="one-hl-rainbow-delimiters-depth-4">{</span>
+                If <span class="one-hl-rainbow-delimiters-depth-5">(</span>-not <span class="one-hl-rainbow-delimiters-depth-6">(</span>Test-Path $<span class="one-hl-variable-name">etl</span> -PathType leaf<span class="one-hl-rainbow-delimiters-depth-6">)</span><span class="one-hl-rainbow-delimiters-depth-5">)</span> <span class="one-hl-rainbow-delimiters-depth-5">{</span>
+                  <span class="one-hl-rainbow-delimiters-depth-6">[</span>System.Windows.Forms.MessageBox<span class="one-hl-rainbow-delimiters-depth-6">]</span>::Show<span class="one-hl-rainbow-delimiters-depth-6">(</span><span class="one-hl-string">'Sorry, but the file "'</span> + $<span class="one-hl-variable-name">etl</span> + <span class="one-hl-string">'" was not found.'</span><span class="one-hl-rainbow-delimiters-depth-6">)</span>
+                  <span class="one-hl-keyword">exit</span>
+                <span class="one-hl-rainbow-delimiters-depth-5">}</span> <span class="one-hl-keyword">else</span> <span class="one-hl-rainbow-delimiters-depth-5">{</span>
+                  $<span class="one-hl-variable-name">ETLlocation</span> = $<span class="one-hl-variable-name">etl</span>
+                <span class="one-hl-rainbow-delimiters-depth-5">}</span>
+            <span class="one-hl-rainbow-delimiters-depth-4">}</span>
+ 
+            Write-Progress -Activity <span class="one-hl-string">"StorportPACMAN Progress"</span> -Status <span class="one-hl-string">"Converting ETL file to CSV file via XPERF"</span> -PercentComplete <span class="one-hl-string">"33"</span>
+ 
+            try <span class="one-hl-rainbow-delimiters-depth-4">{</span>
+                $<span class="one-hl-variable-name">myargs</span> = <span class="one-hl-string">"-i "</span> + <span class="one-hl-rainbow-delimiters-depth-5">(</span><span class="one-hl-string">'"{0}"'</span> -f $<span class="one-hl-variable-name">ETLlocation</span><span class="one-hl-rainbow-delimiters-depth-5">)</span> + <span class="one-hl-string">" -o "</span>  + <span class="one-hl-rainbow-delimiters-depth-5">(</span><span class="one-hl-string">'"{0}"'</span> -f $<span class="one-hl-variable-name">storportpacmandirectory</span><span class="one-hl-rainbow-delimiters-depth-5">)</span> + <span class="one-hl-string">"\raw-xperf.csv -tle"</span>
+                Start-Process xperf -ArgumentList $<span class="one-hl-variable-name">myargs</span> -Wait
+            <span class="one-hl-rainbow-delimiters-depth-4">}</span>
+            catch <span class="one-hl-rainbow-delimiters-depth-4">{</span>
+                <span class="one-hl-rainbow-delimiters-depth-5">[</span>System.Windows.Forms.MessageBox<span class="one-hl-rainbow-delimiters-depth-5">]</span>::Show<span class="one-hl-rainbow-delimiters-depth-5">(</span><span class="one-hl-string">'There was an error running XPerf.  Is it installed and in your system path?  The error message is '</span> + $<span class="one-hl-variable-name">_</span>.Exception.Message<span class="one-hl-rainbow-delimiters-depth-5">)</span>
+                <span class="one-hl-keyword">exit</span>
+            <span class="one-hl-rainbow-delimiters-depth-4">}</span>
+        <span class="one-hl-rainbow-delimiters-depth-3">}</span>
+ 
+ 
+        try <span class="one-hl-rainbow-delimiters-depth-3">{</span>
+            $<span class="one-hl-variable-name">reader</span> = New-Object System.IO.StreamReader<span class="one-hl-rainbow-delimiters-depth-4">(</span>$<span class="one-hl-variable-name">RAWXPerfCSVPath</span><span class="one-hl-rainbow-delimiters-depth-4">)</span>
+            $<span class="one-hl-variable-name">writer</span> = New-Object System.IO.StreamWriter<span class="one-hl-rainbow-delimiters-depth-4">(</span>$<span class="one-hl-variable-name">storportpacmandirectory</span> + <span class="one-hl-string">'\processed-xperf.csv'</span><span class="one-hl-rainbow-delimiters-depth-4">)</span>
+        <span class="one-hl-rainbow-delimiters-depth-3">}</span> catch <span class="one-hl-rainbow-delimiters-depth-3">{</span>
+            <span class="one-hl-rainbow-delimiters-depth-4">[</span>System.Windows.Forms.MessageBox<span class="one-hl-rainbow-delimiters-depth-4">]</span>::Show<span class="one-hl-rainbow-delimiters-depth-4">(</span><span class="one-hl-string">'There was an error creating the readers or writers.  Do you have write access to the '</span> + $<span class="one-hl-variable-name">storportpacmandirectory</span>?  + <span class="one-hl-string">' The error message is '</span> + $<span class="one-hl-variable-name">_</span>.Exception.Message<span class="one-hl-rainbow-delimiters-depth-4">)</span>
+            <span class="one-hl-keyword">exit</span>
+        <span class="one-hl-rainbow-delimiters-depth-3">}</span>
+ 
+ 
+        try <span class="one-hl-rainbow-delimiters-depth-3">{</span>
+            Write-Progress -Activity <span class="one-hl-string">"StorportPACMAN Progress"</span> -Status <span class="one-hl-string">"Scrubbing Data"</span> -PercentComplete <span class="one-hl-string">"50"</span>
+ 
+            $<span class="one-hl-variable-name">already_wrote_header</span> = <span class="one-hl-string">'false'</span>;
+            $<span class="one-hl-variable-name">request_duration_index</span> = 14;
+            $<span class="one-hl-variable-name">record_counter</span> = 0;
+            $<span class="one-hl-variable-name">scsi_status_not_0_counter</span>=0;
+            $<span class="one-hl-variable-name">srb_status_not_1_counter</span>=0;
+            $<span class="one-hl-variable-name">scsi_status_index</span> = 16;
+            $<span class="one-hl-variable-name">srb_status_index</span> = 17;
+ 
+            While <span class="one-hl-rainbow-delimiters-depth-4">(</span>$<span class="one-hl-variable-name">reader</span>.Peek<span class="one-hl-rainbow-delimiters-depth-5">()</span> -gt -1<span class="one-hl-rainbow-delimiters-depth-4">)</span> <span class="one-hl-rainbow-delimiters-depth-4">{</span>
+                $<span class="one-hl-variable-name">original_record</span> = $<span class="one-hl-variable-name">reader</span>.ReadLine<span class="one-hl-rainbow-delimiters-depth-5">()</span>
+ 
+                <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-5">(</span>$<span class="one-hl-variable-name">original_record</span>.Contains<span class="one-hl-rainbow-delimiters-depth-6">(</span><span class="one-hl-string">'OS Version:'</span><span class="one-hl-rainbow-delimiters-depth-6">)</span><span class="one-hl-rainbow-delimiters-depth-5">)</span> <span class="one-hl-rainbow-delimiters-depth-5">{</span>
+                    <span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">check if O/S is windows 2012 or greater and if it is, make requestduration multiplier 10000 since requestdurations changed from millisecond to 100 nanosecond increments
+</span>                    <span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">also request_duration column changes from 14 to 9
+</span> 
+                    <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-6">(</span><span class="one-hl-rainbow-delimiters-depth-7">[</span>Double<span class="one-hl-rainbow-delimiters-depth-7">]</span>$<span class="one-hl-variable-name">original_record</span>.Substring<span class="one-hl-rainbow-delimiters-depth-7">(</span>11,4<span class="one-hl-rainbow-delimiters-depth-7">)</span> -ge 6.2<span class="one-hl-rainbow-delimiters-depth-6">)</span> <span class="one-hl-rainbow-delimiters-depth-6">{</span>
+                        $<span class="one-hl-variable-name">requestduration_multiplier</span> = 10000;
+                        $<span class="one-hl-variable-name">request_duration_index</span> = 9;
+                        $<span class="one-hl-variable-name">srb_status_index</span> = 12;
+                        $<span class="one-hl-variable-name">scsi_status_index</span> = 18;
+                    <span class="one-hl-rainbow-delimiters-depth-6">}</span>
+ 
+                    <span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">get the trace start date time
+</span>                    $<span class="one-hl-variable-name">str_start_time</span> = $<span class="one-hl-variable-name">original_record</span>.Substring<span class="one-hl-rainbow-delimiters-depth-6">(</span>$<span class="one-hl-variable-name">original_record</span>.IndexOf<span class="one-hl-rainbow-delimiters-depth-7">(</span><span class="one-hl-string">'Trace Start:'</span><span class="one-hl-rainbow-delimiters-depth-7">)</span> + <span class="one-hl-rainbow-delimiters-depth-7">(</span><span class="one-hl-string">'trace start:'</span><span class="one-hl-rainbow-delimiters-depth-7">)</span>.Length, $<span class="one-hl-variable-name">original_record</span>.IndexOf<span class="one-hl-rainbow-delimiters-depth-7">(</span><span class="one-hl-string">','</span>, $<span class="one-hl-variable-name">original_record</span>.IndexOf<span class="one-hl-rainbow-delimiters-depth-8">(</span><span class="one-hl-string">'Trace Start:'</span><span class="one-hl-rainbow-delimiters-depth-8">)</span><span class="one-hl-rainbow-delimiters-depth-7">)</span> - <span class="one-hl-rainbow-delimiters-depth-7">(</span>$<span class="one-hl-variable-name">original_record</span>.IndexOf<span class="one-hl-rainbow-delimiters-depth-8">(</span><span class="one-hl-string">'Trace Start:'</span><span class="one-hl-rainbow-delimiters-depth-8">)</span> + <span class="one-hl-rainbow-delimiters-depth-8">(</span><span class="one-hl-string">'trace start:'</span><span class="one-hl-rainbow-delimiters-depth-8">)</span>.Length<span class="one-hl-rainbow-delimiters-depth-7">)</span><span class="one-hl-rainbow-delimiters-depth-6">)</span>;
+                    $<span class="one-hl-variable-name">int_start_time</span> = <span class="one-hl-rainbow-delimiters-depth-6">[</span>Int64<span class="one-hl-rainbow-delimiters-depth-6">](</span>$<span class="one-hl-variable-name">str_start_time</span><span class="one-hl-rainbow-delimiters-depth-6">)</span>;
+                    $<span class="one-hl-variable-name">start_time</span> = Get-Date<span class="one-hl-rainbow-delimiters-depth-6">(</span><span class="one-hl-string">'1/1/1601 12:00AM GMT'</span><span class="one-hl-rainbow-delimiters-depth-6">)</span>;
+                    $<span class="one-hl-variable-name">start_time</span> = $<span class="one-hl-variable-name">start_time</span>.AddTicks<span class="one-hl-rainbow-delimiters-depth-6">(</span>$<span class="one-hl-variable-name">int_start_time</span><span class="one-hl-rainbow-delimiters-depth-6">)</span>;
+                    <span class="one-hl-keyword">continue</span>
+                <span class="one-hl-rainbow-delimiters-depth-5">}</span>
+ 
+ 
+                <span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">read in raw data and scrub it
+</span>                $<span class="one-hl-variable-name">isStorportData</span> = <span class="one-hl-string">'false'</span>;
+ 
+                foreach <span class="one-hl-rainbow-delimiters-depth-5">(</span>$<span class="one-hl-variable-name">s</span><span class="one-hl-keyword"> in</span> $<span class="one-hl-variable-name">strStorportData</span>) <span class="one-hl-rainbow-delimiters-depth-6">{</span>
+                    <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-7">(</span>$<span class="one-hl-variable-name">original_record</span>.Contains<span class="one-hl-rainbow-delimiters-depth-8">(</span>$<span class="one-hl-variable-name">s</span><span class="one-hl-rainbow-delimiters-depth-8">)</span><span class="one-hl-rainbow-delimiters-depth-7">)</span> <span class="one-hl-rainbow-delimiters-depth-7">{</span>
+                        $<span class="one-hl-variable-name">isStorportData</span> = <span class="one-hl-string">'true'</span>;
+                        <span class="one-hl-keyword">break</span>;
+                    <span class="one-hl-rainbow-delimiters-depth-7">}</span>
+                <span class="one-hl-rainbow-delimiters-depth-6">}</span>
+ 
+                <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-6">(</span>$<span class="one-hl-variable-name">isStorportData</span> -eq <span class="one-hl-string">'true'</span><span class="one-hl-rainbow-delimiters-depth-6">)</span> <span class="one-hl-rainbow-delimiters-depth-6">{</span> <span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">this ignores all data except for lines with a string match in $strStorportData
+</span>                    $<span class="one-hl-variable-name">storport_data</span> = $<span class="one-hl-variable-name">original_record</span>.Split<span class="one-hl-rainbow-delimiters-depth-7">(</span><span class="one-hl-string">','</span><span class="one-hl-rainbow-delimiters-depth-7">)</span>;
+ 
+                    If<span class="one-hl-rainbow-delimiters-depth-7">(</span><span class="one-hl-rainbow-delimiters-depth-8">(</span>$<span class="one-hl-variable-name">storport_data</span><span class="one-hl-rainbow-delimiters-depth-9">[</span>1<span class="one-hl-rainbow-delimiters-depth-9">]</span> -as <span class="one-hl-rainbow-delimiters-depth-9">[</span>Int64<span class="one-hl-rainbow-delimiters-depth-9">]</span><span class="one-hl-rainbow-delimiters-depth-8">)</span> -ne $<span class="one-hl-variable-name">null</span><span class="one-hl-rainbow-delimiters-depth-7">)</span> <span class="one-hl-rainbow-delimiters-depth-7">{</span> <span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">test for header versus data 
+</span>                        $<span class="one-hl-variable-name">record_counter</span> = $<span class="one-hl-variable-name">record_counter</span> + 1;
+                        $<span class="one-hl-variable-name">dbl_delta_time</span> = $<span class="one-hl-variable-name">storport_data</span><span class="one-hl-rainbow-delimiters-depth-8">[</span>1<span class="one-hl-rainbow-delimiters-depth-8">]</span> / 1000;
+                        $<span class="one-hl-variable-name">storport_data</span><span class="one-hl-rainbow-delimiters-depth-8">[</span>1<span class="one-hl-rainbow-delimiters-depth-8">]</span> = $<span class="one-hl-variable-name">start_time</span>.AddMilliseconds<span class="one-hl-rainbow-delimiters-depth-8">(</span>$<span class="one-hl-variable-name">dbl_delta_time</span><span class="one-hl-rainbow-delimiters-depth-8">)</span>.ToLocalTime<span class="one-hl-rainbow-delimiters-depth-8">()</span>.ToString<span class="one-hl-rainbow-delimiters-depth-8">()</span>;
+ 
+                        <span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">fix for Excel 2016 bug that converts hex to decimal on the fly
+</span>                        <span class="one-hl-keyword">if</span><span class="one-hl-rainbow-delimiters-depth-8">(</span>$<span class="one-hl-variable-name">request_duration_index</span> -eq 9<span class="one-hl-rainbow-delimiters-depth-8">)</span> <span class="one-hl-rainbow-delimiters-depth-8">{</span>
+                            $<span class="one-hl-variable-name">storport_data</span><span class="one-hl-rainbow-delimiters-depth-9">[</span>11<span class="one-hl-rainbow-delimiters-depth-9">]</span> = <span class="one-hl-string">'"'</span> + $<span class="one-hl-variable-name">storport_data</span><span class="one-hl-rainbow-delimiters-depth-9">[</span>11<span class="one-hl-rainbow-delimiters-depth-9">]</span> + <span class="one-hl-string">'"'</span>;
+                            $<span class="one-hl-variable-name">storport_data</span><span class="one-hl-rainbow-delimiters-depth-9">[</span>12<span class="one-hl-rainbow-delimiters-depth-9">]</span> = <span class="one-hl-string">'"'</span> + $<span class="one-hl-variable-name">storport_data</span><span class="one-hl-rainbow-delimiters-depth-9">[</span>12<span class="one-hl-rainbow-delimiters-depth-9">]</span> + <span class="one-hl-string">'"'</span>;
+                            $<span class="one-hl-variable-name">storport_data</span><span class="one-hl-rainbow-delimiters-depth-9">[</span>18<span class="one-hl-rainbow-delimiters-depth-9">]</span> = <span class="one-hl-string">'"'</span> + $<span class="one-hl-variable-name">storport_data</span><span class="one-hl-rainbow-delimiters-depth-9">[</span>18<span class="one-hl-rainbow-delimiters-depth-9">]</span> + <span class="one-hl-string">'"'</span>;
+                        <span class="one-hl-rainbow-delimiters-depth-8">}</span>
+                        $<span class="one-hl-variable-name">header_flag</span> = <span class="one-hl-string">'false'</span>
+                    <span class="one-hl-rainbow-delimiters-depth-7">}</span> <span class="one-hl-keyword">else</span> <span class="one-hl-rainbow-delimiters-depth-7">{</span>
+                        $<span class="one-hl-variable-name">header_flag</span> = <span class="one-hl-string">'true'</span>
+                    <span class="one-hl-rainbow-delimiters-depth-7">}</span>
+ 
+                    $<span class="one-hl-variable-name">original_record</span> = $<span class="one-hl-variable-name">storport_data</span><span class="one-hl-rainbow-delimiters-depth-7">[</span>1<span class="one-hl-rainbow-delimiters-depth-7">]</span>.Trim<span class="one-hl-rainbow-delimiters-depth-7">()</span> + <span class="one-hl-string">','</span>;
+ 
+                    <span class="one-hl-keyword">for</span> <span class="one-hl-rainbow-delimiters-depth-7">(</span>$<span class="one-hl-variable-name">i</span> = 9; $<span class="one-hl-variable-name">i</span> -lt $<span class="one-hl-variable-name">storport_data</span>.Length; $<span class="one-hl-variable-name">i</span>++<span class="one-hl-rainbow-delimiters-depth-7">)</span> <span class="one-hl-rainbow-delimiters-depth-7">{</span>
+                        $<span class="one-hl-variable-name">original_record</span> += $<span class="one-hl-variable-name">storport_data</span><span class="one-hl-rainbow-delimiters-depth-8">[</span>$<span class="one-hl-variable-name">i</span><span class="one-hl-rainbow-delimiters-depth-8">]</span>.Trim<span class="one-hl-rainbow-delimiters-depth-8">()</span> + <span class="one-hl-string">','</span>;
+                    <span class="one-hl-rainbow-delimiters-depth-7">}</span>
+ 
+                    <span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">fix for 2012 changing record names
+</span>                    <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-7">(</span>$<span class="one-hl-variable-name">header_flag</span><span class="one-hl-rainbow-delimiters-depth-7">)</span> <span class="one-hl-rainbow-delimiters-depth-7">{</span>
+                        $<span class="one-hl-variable-name">original_record</span> = $<span class="one-hl-variable-name">original_record</span>.Replace<span class="one-hl-rainbow-delimiters-depth-8">(</span><span class="one-hl-string">'RequestDuration_100ns'</span>, <span class="one-hl-string">'RequestDuration in 100ns'</span><span class="one-hl-rainbow-delimiters-depth-8">)</span>;
+                        $<span class="one-hl-variable-name">original_record</span> = $<span class="one-hl-variable-name">original_record</span>.Replace<span class="one-hl-rainbow-delimiters-depth-8">(</span><span class="one-hl-string">'BuildIoDuration_100ns'</span>, <span class="one-hl-string">'BuildIoDuration in 100ns'</span><span class="one-hl-rainbow-delimiters-depth-8">)</span>;
+                        $<span class="one-hl-variable-name">original_record</span> = $<span class="one-hl-variable-name">original_record</span>.Replace<span class="one-hl-rainbow-delimiters-depth-8">(</span><span class="one-hl-string">'StartIoDuration_100ns'</span>, <span class="one-hl-string">'StartIoDuration in 100ns'</span><span class="one-hl-rainbow-delimiters-depth-8">)</span>;
+                        $<span class="one-hl-variable-name">original_record</span> = $<span class="one-hl-variable-name">original_record</span>.Replace<span class="one-hl-rainbow-delimiters-depth-8">(</span><span class="one-hl-string">'ByteLengthOfTransfer'</span>, <span class="one-hl-string">'DataTransferLength'</span><span class="one-hl-rainbow-delimiters-depth-8">)</span>;
+                    <span class="one-hl-rainbow-delimiters-depth-7">}</span>
+ 
+                    <span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">cleanup
+</span>                    $<span class="one-hl-variable-name">original_record</span> = $<span class="one-hl-variable-name">original_record</span>.Replace<span class="one-hl-rainbow-delimiters-depth-7">(</span><span class="one-hl-string">'TimeStamp'</span>,<span class="one-hl-string">'DateTime'</span><span class="one-hl-rainbow-delimiters-depth-7">)</span>;
+                    $<span class="one-hl-variable-name">original_record</span> = $<span class="one-hl-variable-name">original_record</span>.TrimEnd<span class="one-hl-rainbow-delimiters-depth-7">(</span><span class="one-hl-string">','</span><span class="one-hl-rainbow-delimiters-depth-7">)</span>;
+                    $<span class="one-hl-variable-name">original_record</span> = $<span class="one-hl-variable-name">original_record</span>.Replace<span class="one-hl-rainbow-delimiters-depth-7">(</span><span class="one-hl-string">'('</span>,$<span class="one-hl-variable-name">null</span><span class="one-hl-rainbow-delimiters-depth-7">)</span>;
+                    $<span class="one-hl-variable-name">original_record</span> = $<span class="one-hl-variable-name">original_record</span>.Replace<span class="one-hl-rainbow-delimiters-depth-7">(</span><span class="one-hl-string">')'</span>,$<span class="one-hl-variable-name">null</span><span class="one-hl-rainbow-delimiters-depth-7">)</span>;
+                    $<span class="one-hl-variable-name">original_record</span> = $<span class="one-hl-variable-name">original_record</span>.Replace<span class="one-hl-rainbow-delimiters-depth-7">(</span><span class="one-hl-string">"\'"</span>,$<span class="one-hl-variable-name">null</span><span class="one-hl-rainbow-delimiters-depth-7">)</span>;
+ 
+ 
+                    <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-7">(</span><span class="one-hl-rainbow-delimiters-depth-8">(</span>$<span class="one-hl-variable-name">requestdurationvalue</span> -ne -1<span class="one-hl-rainbow-delimiters-depth-8">)</span> -AND <span class="one-hl-rainbow-delimiters-depth-8">(</span>$<span class="one-hl-variable-name">header_flag</span> -eq <span class="one-hl-string">'false'</span><span class="one-hl-rainbow-delimiters-depth-8">)</span><span class="one-hl-rainbow-delimiters-depth-7">)</span> <span class="one-hl-rainbow-delimiters-depth-7">{</span>  <span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">write out the data immediately if it is the header or there is no filter (-1 value for $requestdurationvalue)
+</span>                        <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-8">(</span><span class="one-hl-rainbow-delimiters-depth-9">[</span>Int64<span class="one-hl-rainbow-delimiters-depth-9">](</span>$<span class="one-hl-variable-name">storport_data</span><span class="one-hl-rainbow-delimiters-depth-1">[</span>$<span class="one-hl-variable-name">request_duration_index</span><span class="one-hl-rainbow-delimiters-depth-1">]</span>.Trim<span class="one-hl-rainbow-delimiters-depth-1">()</span><span class="one-hl-rainbow-delimiters-depth-9">)</span> -lt <span class="one-hl-rainbow-delimiters-depth-9">(</span>$<span class="one-hl-variable-name">requestdurationvalue</span> * $<span class="one-hl-variable-name">requestduration_multiplier</span><span class="one-hl-rainbow-delimiters-depth-9">)</span><span class="one-hl-rainbow-delimiters-depth-8">)</span> <span class="one-hl-rainbow-delimiters-depth-8">{</span>
+                            <span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">write the line if the value of requestduration is lower then the filter
+</span>                            $<span class="one-hl-variable-name">writer</span>.WriteLine<span class="one-hl-rainbow-delimiters-depth-9">(</span>$<span class="one-hl-variable-name">original_record</span><span class="one-hl-rainbow-delimiters-depth-9">)</span>
+ 
+                            <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-9">(</span>$<span class="one-hl-variable-name">request_duration_index</span> -eq 9<span class="one-hl-rainbow-delimiters-depth-9">)</span> <span class="one-hl-rainbow-delimiters-depth-9">{</span>
+                                <span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">scsi status check
+</span>                                <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-1">(</span>-Not <span class="one-hl-rainbow-delimiters-depth-2">(</span>$<span class="one-hl-variable-name">storport_data</span><span class="one-hl-rainbow-delimiters-depth-3">[</span>$<span class="one-hl-variable-name">scsi_status_index</span><span class="one-hl-rainbow-delimiters-depth-3">]</span>.Contains<span class="one-hl-rainbow-delimiters-depth-3">(</span><span class="one-hl-string">"0x00"</span><span class="one-hl-rainbow-delimiters-depth-3">)</span><span class="one-hl-rainbow-delimiters-depth-2">)</span><span class="one-hl-rainbow-delimiters-depth-1">)</span> <span class="one-hl-rainbow-delimiters-depth-1">{</span>
+                                    $<span class="one-hl-variable-name">scsi_status_not_0_counter</span> = $<span class="one-hl-variable-name">scsi_status_not_0_counter</span> + 1;
+                                <span class="one-hl-rainbow-delimiters-depth-1">}</span>
+ 
+                                <span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">srb status check
+</span>                                <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-1">(</span>-Not <span class="one-hl-rainbow-delimiters-depth-2">(</span>$<span class="one-hl-variable-name">storport_data</span><span class="one-hl-rainbow-delimiters-depth-3">[</span>$<span class="one-hl-variable-name">srb_status_index</span><span class="one-hl-rainbow-delimiters-depth-3">]</span>.Contains<span class="one-hl-rainbow-delimiters-depth-3">(</span><span class="one-hl-string">"0x01"</span><span class="one-hl-rainbow-delimiters-depth-3">)</span><span class="one-hl-rainbow-delimiters-depth-2">)</span><span class="one-hl-rainbow-delimiters-depth-1">)</span> <span class="one-hl-rainbow-delimiters-depth-1">{</span>
+                                    $<span class="one-hl-variable-name">srb_status_not_1_counter</span> = $<span class="one-hl-variable-name">srb_status_not_1_counter</span> + 1;
+                                <span class="one-hl-rainbow-delimiters-depth-1">}</span>
+                            <span class="one-hl-rainbow-delimiters-depth-9">}</span>
+ 
+                            <span class="one-hl-keyword">else</span> <span class="one-hl-rainbow-delimiters-depth-9">{</span>
+ 
+                                <span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">scsi status check
+</span>                                <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-1">(</span>$<span class="one-hl-variable-name">storport_data</span><span class="one-hl-rainbow-delimiters-depth-2">[</span>$<span class="one-hl-variable-name">scsi_status_index</span><span class="one-hl-rainbow-delimiters-depth-2">]</span>.Trim<span class="one-hl-rainbow-delimiters-depth-2">()</span> -ne <span class="one-hl-string">"0"</span><span class="one-hl-rainbow-delimiters-depth-1">)</span> <span class="one-hl-rainbow-delimiters-depth-1">{</span>
+                                    $<span class="one-hl-variable-name">scsi_status_not_0_counter</span> = $<span class="one-hl-variable-name">scsi_status_not_0_counter</span> + 1;
+                                <span class="one-hl-rainbow-delimiters-depth-1">}</span>
+ 
+                                <span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">srb status check
+</span>                                <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-1">(</span>$<span class="one-hl-variable-name">storport_data</span><span class="one-hl-rainbow-delimiters-depth-2">[</span>$<span class="one-hl-variable-name">srb_status_index</span><span class="one-hl-rainbow-delimiters-depth-2">]</span>.Trim<span class="one-hl-rainbow-delimiters-depth-2">()</span> -ne <span class="one-hl-string">"1"</span><span class="one-hl-rainbow-delimiters-depth-1">)</span> <span class="one-hl-rainbow-delimiters-depth-1">{</span>
+                                    $<span class="one-hl-variable-name">srb_status_not_1_counter</span> = $<span class="one-hl-variable-name">srb_status_not_1_counter</span> + 1;
+                                <span class="one-hl-rainbow-delimiters-depth-1">}</span>
+                            <span class="one-hl-rainbow-delimiters-depth-9">}</span>
+                        <span class="one-hl-rainbow-delimiters-depth-8">}</span>
+                    <span class="one-hl-rainbow-delimiters-depth-7">}</span>
+                    <span class="one-hl-keyword">else</span> <span class="one-hl-rainbow-delimiters-depth-7">{</span>
+                        <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-8">(</span>$<span class="one-hl-variable-name">header_flag</span> -eq <span class="one-hl-string">'true'</span><span class="one-hl-rainbow-delimiters-depth-8">)</span> <span class="one-hl-rainbow-delimiters-depth-8">{</span>
+                            <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-9">(</span>$<span class="one-hl-variable-name">already_wrote_header</span> -eq <span class="one-hl-string">'false'</span><span class="one-hl-rainbow-delimiters-depth-9">)</span> <span class="one-hl-rainbow-delimiters-depth-9">{</span>
+                                $<span class="one-hl-variable-name">writer</span>.WriteLine<span class="one-hl-rainbow-delimiters-depth-1">(</span>$<span class="one-hl-variable-name">original_record</span><span class="one-hl-rainbow-delimiters-depth-1">)</span>
+                            <span class="one-hl-rainbow-delimiters-depth-9">}</span>
+ 
+                            $<span class="one-hl-variable-name">already_wrote_header</span> = <span class="one-hl-string">'true'</span>;
+                        <span class="one-hl-rainbow-delimiters-depth-8">}</span>
+                        <span class="one-hl-keyword">else</span> <span class="one-hl-rainbow-delimiters-depth-8">{</span>
+                            $<span class="one-hl-variable-name">writer</span>.WriteLine<span class="one-hl-rainbow-delimiters-depth-9">(</span>$<span class="one-hl-variable-name">original_record</span><span class="one-hl-rainbow-delimiters-depth-9">)</span>
+ 
+                            <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-9">(</span>$<span class="one-hl-variable-name">request_duration_index</span> -eq 9<span class="one-hl-rainbow-delimiters-depth-9">)</span> <span class="one-hl-rainbow-delimiters-depth-9">{</span>
+                                <span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">scsi status check
+</span>                                <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-1">(</span>-Not <span class="one-hl-rainbow-delimiters-depth-2">(</span>$<span class="one-hl-variable-name">storport_data</span><span class="one-hl-rainbow-delimiters-depth-3">[</span>$<span class="one-hl-variable-name">scsi_status_index</span><span class="one-hl-rainbow-delimiters-depth-3">]</span>.Contains<span class="one-hl-rainbow-delimiters-depth-3">(</span><span class="one-hl-string">"0x00"</span><span class="one-hl-rainbow-delimiters-depth-3">)</span><span class="one-hl-rainbow-delimiters-depth-2">)</span><span class="one-hl-rainbow-delimiters-depth-1">)</span> <span class="one-hl-rainbow-delimiters-depth-1">{</span>
+                                    $<span class="one-hl-variable-name">scsi_status_not_0_counter</span> += 1;
+                                <span class="one-hl-rainbow-delimiters-depth-1">}</span>
+ 
+                                <span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">srb status check
+</span>                                <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-1">(</span>-Not <span class="one-hl-rainbow-delimiters-depth-2">(</span>$<span class="one-hl-variable-name">storport_data</span><span class="one-hl-rainbow-delimiters-depth-3">[</span>$<span class="one-hl-variable-name">srb_status_index</span><span class="one-hl-rainbow-delimiters-depth-3">]</span>.Contains<span class="one-hl-rainbow-delimiters-depth-3">(</span><span class="one-hl-string">"0x01"</span><span class="one-hl-rainbow-delimiters-depth-3">)</span><span class="one-hl-rainbow-delimiters-depth-2">)</span><span class="one-hl-rainbow-delimiters-depth-1">)</span> <span class="one-hl-rainbow-delimiters-depth-1">{</span>
+                                    $<span class="one-hl-variable-name">srb_status_not_1_counter</span> += 1;
+                                <span class="one-hl-rainbow-delimiters-depth-1">}</span>
+                            <span class="one-hl-rainbow-delimiters-depth-9">}</span> <span class="one-hl-keyword">else</span> <span class="one-hl-rainbow-delimiters-depth-9">{</span>
+                                <span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">scsi status check                       
+</span>                                <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-1">(</span>$<span class="one-hl-variable-name">storport_data</span><span class="one-hl-rainbow-delimiters-depth-2">[</span>$<span class="one-hl-variable-name">scsi_status_index</span><span class="one-hl-rainbow-delimiters-depth-2">]</span>.Trim<span class="one-hl-rainbow-delimiters-depth-2">()</span> -ne <span class="one-hl-string">"0"</span><span class="one-hl-rainbow-delimiters-depth-1">)</span> <span class="one-hl-rainbow-delimiters-depth-1">{</span>
+                                    $<span class="one-hl-variable-name">scsi_status_not_0_counter</span> += 1;
+                                <span class="one-hl-rainbow-delimiters-depth-1">}</span>
+ 
+                                <span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">srb status check
+</span>                                <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-1">(</span>$<span class="one-hl-variable-name">storport_data</span><span class="one-hl-rainbow-delimiters-depth-2">[</span>$<span class="one-hl-variable-name">srb_status_index</span><span class="one-hl-rainbow-delimiters-depth-2">]</span>.Trim<span class="one-hl-rainbow-delimiters-depth-2">()</span> -ne <span class="one-hl-string">"1"</span><span class="one-hl-rainbow-delimiters-depth-1">)</span> <span class="one-hl-rainbow-delimiters-depth-1">{</span>
+                                    $<span class="one-hl-variable-name">srb_status_not_1_counter</span> += 1;
+                                <span class="one-hl-rainbow-delimiters-depth-1">}</span>
+                            <span class="one-hl-rainbow-delimiters-depth-9">}</span>
+                        <span class="one-hl-rainbow-delimiters-depth-8">}</span>
+                    <span class="one-hl-rainbow-delimiters-depth-7">}</span>
+                <span class="one-hl-rainbow-delimiters-depth-6">}</span>
+            <span class="one-hl-rainbow-delimiters-mismatched">}</span>
+ 
+            $<span class="one-hl-variable-name">writer</span>.Flush<span class="one-hl-rainbow-delimiters-depth-5">()</span>
+            $<span class="one-hl-variable-name">writer</span>.Close<span class="one-hl-rainbow-delimiters-depth-5">()</span>
+            $<span class="one-hl-variable-name">reader</span>.Close<span class="one-hl-rainbow-delimiters-depth-5">()</span>
+        <span class="one-hl-rainbow-delimiters-depth-4">}</span>
+        catch <span class="one-hl-rainbow-delimiters-depth-4">{</span>
+            <span class="one-hl-rainbow-delimiters-depth-5">[</span>System.Windows.Forms.MessageBox<span class="one-hl-rainbow-delimiters-depth-5">]</span>::Show<span class="one-hl-rainbow-delimiters-depth-5">(</span><span class="one-hl-string">'There was an error while scrubbing the data. The error message is '</span> + $<span class="one-hl-variable-name">_</span>.Exception.Message<span class="one-hl-rainbow-delimiters-depth-5">)</span>
+            <span class="one-hl-keyword">exit</span>
+        <span class="one-hl-rainbow-delimiters-depth-4">}</span>
+ 
+        <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-4">(</span>$<span class="one-hl-variable-name">record_counter</span> -ne 0<span class="one-hl-rainbow-delimiters-depth-4">)</span> <span class="one-hl-rainbow-delimiters-depth-4">{</span>
+            <span class="one-hl-comment-delimiter"># </span><span class="one-hl-comment">open exel spreadsheet
+</span>            Write-Progress -Activity <span class="one-hl-string">"StorportPACMAN Progress"</span> -Status <span class="one-hl-string">"Opening Excel Spreadsheet"</span> -PercentComplete <span class="one-hl-string">"66"</span> 
+ 
+            <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-5">(</span>$<span class="one-hl-variable-name">requestduration_multiplier</span> -eq 10000<span class="one-hl-rainbow-delimiters-depth-5">)</span> <span class="one-hl-rainbow-delimiters-depth-5">{</span> <span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">Check for Windows 2012
+</span>                $<span class="one-hl-variable-name">workbookpath</span> = $<span class="one-hl-variable-name">storportpacmandirectory</span> + <span class="one-hl-string">'\storport2012.xlsx'</span>
+            <span class="one-hl-rainbow-delimiters-depth-5">}</span> <span class="one-hl-keyword">else</span> <span class="one-hl-rainbow-delimiters-depth-5">{</span>
+                $<span class="one-hl-variable-name">workbookpath</span> = $<span class="one-hl-variable-name">storportpacmandirectory</span> + <span class="one-hl-string">'\storport2008.xlsx'</span>
+            <span class="one-hl-rainbow-delimiters-depth-5">}</span>
+ 
+            Try <span class="one-hl-rainbow-delimiters-depth-5">{</span>
+                $<span class="one-hl-variable-name">excel</span> = New-Object -ComObject Excel.Application
+                $<span class="one-hl-variable-name">excel</span>.visible = $<span class="one-hl-variable-name">true</span>
+                $<span class="one-hl-variable-name">workbook</span> = $<span class="one-hl-variable-name">excel</span>.workbooks.open<span class="one-hl-rainbow-delimiters-depth-6">(</span>$<span class="one-hl-variable-name">workbookpath</span><span class="one-hl-rainbow-delimiters-depth-6">)</span>
+                $<span class="one-hl-variable-name">workbook</span>.refreshall<span class="one-hl-rainbow-delimiters-depth-6">()</span>
+ 
+                $<span class="one-hl-variable-name">mymessage</span> = <span class="one-hl-string">"Data Refresh Complete. Processed "</span> + $<span class="one-hl-variable-name">record_counter</span>.ToString<span class="one-hl-rainbow-delimiters-depth-6">()</span> + <span class="one-hl-string">" records."</span>;
+ 
+                <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-6">(</span>$<span class="one-hl-variable-name">scsi_status_not_0_counter</span> -ne 0<span class="one-hl-rainbow-delimiters-depth-6">)</span> <span class="one-hl-rainbow-delimiters-depth-6">{</span>
+                    $<span class="one-hl-variable-name">mymessage</span> = $<span class="one-hl-variable-name">mymessage</span> + <span class="one-hl-string">"`r`nWARNING: there were "</span> + $<span class="one-hl-variable-name">scsi_status_not_0_counter</span>.ToString<span class="one-hl-rainbow-delimiters-depth-7">()</span> + <span class="one-hl-string">" records that have a SCSI Status other than GOOD - please review the data."</span>;
+                <span class="one-hl-rainbow-delimiters-depth-6">}</span>
+ 
+                <span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-6">(</span>$<span class="one-hl-variable-name">srb_status_not_1_counter</span> -ne 0<span class="one-hl-rainbow-delimiters-depth-6">)</span> <span class="one-hl-rainbow-delimiters-depth-6">{</span>
+                    $<span class="one-hl-variable-name">mymessage</span> = $<span class="one-hl-variable-name">mymessage</span> + <span class="one-hl-string">"`r`nWARNING: there were "</span> + $<span class="one-hl-variable-name">srb_status_not_1_counter</span>.ToString<span class="one-hl-rainbow-delimiters-depth-7">()</span> + <span class="one-hl-string">" records that have a SRB Status of not completing successfully - please review the data."</span>;
+                <span class="one-hl-rainbow-delimiters-depth-6">}</span>
+ 
+                <span class="one-hl-rainbow-delimiters-depth-6">[</span>System.Windows.Forms.MessageBox<span class="one-hl-rainbow-delimiters-depth-6">]</span>::Show<span class="one-hl-rainbow-delimiters-depth-6">(</span>$<span class="one-hl-variable-name">mymessage</span><span class="one-hl-rainbow-delimiters-depth-6">)</span>;
+            <span class="one-hl-rainbow-delimiters-depth-5">}</span> catch <span class="one-hl-rainbow-delimiters-depth-5">{</span>
+                <span class="one-hl-rainbow-delimiters-depth-6">[</span>System.Windows.Forms.MessageBox<span class="one-hl-rainbow-delimiters-depth-6">]</span>::Show<span class="one-hl-rainbow-delimiters-depth-6">(</span><span class="one-hl-string">'There was an error opening one of the spreadsheets. Make sure both storport2012.xlsx and storport2008.xlsx are in the '</span> + $<span class="one-hl-variable-name">storportpacmandirectory</span> + <span class="one-hl-string">' directory.  The error message is '</span> + $<span class="one-hl-variable-name">_</span>.Exception.Message<span class="one-hl-rainbow-delimiters-depth-6">)</span>
+                <span class="one-hl-keyword">exit</span>
+            <span class="one-hl-rainbow-delimiters-depth-5">}</span>
+        <span class="one-hl-rainbow-delimiters-depth-4">}</span> <span class="one-hl-keyword">else</span> <span class="one-hl-rainbow-delimiters-depth-4">{</span>
+            <span class="one-hl-rainbow-delimiters-depth-5">[</span>System.Windows.Forms.MessageBox<span class="one-hl-rainbow-delimiters-depth-5">]</span>::Show<span class="one-hl-rainbow-delimiters-depth-5">(</span><span class="one-hl-string">'There was no Storport data in the ETL file.  Please check how you ran the Storport trace.'</span><span class="one-hl-rainbow-delimiters-depth-5">)</span>
+            <span class="one-hl-keyword">exit</span>
+        <span class="one-hl-rainbow-delimiters-depth-4">}</span>
+    <span class="one-hl-rainbow-delimiters-depth-3">}</span>
+<span class="one-hl-rainbow-delimiters-depth-2">}</span></code></pre>
+</div>
+</div>
+<div><h3 id="one-6ba6c136db">Preparing our storport.etl file</h3><div><p>We have to use XPerf.exe to convert the ETL file into a CSV before we sort it with StorportPacman.ps1.
+Download the Windows Performance Toolkit from
+<a href="https://docs.microsoft.com/en-us/windows-hardware/get-started/adk-install">this Windows ADK link</a>.
+</p>
+
+<p>Once the toolkit is installed, convert the storport.etl file to a CSV
+</p>
+
+<pre><code class="one-hl one-hl-block">xperf -i C:\Perflogs\storport.ETL -o C:\Perflogs\raw-xperf.csv -tle</code></pre>
+
+<p>Now finally download the PowerPivot Excel templates from <a href="http://wiki.webperfect.ch/index.php?title=Datei:Storport_Excel_PowerPivot-Templates.zip">wiki.webperfect.ch</a>
+or my <a href="https://archive.org/details/storport-excel-power-pivot-templates">upload to archive.org</a>
+</p>
+
+<p>Copy and paste the script into a ps1 file.
+Next, import it using this command
+</p>
+
+<pre><code class="one-hl one-hl-block">Import-Module -Name ./StorportPacman.ps1</code></pre>
+
+<p>Now lets run the script.
+The name of your raw-xperf.csv file is important.
+Unless changed, raw-xperf.csv is the default filename the script looks for
+The filenames of the PowerPivot templates are sensitive too.
+</p>
+
+<pre><code class="one-hl one-hl-block"><span class="one-hl-comment-delimiter"># </span><span class="one-hl-comment">Remember to keep the xlsx and raw-xperf.csv files in the the same folder
+</span>Convert-ETWTraceToReadableFileCSV -WorkFolderPath C:\PerfLogs<span class="one-hl-sh-escaped-newline">\</span></code></pre>
+</div>
+</div>
+</div>
+<div class="nav"><a href="/blog/simulating-bad-blocks-on-ntfs-drive">PREV</a><a href="/blog/tg1672G-default-wifi-password">RANDOM</a><a href="/blog/mikrotik-creating-client-to-site-vpn">NEXT</a></div></article></div></body><script>
+function sidebarShow() {
+  if (window.innerWidth < 481)
+    document.getElementById('sidebar-left').style.width = '75vw';
+  else {
+    document.getElementById('sidebar-left').style.width = 'min(300px, 34vw)';
+  }
+  document.getElementById('sidebar-main').setAttribute('onclick', 'sidebarHide()');
+  document.getElementById('sidebar-main').style.display = 'block';
+}
+function sidebarHide() {
+  document.getElementById('sidebar-left').style.width = '0';
+  document.getElementById('sidebar-main').style.display = 'none';
+}
+</script></html>
