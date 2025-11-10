@@ -1,0 +1,3935 @@
+* Homepage 
+:PROPERTIES:
+:ONE: one-default-doc
+:CUSTOM_ID: /
+:END:
+# <2025-11-02 Sun 20:15>
+
+Hi all (^_^)/
+
+I'm Peter, 23, and I enjoy computers & philosophy.
+
+#+begin_src bash
+┌─[queztaz@queztaz-space]──[20:13]──[/home/queztaz/]
+└─> $ cowsay BLEH, PHILOSOPHY
+ __________________
+< BLEH, PHILOSOPHY >
+ ------------------
+        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\
+                ||----w |
+                ||     ||
+#+end_src
+
+This is my blog! It's statically built using [[https://github.com/tonyaldon/one.el?tab=readme-ov-file][one.el]]. All of the webpages you see
+are stored in one emacs org document! WOW!
+
+I post about computers and anything I'm working on. There's currently no set
+pattern to it. Whatever I intuitively comes to mind I post.
+
+* Queztaz/Tech Inventory
+:PROPERTIES:
+:ONE: one-default-doc
+:CUSTOM_ID: /blog/inventory/
+:CREATED: <2025-11-02 Sun 21:07>
+:END:
+** Google Pixel 7
+Terminess is installed to remotely connect to my VPS. I access emacs and tmux
+exclusively through this.
+
+Termux is setup
+- Daily Driver Phone 
+- All applications disabled apart from messaging and a web browser.
+- Great Google integration. No USB-C Alt Mode support because greed.
+- Termux and Todoist are manly used.
+
+** Thinkpad X220
+Favorite laptop of recent years. Running Debian. Corbooted.
+
+** Portable Laptop
+CrowView portable monitor with keyboard and battery with the RPI 5 adapter installed.
+<insert image here>
+
+** Remote server
+Remote into a VPS to run emacs and tmux.
+
+** Freedom Mode
+Thinkpad with Tail's linux.
+
+* Emacs/Emacs With BiDirectional Google Calendar Sync
+:PROPERTIES:
+:ONE: one-default-doc
+:CUSTOM_ID: /blog/emacs-with-bidirectional-google-calendar-sync/
+:CREATED: <2025-01-17 Sun 19:00>
+:END:
+Directions to setup the [[https://github.com/kidd/org-gcal.el/][org-gcal]] package for bidirectional Google Calendar
+Sync. Emacs 30 was used. The AppImage can be located here: [[https://github.com/blahgeek/emacs-appimage/releases/tag/github-action-build-12425294048][LINK]]
+
+** Calendar Sync
+- Create a new app on the Google Developer Console
+- Install org-gcal
+- Add your API keys
+- Sync Calendar
+
+The guide on the Kidd's README is incredibly detailed. I'll be copying most of it and
+including the solutions that left me with a working system.
+** Setup Calendar API
+
+*** Creating the Google App
+
+- Navigate to: https://console.cloud.google.com/cloud-resource-manager
+- Create a new project named "Emacs G-CAL"
+- Click on the top left hamburger menu
+- Select "API & Services>OAuth Consent Screen"
+
+*** Create an external app
+
+# [[./Nb2G.png]]
+
+*** Assign app name
+Give it a name such as "Emacs G-CAL". The rest of the settings can be left as
+default. *Add your email address as a test user before completing the setup*.
+
+# [[./vsip.png]]
+
+*** Leave scopes default
+Leave this page unchanged
+# [[./c10H.png]]
+
+*** Create test users
+Add yourself as a test user
+
+# [[./yZgB.png]]
+
+# [[./pkMF.png]]
+
+*** Create the API Credential
+- Click on Credentials>Create Credentials>Create OAuth Client ID
+
+# [[./y8BS.png]]
+
+Application type is desktop. Copy your client ID and client secret to a text
+file after completing this step.
+
+# [[./ebd4.png]]
+
+
+*** Enable the API
+The last step is to enable the Google Calendar API for the project
+- Click on Enabled API and Services
+- Click on Enable API
+- Scroll down to "Google Calendar" and enable it
+
+*** Locating the Calendar ID
+Your Google calendar ID will be a set in a variable when installing org-gcal in
+Emacs. This is how to find it and please write it down.
+
+Navigate to your google calendar settings and scroll down to the
+integration/sharing settings. There will be links to the ISC calendars for
+sharing, as well as a section that says *Calendar ID*
+
+For Gmail Personal accounts at least, the *Calendar ID* will be your email address
+address. Write down your *Calendar ID*
+
+** Adding ORG-GCAL to Emacs
+
+*** Manually adding the package
+Clone the org-gcal repository into your emacs load path. I have the following
+code in my init.el. It allows my org-gcal/ repository to be stored and read from
+the distribution folder.
+
+#+begin_src emacs-lisp
+(let ((default-directory "~/.emacs.d/distribution/"))
+  (normal-top-level-add-subdirs-to-load-path))
+#+end_src
+
+
+This is the official way of installing org-gcal. For the rest of this guide,
+I'll be using a slightly modified version that provides basic security for
+storing the API Keys. Please acknowledge this code block, but don't use it if
+you're following along.
+
+#+begin_src emacs-lisp
+# THIS IS ONLY A WORKING EXAMPLE. KEEP READING PAGE
+  (use-package org-gcal
+    :ensure t
+    :config
+    (require 'org-gcal)
+    (require 'plstore)
+    (setq plstore-cache-passphrase-for-symmetric-encryption t)
+    (setq org-gcal-client-id "YOUR_CLIENT_ID"
+          org-gcal-client-secret "YOUR_CLIENT_SECRET"
+          org-gcal-fetch-file-alist '(("YOUR_CALENDAR_ID" .  "~/.emacs.d/calendar.org")))
+    (org-gcal-reload-client-id-secret)
+    )
+#+end_src
+
+*** GPG Keys and about PLStore 
+
+Org-gcal relies on using plstore which stores key value pairs in an encrypted
+file using GPG. The purpose of the plstore is to read the ~org-gcal-client-id~ and
+~org-gcal-client-secret~, and then use an oauth2.0 library to request the xoauth2.0
+token. The token is then encrypted in a file located in
+~$HOME/.emacs.d/oauth2-auto.plist~. Anytime you sync your calendar, that file will
+be decrypted and used for authentication.
+
+I'll start with creating a passwordless GPG keypair. This is required by my
+email client. You don't strictly need a passwordless key pair. ~Pass~ is used to
+store the client ID and secret keys in encrypted files. In my init.el, I'll tell
+emacs to decrypt the files for the variables. Additionally, I'll tell plstore to
+encrypt using my key-pair instead of using symmetric encryption. This avoids
+hard coded API keys and password prompts when syncing.
+
+Start with creating the GPG key pair and then encrypting your Client ID and
+Client Secret ID. These encrypted files will automatically be stored in
+~$HOME/.password-store/g-cal/~
+
+#+begin_src bash
+apt install pass
+gpg --batch --passphrase '' --quick-gen-key proton@proton.local default default
+
+pass init proton@proton.local
+
+pass insert g-cal/clientid
+<PASTE Client ID Here>
+
+pass insert g-cal/clientsecret
+<PASTE Client Secret ID Here>
+#+end_src
+
+*** Adding to init.el
+Now use this code snippet to install GCal.:
+
+#+begin_src emacs-lisp
+
+(install-package 'org-gcal)
+(require 'org-gcal)
+(require 'plstore)
+(setq org-gcal-client-id (string-trim (shell-command-to-string "pass g-cal/clientid")))
+(setq org-gcal-client-secret (string-trim (shell-command-to-string "pass g-cal/clientsecret")))
+(setq plstore-cache-passphrase-for-symmetric-encryption t)
+(setq org-gcal-recurring-events-mode 'nested) ; Nested org headers for re-occuring events
+(setq org-gcal-fetch-file-alist `(("first@gmail.com" . ,(expand-file-name "calendar.org" org-directory))))
+(setq plstore-encrypt-to "proton@proton.local")
+(let* ((emacs-dir user-emacs-directory) ; Ensure oauth2-auto.plist file exists
+       (oauth2-file (expand-file-name "oauth2-auto.plist" emacs-dir)))
+  (unless (file-exists-p oauth2-file)
+    (with-temp-buffer
+      (write-file oauth2-file))))
+
+(defun my-org-gcal-sync-clear-token ()
+  "Sync calendar, clearing tokens first, without producing output."
+  (interactive)
+  (require 'org-gcal)
+  (when org-gcal--sync-lock
+    ;; Avoids displaying the org-sync-lock error
+    (org-gcal--sync-unlock))
+  (org-gcal-sync-tokens-clear)
+  (let ((inhibit-message t)
+        (message-log-max nil))
+    (org-gcal-reload-client-id-secret)
+    (org-gcal-sync)))
+#+end_src
+
+** Syncing Your Calendar
+*** Setup & Manual Sync
+This part can be tedious. I'll include steps for troubleshooting.
+
+Firstly, ensure your org agenda files are set.
+
+#+begin_src 
+(setq org-agenda-files '("~/.emacs.d/calendar.org"))
+(setq org-default-agenda-file "~/.emacs.d/calendar.org")
+#+end_src
+
+Now create the ~$HOME/.emacs.d/oauth2-auto.plist~ file. For an unknown reason,
+the plstore module will fail to create the encrypted oauth2-auto.plist file
+unless it already exists. Create this file manually before attempting the g-cal
+sync/google sign in window:
+
+#+begin_src emacs-lisp
+touch $HOME/.emacs.d/oauth2-auto.plist
+#+end_src
+
+Open Emacs and run the following command
+
+#+begin_src
+# If the sync ever fails, run this before attempting to resync
+M-x org-gcal--sync-unlock
+
+M-x org-gcal-sync
+#+end_src
+
+This will attempt to open your default web browser. Complete the "sign in with
+google" consent screen and close the window. Emacs will retrieve the xoauth2.0
+token after closing the window, then encrypt it into that file.
+
+*If you have a prompt requesting to kill the xoauth2.0 buffer, click "Save and
+ kill buffer"*.
+
+Run the sync again. This time it should should download your email events into
+your agenda/calendar file.
+
+#+begin_src 
+M-x org-gcal-sync
+#+end_src
+
+Your calendar should be synced at this point!
+
+*** Automatically Sync Calendar
+Filling this out when I have a clean answer. The minibuffer output is too
+verbose and distracting. The decryption causes emacs to hang until the plstore
+file is read.
+
+*** Org Capture Template
+
+Per the README, this is the official way to use org capture. I learned its
+easiest to write dates in the format "Jan 1 23:00" when scheduling items. Read
+the documentation for any information on how the application works.
+
+#+begin_src emacs-lisp
+  (setq org-capture-templates
+        `(("a" "Appointment" entry (file ,(concat user-emacs-directory "/calendar.org"))
+           "* %?\n:PROPERTIES:\n:calendar-id:\tfirst@gmail.com\n:END:\n:org-gcal:\n%^T--%^T\n:END:\n\n" :jump-to-captured t)
+          ("j" "Journal" entry (file org-default-journal-file)
+           "** %? %U\n\n"
+           :empty-lines 1)
+          ))
+#+end_src
+
+** Troubleshooting
+*** Scenario: The sync is completing without error though no calendar events are populating.
+
+Solution: Create a new calendar event item first and see if that syncs. My
+calendar took a while to retrieve future and past events. I was under the
+impression that only new calendar event items would appear. All of your events
+will appear, though sometimes it can take a moment.
+
+If the sync fails, run these commands and try again. This is also applicable to
+if you receive an oauth provider error. Running the reload command will fix
+that as well:
+
+#+begin_src 
+M-x (org-gcal-reload-client-id-secret)
+M-x (org-gcal--sync-unlock)
+M-x (org-gcal-sync)
+#+end_src
+
+*** Scenario: Sync failing in general
+
+Solution: It could be that your API credentials are incorrect Try steps above
+after confirming the credentials are correct. Double check that your
+oauth2-auto.plist file in the emacs-user-directory contains data. This should
+contain encrypted PGP data. If it doesn't, read your emacs error logs and enable
+org-gcal-toggle-debugging. This will indicate whether its an issue creating the
+file or with the API server.
+
+I have tried clicking on "~yes~", "~no~", and "~save then kill~" when first running
+~org-gcal-sync~ and receiving the ~oauth2-auto.plist~ buffer message. I believe if
+you click "save then kill", it will properly save the PGP encrypted file that
+emacs creates.
+
+If the file contains valid PGP data and the message buffer says its getting
+decrypted, its another problem with either the API or the sync being
+delayed. Please try creating new calendar event items specifically when
+troubleshooting.
+
+The steps above should "just work". Additional issues would need individual
+troubleshooting.
+
+* Emacs/Setting up Mu4e and Multiple Gmail Accounts
+:PROPERTIES:
+:ONE: one-default-doc
+:CUSTOM_ID: /blog/emacs-with-mu4e-and-multiple-gmail-accounts
+:CREATED: <2025-01-11 Sun 00:53>
+:END:
+Documented steps I take to setup Mu4e with two Gmail accounts. This page will
+contain the directions for using app password authentication. It will be updated
+when XOAUTH2.0 is required.
+
+** Installation
+
+** Gmail
+I'm using app passwords while they still last. Eventually this section will
+contain information on setting up XOAUTH 2.0 when app passwords are fully phased
+out.
+
+Two email accounts will be added to Mu4e. Each account will have its own
+"context" and account dependent keybindings.
+
+*** Creating a Gmail App Password
+- Open the Gmail account settings
+- Enable two factor authentication
+- Create your app password using https://myaccount.google.com/apppasswords
+
+The app password will be used by offlineimap to sign into your Gmail
+account. Create app passwords for both your email accounts.
+
+** Compile Mu4e
+
+The application will be compiled from source
+
+*** Dependencies
+
+#+begin_src bash
+sudo apt install -y git meson libgmime-3.0-dev libxapian-dev gnutls-bin texinfo libcld2-dev cmake guile-3.0
+#+end_src
+
+*** Compiling Mu4e
+
+#+begin_src bash
+mkdir -p ~/Sources
+git clone https://github.com/emacsmirror/mu4e ~/Sources/mu4e
+cd ~/Sources/mu4e
+./autogen.sh
+make
+sudo make install
+#+end_src
+
+*** GPG Keys (Encrypting Password)
+
+Generate your own GPG pair. This will be used to decrypt your password by
+offlineimap. Please use the full-key-gen flag instead of following the example
+below. I'm creating a passwordless GPG pair. Its absolutely not secure. This
+avoids having to type a passphrase to decrypt your password files
+
+#+begin_src bash
+gpg --batch --passphrase '' --quick-gen-key proton@proton.local default default
+gpg --list-keys
+pass init <GPGID>
+#+end_src
+
+** Offline Imap (Downloading Emails) 
+OfflineImap will be used to download the emails. Emacs will be used to send the
+emails using its SMTP functionality
+
+*** Create Email Folder
+
+Create a folder to store your emails
+
+#+begin_src bash
+mkdir -p ~/Mail/first@gmail.com
+#+end_src
+
+*** Create password decrypting script
+
+Create the following .offlineimap.py script. This will be used in the
+.offlineimaprc to decrypt our password file
+
+#+begin_src bash
+cat <<OEM > ~/.offlineimap.py
+#! /usr/bin/env python
+from subprocess import check_output
+
+def get_pass(account):
+    return check_output("pass email/" + account, bash=True).splitlines()[0]
+OEM
+#+end_src
+
+*** Create main configuration file
+Now create the main configuration used to download the emails. The only thing
+you need to replace is any reference to first@gmail.com
+
+#+begin_src bash
+cat <<OEM > ~/.offlineimaprc
+[general]
+accounts = main, unix
+maxsyncaccounts = 3
+socktimeout = 60
+pythonfile = ~/.offlineimap.py
+
+ui = TTY.TTYUI
+
+[Account main]
+localrepository = main-local
+remoterepository = gmail-remote
+
+[Repository main-local]
+type = Maildir
+localfolders = /home/user/Mail/first@gmail.com
+nametrans = lambda folder: re.sub ('important', '^\[Gmail\].Important',
+                           re.sub('all', '[Gmail].All Mail'       ,
+                           re.sub('sent'    , '[Gmail].Sent Mail' ,
+                           re.sub('drafts'  , '[Gmail].Drafts'    ,
+                           folder))))
+folderfilter = lambda folder: folder not in ['important']
+
+[Repository gmail-remote]
+type = Gmail
+remoteuser = first@gmail.com
+remotepasseval = get_pass("first@gmail.com")
+
+nametrans = lambda folder: re.sub ('^\[Gmail\].Important', 'important',
+                           re.sub('.*All Mail$'  , 'all',
+                           re.sub('.*Sent Mail$' , 'sent',
+                           re.sub('.*Drafts$'    , 'drafts',
+                           folder))))
+folderfilter = lambda folder: folder not in ['[Gmail]/All Mail',
+                                             '[Gmail]/Important',
+                                             '[Gmail]/Starred']
+
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+ssl_version = tls1_2
+
+[Account unix]
+localrepository = unix-local
+remoterepository = unix-remote
+
+[Repository unix-local]
+type = Maildir
+localfolders = /home/user/Mail/second@gmail.com
+nametrans = lambda folder: re.sub ('important', '^\[Gmail\].Important',
+                           re.sub('all', '[Gmail].All Mail'       ,
+                           re.sub('sent'    , '[Gmail].Sent Mail' ,
+                           re.sub('drafts'  , '[Gmail].Drafts'    ,
+                           folder))))
+folderfilter = lambda folder: folder not in ['important']
+
+[Repository unix-remote]
+type = Gmail
+remoteuser = second@gmail.com
+remotepasseval = get_pass("second@gmail.com")
+
+nametrans = lambda folder: re.sub ('^\[Gmail\].Important', 'important',
+                           re.sub('.*All Mail$'  , 'all',
+                           re.sub('.*Sent Mail$' , 'sent',
+                           re.sub('.*Drafts$'    , 'drafts',
+                           folder))))
+folderfilter = lambda folder: folder not in ['[Gmail]/All Mail',
+                                             '[Gmail]/Important',
+                                             '[Gmail]/Starred']
+
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+ssl_version = tls1_2
+OEM
+#+end_src
+
+*** Downloading and Indexing Emails
+Run the following to commands. ~offlineimap~ is used to start the email
+download. Mu will index the downloaded emails.
+
+
+#+begin_src bash
+offlineimap
+
+mu init --maildir=~/Mail \
+    --my-address=first@gmail.com \
+    --my-address=second@gmail.com \
+#+end_src
+
+** Configuring Emacs
+At this point you would have installed the emacs mu4e package from source,
+downloaded your emails to a folder, and lastly indexed it with Mu4e.
+
+Now its time to configure Emacs to show you emails in that folder. I won't
+explain this configuration file. I'll leave this up to your responsibility.
+
+This configuration file will work with your email. I stripped out the
+mu4e-folding and mu4e-thread packages from the config. They provide UI
+improvements to Mu4e and the installation of these plugins are out of the scope
+of this guide.
+
+
+*** Basic Config
+
+#+begin_src emacs-lisp
+;; Load mu4e (Maildir email client for Emacs) if its directory exists
+(when (file-directory-p "/usr/local/share/emacs/site-lisp/mu4e")
+  ;; Load mu4e and its contribution library
+  (require 'mu4e)
+  (require 'mu4e-contrib)
+
+  ;; --- Basic mu4e Configuration ---
+  (setq mu4e-maildir "~/Mail")               ; Root Maildir directory (where your emails are stored)
+  (setq mu4e-attachment-dir "~/Downloads")   ; Default directory for saving email attachments
+  (setq message-kill-buffer-on-exit t)       ; Close the buffer after sending/canceling an email
+  (setq mu4e-compose-keep-self-cc nil)       ; Don't CC yourself when replying to your own emails
+  (add-hook 'mu4e-view-mode-hook #'visual-line-mode) ; Enable word wrapping in email view
+  (add-hook 'mu4e-compose-mode-hook #'(lambda () (auto-save-mode 1))) ; Auto-save drafts
+
+  ;; --- SMTP (Outgoing Mail) Settings ---
+  (setq send-mail-function 'smtpmail-send-it) ; Use `smtpmail` for sending emails
+  (setq smtpmail-stream-type 'starttls)      ; Use STARTTLS for secure SMTP connections
+
+  ;; --- Email Display & Rendering ---
+  (setq mu4e-html2text-command "w3m -T text/html") ; Convert HTML emails to plain text using `w3m`
+  (setq mu4e-headers-auto-update t)          ; Automatically refresh email headers
+  (setq mu4e-view-show-images t)             ; Display inline images in emails
+  (setq mu4e-use-fancy-chars t)              ; Use pretty symbols (e.g., arrows for threads)
+  (setq mu4e-headers-show-threads t)         ; Enable email threading in the headers view
+  (setq mu4e-view-fields '(:from :to :subject :date :maildir :tags)) ; Fields to display in email view
+  (setq mu4e-view-hide-cited t)              ; Hide quoted text in email view by default
+
+  ;; --- Composing Emails ---
+  (setq mu4e-compose-signature-auto-include nil) ; Don't auto-insert signature
+  (setq mu4e-compose-in-new-frame t)         ; Open compose window in a new frame
+  (setq mu4e-compose-dont-reply-to-self t)   ; Exclude self when replying to a mailing list
+  (setq message-citation-line-function 'message-insert-formatted-citation-line) ; Format email citations
+
+  ;; --- Search & Behavior ---
+  (setq mu4e-search-full t)                  ; Show all search results (no limit)
+  (setq mu4e-sent-messages-behavior 'delete) ; Don't save sent emails (IMAP server handles this)
+  (setq mu4e-change-filenames-when-moving t) ; Required for `mbsync` compatibility
+  (setq mu4e-confirm-quit nil)               ; Don't ask for confirmation when quitting mu4e
+  (setq mu4e-index-cleanup t)      ; Remove stale entries
+  (setq mu4e-index-lazy-check t)   ; Only re-index if changed
+  (setq mu4e-index-updated-hook nil) ; Disable "lazy indexing completed" popup
+  (advice-add 'mu4e--index-cleanup-finished-message :override #'ignore)
+  ;; --- Integration with Other Tools ---
+  (setq mail-user-agent 'mu4e-user-agent)    ; Set mu4e as the default email client in Emacs
+  (setq mu4e-completing-read-function 'ivy-completing-read) ; Use Ivy for autocompletion
+
+  ;; --- UI & Hooks ---
+  (add-hook 'minibuffer-setup-hook (lambda () (setq mu4e-hide-index-messages t))) ; Hide mu4e logs in minibuffer
+  (add-hook 'minibuffer-exit-hook (lambda () (setq mu4e-hide-index-messages nil)))) ; Restore logs after exiting minibuffer
+
+;; Email Syncing
+
+(setq mu4e-get-mail-command "true") ;; Don't set a mail fetch program. Rely on independant sync
+(setq mu4e-update-interval 60)             ; Check for new emails every 60 seconds
+
+(defvar my/offlineimap-process nil
+  "Tracks the OfflineIMAP process to prevent multiple instances.")
+
+(defun my/async-offlineimap-sync ()
+  "Run OfflineIMAP asynchronously without blocking Emacs, but avoid multiple instances."
+  (interactive)
+  (unless my/offlineimap-process
+    (let ((timestamp (current-time-string))
+          (buf (get-buffer-create "*offlineimap*")))
+      (with-current-buffer buf
+        (read-only-mode 0)
+        (erase-buffer)
+        (insert (format "Starting OfflineIMAP sync at: %s\n" timestamp)))  ;; Insert timestamp into the buffer
+      (setq my/offlineimap-process
+            (start-process "offlineimap"
+                           buf
+                           "offlineimap" "-o")))))
+
+(defun my/stop-offlineimap-sync ()
+  "Stop the OfflineIMAP process if it's running."
+  (when my/offlineimap-process
+    (delete-process my/offlineimap-process)
+    (setq my/offlineimap-process nil)))
+
+;; Run OfflineIMAP every 45 seconds, but only if it's not already running
+(run-with-timer 0 45 #'my/async-offlineimap-sync)
+(add-hook 'mu4e-update-mail-hook #'mu4e-update-index)
+
+;; Email Contexts
+; This code handles which email accounts are visible in MU4E as well as configures
+; context-aware keybindings for bookmarks.
+
+(setq mu4e-contexts
+      (list
+       ;; Office account
+       (make-mu4e-context
+        :name "Office"
+        :match-func
+        (lambda (msg)
+          (when msg
+            (string-prefix-p "/first@gmail.com" (mu4e-message-field msg :maildir))))
+        :vars '((user-mail-address . "first@gmail.com")
+                (user-full-name    . "First Last")
+                (mu4e-drafts-folder  . "/first@gmail.com/drafts")
+                (mu4e-sent-folder    . "/first@gmail.com/sent")
+                (mu4e-refile-folder  . "/first@gmail.com/[Gmail]/All Mail")
+                (mu4e-trash-folder   . "/first@gmail.com/[Gmail].Trash")
+                (smtpmail-smtp-server . "smtp.gmail.com")
+                (smtpmail-smtp-service . 587)
+                ;; (mu4e-sent-messages-behavior . 'delete)
+                (mu4e-compose-reply-ignore-address . '("no-?reply" "first@gmail.com"))
+                (mu4e-maildir-shortcuts . (("/first@gmail.com/INBOX" . ?i)
+                                           ("/first@gmail.com/sent" . ?s)
+                                           ("/first@gmail.com/[Gmail].Trash" . ?t)
+                                           ("/first@gmail.com/[Gmail].Spam" . ?j)
+                                           ("/first@gmail.com/drafts" . ?d)))))
+
+       ;; UnixFandom account
+       (make-mu4e-context
+        :name "Queztaz"
+        :match-func
+        (lambda (msg)
+          (when msg
+            (string-prefix-p "/second@gmail.com" (mu4e-message-field msg :maildir))))
+        :vars '((user-mail-address . "second@gmail.com")
+                (user-full-name    . "First Last")
+                (mu4e-drafts-folder  . "/second@gmail.com/drafts")
+                (mu4e-sent-folder    . "/second@gmail.com/sent")
+                (mu4e-refile-folder  . "/second@gmail.com/[Gmail]/All Mail")
+                (mu4e-trash-folder   . "/second@gmail.com/[Gmail].Trash")
+                (smtpmail-smtp-server . "smtp.gmail.com")
+                (smtpmail-smtp-service . 587)
+                ;; (mu4e-sent-messages-behavior . 'delete)
+                (mu4e-compose-reply-ignore-address . '("no-?reply" "second@gmail.com"))
+                (mu4e-maildir-shortcuts . (("/second@gmail.com/INBOX" . ?u)
+                                           ("/second@gmail.com/sent" . ?S)
+                                           ("/second@gmail.com/[Gmail].Trash" . ?T)
+                                           ("/second@gmail.com/[Gmail].Spam" . ?J)
+                                           ("/second@gmail.com/drafts" . ?D)))))))
+
+(defvar my/mu4e-bookmarks-by-context
+  '(("Office"
+     . ((:name "Inbox" :query "maildir:/first@gmail.com/INBOX" :key ?i)
+        (:name "Unread" :query "flag:unread and maildir:/first@gmail.com/INBOX" :key ?u)
+        (:name "All Mail" :query "maildir:/first@gmail.com/" :key ?a)
+        (:name "Sent" :query "maildir:/first@gmail.com/sent" :key ?s)
+        (:name "Drafts" :query "maildir:/first@gmail.com/drafts" :key ?d)
+        (:name "Spam" :query "maildir:/first@gmail.com/[Gmail].Spam" :key ?j)
+        (:name "Trash" :query "maildir:/first@gmail.com/[Gmail].Trash" :key ?t)
+        (:name "Last 7 Days" :query "date:7d..now and maildir:/first@gmail.com/INBOX" :key ?7)
+        (:name "PDFs" :query "mime:application/pdf and maildir:/first@gmail.com/INBOX" :key ?p)
+        (:name "Images" :query "mime:image/* and maildir:/first@gmail.com/INBOX" :key ?i)
+        (:name "With Calendar Event" :query "mime:text/calendar and maildir:/first@gmail.com/INBOX" :key ?c)
+        (:name "With Word Docs" :query "mime:application/msword  OR mime:application/vnd.openxmlformats-officedocument.wordprocessingml.document and maildir:/first@gmail.com/INBOX" :key ?w)
+))
+
+    ("Queztaz"
+     . ((:name "Inbox" :query "maildir:/second@gmail.com/INBOX" :key ?i)
+        (:name "Unread" :query "flag:unread and maildir:/second@gmail.com/INBOX" :key ?u)
+        (:name "All Mail" :query "maildir:/second@gmail.com/" :key ?a)
+        (:name "Sent" :query "maildir:/second@gmail.com/sent" :key ?s)
+        (:name "Drafts" :query "maildir:/second@gmail.com/drafts" :key ?d)
+        (:name "Spam" :query "maildir:/second@gmail.com/[Gmail].Spam" :key ?j)
+        (:name "Trash" :query "maildir:/second@gmail.com/[Gmail].Trash" :key ?t)
+        (:name "Last 7 Days" :query "date:7d..now and maildir:/second@gmail.com/INBOX" :key ?7)
+        (:name "PDFs" :query "mime:application/pdf and maildir:/second@gmail.com/INBOX" :key ?p)
+       (:name "Images" :query "mime:image/* and maildir:/second@gmail.com/INBOX" :key ?i)
+        (:name "With Calendar Event" :query "mime:text/calendar and maildir:/second@gmail.com/INBOX" :key ?c)
+        (:name "With Word Docs" :query "mime:application/msword  OR mime:application/vnd.openxmlformats-officedocument.wordprocessingml.document and maildir:/second@gmail.com/INBOX" :key ?w)
+))))
+
+(defun my/update-mu4e-bookmarks-based-on-context (context-name)
+  "Update `mu4e-bookmarks` when switching context."
+  (let ((bookmarks (cdr (assoc context-name my/mu4e-bookmarks-by-context))))
+    (when bookmarks
+      (setq mu4e-bookmarks bookmarks))))
+
+(add-hook 'mu4e-context-changed-hook
+          (lambda ()
+            (my/update-mu4e-bookmarks-based-on-context
+             (mu4e-context-name (mu4e-context-current)))))
+#+end_src
+
+*** Creating .authinfo.gpg file
+This file will contain your SMTP password used by emacs to send emails.
+
+
+#+begin_src shell
+machine smtp.gmail.com login first@gmail.com password PASSWORDHERE port 587 
+machine smtp.gmail.com login second@gmail.com password PASSWORDHERE port 587 
+#+end_src
+
+
+*** Using Mu4e
+
+Evaluate the code blocks above and launch Mu4e
+
+#+begin_src 
+M-x mu4e
+#+end_src
+* Emacs/EWW Hacks
+:PROPERTIES:
+:ONE:      one-default-doc
+:CUSTOM_ID: /blog/emacs-eww-hacks/
+:CREATED:  <2024-05-14 Tue 08:32>
+:END:
+Collection of emacs snippets to enhance the eww experience.
+
+** Hack list
+** Simple Styling
+#+begin_src emacs-lisp
+(setq browse-url-browser-function 'eww-browse-url) ; Use eww as the default browser
+(setq shr-use-fonts  nil)  ; No special fonts
+(setq shr-use-colors nil) ; No colours
+(setq shr-indentation 4) ; Left-side margin
+(setq shr-width 70) ; Fold text to 70 columns
+(setq eww-search-prefix "https://google.com/search?q=") ; Use another engine for searching
+#+end_src
+
+** Rename EWW Buffers to Website Names
+
+#+begin_src emacs-lisp
+(setq eww-auto-rename-buffer t)
+#+end_src
+
+
+** Force EWW to open new buffers by default
+Normally EWW only runs as a single buffer, similar to Eshell. This function will
+make a new EWW buffer by default instead of replacing the previous.
+
+#+begin_src emacs-lisp
+  (use-package eww
+    :ensure t
+    :config
+    (defun modi/force-new-eww-buffer (orig-fun &rest args)
+      "When prefix argument is used, a new eww buffer will be created,
+      regardless of whether the current buffer is in `eww-mode'."
+      (if current-prefix-arg
+	  (with-temp-buffer
+	    (apply orig-fun args))
+	(apply orig-fun args)))  
+    (advice-add 'eww :around #'modi/force-new-eww-buffer)
+    )
+#+end_src
+
+
+** Faster Searches
+This function will prompt you for a string and allow you to search for it using your favorite
+search engine. If the string is a url it'll open it up.
+
+#+begin_src emacs-lisp
+  (defun my/is-url (string)
+    "Checks if STRING is a valid URL."
+    (let ((url-parts (url-generic-parse-url string)))
+      (and url-parts (url-type url-parts))))
+
+  (defun my/eww-search (x)
+    "Searches stuff in eww"
+    (interactive "sSearch Query: ")
+    (switch-to-buffer (generate-new-buffer "eww"))
+    (eww-mode)
+    (eww (concat "https://lite.duckduckgo.com/lite/?q=" (replace-regexp-in-string " " "+" x)))
+    )
+
+  ; Binding it using evil mode
+  (evil-define-key 'normal eww-mode-map "ss" 'my/eww-search)
+#+end_src
+
+** Search highlighted region
+Highlighting a url will open it using EWW. If you highlight text, it'll google
+the string instead.
+
+#+begin_src emacs-lisp
+  (defun my/eww-search-selected (start end)
+    "Searches the selected text in EWW. If it's a URL, opens it directly. If not, searches Google."
+    (interactive "r")
+    (when (use-region-p)
+      (let ((region (buffer-substring-no-properties start end)))
+	(if (my/is-url region)
+	    (eww-browse-url region)
+	  (split-window-right)
+	  (balance-windows)
+	  (other-window 1)
+	  (let ((query (replace-regexp-in-string "\n" " " region)))
+	    (eww-browse-url (concat "https://www.google.com/search?q=" (url-hexify-string query))))))))
+(define-key map (kbd "C-c s") 'my/eww-search-selected)
+#+end_src
+
+** Redirect Reddit to Reddit.old
+Self explanatory. I had to compile emacs 29.2 with libxml2 support to get it to
+work. The URL transformers function wasn't available with my package managers
+emacs version.
+
+#+begin_src emacs-lisp
+  (defun eww-reddit-redirect(url)
+    "Redirect reddit.com to old.reddit.com automatically."
+    (replace-regexp-in-string "https://www.reddit.com" "https://old.reddit.com" url))
+
+  (setq eww-url-transformers '(eww-remove-tracking eww-reddit-redirect))
+#+end_src
+
+** Quasi Default Web Browser
+Have EWW act as a default web browser [[https://old.reddit.com/r/emacs/comments/6ha4tl/a_little_trick_with_eww/][source]]
+
+#+begin_src 
+  (defalias 'gk-urls-external-browser 'browse-url-xdg-open)
+
+  (defun gk-browse-url (&rest args)
+    "Prompt for whether or not to browse with EWW, if no browse
+  with external browser."
+    (apply
+     (if (y-or-n-p "Browse with EWW? ")
+	 'eww-browse-url
+       #'gk-urls-external-browser)
+     args))
+
+  (setq browse-url-browser-function #'gk-browse-url) 
+#+end_src
+
+** Open EWW at startup
+
+#+begin_src emacs-lisp
+(defun my/open-eww-in-background()
+  (switch-to-buffer (generate-new-buffer "eww"))
+  (eww-mode)
+  (eww "https://lite.duckduckgo.com/lite/")
+  (switch-to-buffer "*scratch*")
+  )
+
+(my/open-eww-in-background)
+#+end_src
+
+* Linux/Creating an Offline Debian Mirror Repository
+:PROPERTIES:
+:ONE:      one-default-doc
+:CUSTOM_ID: /blog/creating-offline-debian-mirror/
+:CREATED:  <2025-11-02 Sun 21:03>
+:END:
+Directions for creating a fully functional offline Debian mirror with most, but
+not all, packages available.
+
+** Creating the offline mirror
+** Overview
+- Install [[https://github.com/xr09/debian-mini-repo/blob/master/cron-debmirror][xr09's mirror script]]
+- Download Packages to folder
+- Generate package index list
+- Use the mirror
+** Mirror Script
+
+Clone this repo: [[https://github.com/xr09/debian-mini-repo/blob/master/cron-debmirror]]
+
+Edit the script and change the ~REPOS_DIR~ variable in the mirror.sh file. This
+should be the local path that will store the packages.
+
+Edit the debmirror.conf file and set the host to a Debian mirror (i.e
+"ftp.debian.org"). I'd suggest using a third party mirror to mindful of Debian's
+bandwidth costs.
+
+Edit the debmirror.conf file path in the mirror.sh script. The
+script will expect to find the file in ~/opt/~ otherwise.
+
+** Sync the Mirror Repo to a local folder
+
+Run the mirror script. This will begin downloading all the Debian packages.
+
+#+begin_src bash
+./mirror.sh
+#+end_src
+
+** Generate a package list
+Everytime you re-synchronize your mirror, run this command to recreate the
+package.gz index file. Apt won't work without this.
+
+The Packages.gz file must be located in the root folder of your offline mirror.
+
+#+begin_src bash
+dpkg-scanpackages . /dev/null | gzip -9 > Packages.gz
+#+end_src
+
+** Using the mirror
+Add the mirror to your sources.list file. Be mindful of keeping remote
+repositories in this list. For stability I would suggest only leaving the
+offline repo in your sources file unless otherwise needed.
+
+#+begin_src bash
+vim /etc/apt/sources.list
+
+deb [trusted=yes] file:/mnt/Debian /
+#+end_src
+
+The file repository will be live at this point
+
+#+begin_src bash
+apt update
+apt install ranger
+#+end_src
+
+** Source Code
+I modified the mirror.sh script to use a SCRIPT_DIR variable. The debmirror.conf
+file has debian as the host. The crontab file is unchanged.
+
+*** Mirror.sh
+
+#+begin_src bash
+#!/usr/bin/env bash
+
+SCRIPT_DIR=$(dirname "$(realpath "$1")")
+REPOS_DIR="/mnt/Debian/"
+
+debmirror --method=http --config-file=$SCRIPT_DIR/debmirror.conf --nosource $REPOS_DIR \
+--ignore-release-gpg --nosource --no-check-gpg --postcleanup --allow-dist-rename \
+--root=debian --rsync-extra=none -d stable   \
+--exclude-deb-section='(games|debug|news|zope|electronics|comm|gnustep|haskell|ocaml|hamradio|gnu-r|science)' \
+          --exclude='(/i19n/Translation-.*\.bz2)' \
+          --exclude='(kfreebsd-.*)' \
+          --include='(/python[1-9.]*-doc)' \
+          --exclude='(.*java.*doc.*)' \
+          --exclude='(.*debian.*reference.*)' \
+          --exclude='(.*-dbg.*)' \
+          --exclude='(/cairo-dock.*)' \
+          --exclude='(/.*-doc)' \
+          --include='(/(sqlite4|ansible|coffescript|geany|libjs|nginx|php|postgres|pypy|python-(django|flask|jinja|sql|werkzeug)).*doc)' \
+          --include='(/.*(xorg|ruby).*doc.*)' \
+      --include='(/firebird.*-doc)' \
+      --include='(/python[1-9.]*-doc)' \
+      --exclude='(openjdk.*doc.*)' \
+          --exclude='(typo4-src.*)' \
+          --exclude='(gdb-source.*)' \
+          --exclude='(w4af-console.*)' \
+          --exclude='(/calligra.*)' \
+          --exclude='(/mono/.*)' \
+          --exclude='(/texlive-(extra|lang)/.*)' \
+          --exclude='(/atlas/.*)' \
+          --exclude='(/childsplay-alphabet-sounds.*)' \
+          --exclude='(/aegis/.*)' \
+          --exclude='(/abinit/.*)' \
+          --exclude='(/ardour.*/.*)' \
+          --exclude='(/amsn/.*)' \
+          --exclude='(/aolserver5/.*)' \
+          --exclude='(/ant/.*)' \
+          --exclude='(/adios/.*)' \
+          --exclude='(/blender/.*)' \
+          --exclude='(/bullet/.*)' \
+          --exclude='(/visp/.*)' \
+          --exclude='(/ampache-themes/.*)' \
+          --exclude='(/alpine/.*)' \
+          --exclude='(/antlr3/.*)' \
+          --exclude='(/aspectj/.*)' \
+          --exclude='(/advi/.*)' \
+          --exclude='(/anjuta/.*)' \
+          --exclude='(/amule/.*)' \
+          --exclude='(/afterstep/.*)' \
+          --exclude='(/asymptote/.*)' \
+          --exclude='(/allegro4.4/.*)' \
+          --exclude='(/ampache-themes/.*)' \
+          --exclude='(/aspectc++/.*)' \
+          --exclude='(/amarok/.*)' \
+          --exclude='(/basemap/.*)' \
+          --exclude='(/brise/.*)' \
+          --exclude='(/boost1.54/.*)' \
+          --exclude='(/root-system/.*)' \
+          --exclude='(/c++-annotations/.*)' \
+          --exclude='(/asio/.*)' \
+          --exclude='(/wordnet/.*)' \
+          --exclude='(/gcc-4.6/.*)' \
+          --exclude='(/wine-gecko-1.4/.*)' \
+          --exclude='(/ace/.*)' \
+          --exclude='(/digikam/.*)' \
+          --exclude='(/e17/.*)' \
+          --exclude='(/abiword/.*)' \
+          --exclude='(/maxima/.*)' \
+          --exclude='(/mapnik/.*)' \
+          --exclude='(libpython.*testsuite.*)' \
+          --exclude='(/musixtex/.*)' \
+          --exclude='(/magics\+\+/.*)' \
+          --exclude='(ada-reference.*)' \
+          --exclude='(pyxplot-doc.*)' \
+          --exclude='(gnumach.*)' \
+          --exclude='(/wims.*)' \
+          --exclude='(/webgen.*)' \
+          --exclude='(/libtao.*)' \
+          --exclude='(/tao.*)' \
+          --exclude='(/activiz.*)' \
+          --exclude='(/agda.*)' \
+          --exclude='(/debian-edu.*)' \
+          --exclude='(/dff.*)' \
+          --exclude='(/elastix.*)' \
+          --exclude='(/fonts-ipamj.*)' \
+          --exclude='(/fonts-baekmuk.*)' \
+          --exclude='(/fonts-hanazono.*)' \
+          --exclude='(/fonts-horai.*)' \
+          --exclude='(/fonts-ipa.*)' \
+          --exclude='(/fonts-kiloji.*)' \
+          --exclude='(/fonts-kou.*)' \
+          --exclude='(/fonts-nanum.*)' \
+          --exclude='(/fonts-nanum.*)' \
+          --exclude='(/fonts-takao.*)' \
+          --exclude='(/fonts-yozvox.*)' \
+          --exclude='(/fonts-mikachan.*)' \
+          --exclude='(/fp-.*)' \
+          --exclude='(/gnucash.*)' \
+          --exclude='(/gnumed.*)' \
+          --exclude='(/grass.*)' \
+          --exclude='(/iceape.*)' \
+          --exclude='(/instalation-guide-.*)' \
+          --exclude='(/ooohg.*)' \
+          --exclude='(/libosl-doc.*)' \
+          --exclude='(/libreoffice-help.*)' \
+          --exclude='(/ns2.*)' \
+          --exclude='(/open-axiom.*)' \
+          --exclude='(/openclipart.*)' \
+          --exclude='(/paraview.*)' \
+          --exclude='(/sofa-.*)' \
+          --exclude='(/tagainijisho-dic-de.*)' \
+          --exclude='(/texmacs.*)' \
+          --exclude='(/lilypond.*)' \
+          --exclude='(/vtk.*)' \
+          --exclude='(/elmer.*)' \
+          --exclude='(/felix.*)' \
+          --exclude='(/debian-installer-6.0-)' \
+          --exclude='(/evolution.*)'\
+          --exclude='(/gimp-help-.*)'\
+          --include='(/gimp-help-common.*)'\
+          --include='(/gimp-help-en.*)'\
+          --exclude='(/mbrola-de.*)'\
+          --exclude='(/mgltools.*)'\
+          --exclude='(/mecab.*)'\
+          --exclude='(/context.*)'\
+          --exclude='(/cuneiform.*)'\
+          --exclude='(/celestia.*)'\
+          --exclude='(/cclib.*)'\
+          --exclude='(/nvidia-visual.*)'\
+          --exclude='(/nvidia-cuda-toolkit.*)'\
+          --exclude='(/nvidia-cuda-doc.*)'\
+          --exclude='(/scribus-doc.*)'\
+          --exclude='(/selfhtml.*)'\
+          --exclude='(/etoys.*)'\
+          --exclude='(/gmap.*)'\
+          --exclude='(/icc-profiles.*)'\
+          --exclude='(/picon.*)'\
+          --exclude='(/fsl.*)'\
+          --include='(/fslint.*)'\
+          --exclude='(/cain.*)'\
+          --exclude='(/cmuc.*)'\
+          --exclude='(/cm-super.*)'\
+          --exclude='(/jmol.*)'\
+          --exclude='(/libjmol.*)'\
+          --exclude='(/mypaint.*)'\
+          --exclude='(/mysql-source.*)'\
+          --exclude='(/makehuman.*)'\
+          --exclude='(/mayavi2.*)'\
+          --exclude='(/ovito.*)'\
+          --exclude='(/opencascade.*)'\
+          --exclude='(/libopencascade.*)'\
+          --exclude='(/oce-draw.*)'\
+          --exclude='(/liboce.*)'\
+          --exclude='(/sunpinyin.*)'\
+          --exclude='(/openscenegraph.*)'\
+          --exclude='(/libopenscenegraph.*)'\
+          --exclude='(/opendnssec.*)'\
+          --exclude='(/openturns.*)'\
+          --exclude='(/libopenturns.*)'\
+          --exclude='(/volview.*)'\
+          --exclude='(/libbvx.*)'\
+          --exclude='(/libvibrant.*)'\
+          --exclude='(/ncbi.*)'\
+          --exclude='(/libncbi.*)'\
+          --exclude='(/nwchem.*)'\
+          --exclude='(/libwine-gecko.*)'\
+          --exclude='(/whitedune.*)'\
+          --exclude='(/xemacs21.*)'\
+          --exclude='(/acl2.*)'\
+          --exclude='(/axiom.*)'\
+          --exclude='(/open-axiom.*)'\
+          --exclude='(/scilab.*)'\
+          --exclude='(/swe-.*)'\
+          --exclude='(/libswe.*)'\
+          --exclude='(/sitplus.*)'\
+          --exclude='(/racket.*)'\
+          --exclude='(/radiance.*)'\
+          --exclude='(/regina-normal.*)'\
+          --exclude='(/quantlib.*)'\
+          --exclude='(/ruby-feedtools-doc.*)'\
+          --exclude='(/ruby-activeldap-doc.*)'\
+          --exclude='(/kde-l10n-.*)'\
+          --exclude='(/quantum-espresso.*)'\
+          --exclude='(/emacs23.*)'\
+          --exclude='(/emboss.*)'\
+          --exclude='(/jemboss.*)'\
+          --exclude='(/lammps.*)'\
+          --exclude='(/lazarus.*)'\
+          --exclude='(/lcl.*)'\
+          --exclude='(/installation-guide.*)'\
+          --exclude='(/ibus-table-chinese.*)'\
+          --exclude='(/tuxpaint.*)'\
+          --exclude='(/tesseract.*)'\
+          --exclude='(/tagainjisho.*)'\
+          --exclude='(/fluid-soundfont.*)'\
+          --exclude='(/freepats.*)'\
+          --exclude='(/ferret.*)'\
+          --exclude='(/festvox.*)'\
+          --exclude='(/freecad.*)'\
+          --exclude='(/festvox-.*)'\
+          --exclude='(/festival.*)'\
+          --exclude='(/frama-c.*)'\
+          --exclude='(/fonts-cwtex.*)'\
+          --exclude='(/freefem.*)'\
+          --exclude='(/fonts-unfonts.*)'\
+          --exclude='(/biomaj.*)'\
+          --exclude='(/doc-linux-.*)'\
+          --include='(/doc-linux-html.*)'\
+          --include='(/doc-linux-text.*)'\
+          --exclude='(/digikam-doc.*)'\
+          --exclude='(/dotlrn.*)'\
+          --exclude='(/gfxboot.*)'\
+          --exclude='(/gcc-4.*-source.*)'\
+          --exclude='(/gmt.*)'\
+          --exclude='(/games-thumbnails.*)'\
+          --exclude='(/pari-.*)'\
+          --exclude='(/libpari.*)'\
+          --exclude='(/eglib-source.*)'\
+          --exclude='(/expeyes.*)'\
+          --exclude='(/k3d.*)'\
+          --exclude='(/gcompris/.*)'\
+          --exclude='(/geotranz/.*)'\
+          --exclude='(/linux-source-.*)'\
+          --exclude='(/sweethome3d.*)'\
+          --exclude='(/unidic-mecab/.*)'\
+          --exclude='(/eclipse.*/.*)'\
+          --exclude='(/insighttoolkit4/.*)'\
+          --exclude='(/gap-tomlib/.*)'\
+          --exclude='(/ko.tex-unfonts/.*)'\
+          --exclude='(/openjdk-[0-9]-source.*)'\
+          --exclude='(/openvrml/.*)'\
+          --exclude='(/coq/.*)'\
+          --exclude='(/mozc/.*)'\
+          --exclude='(/norwegian/.*)'\
+          --exclude='(/nuvola-icon-theme.*)'\
+          --exclude='(/kiten/.*)'\
+          --exclude='(/ding/.*)'\
+          --exclude='(/live-manual/.*)'\
+          --exclude='(/scratch/.*)'\
+          --exclude='(/freevo/.*)'\
+          --exclude='(/pinyin-database/.*)'\
+          --exclude='(/invesalius/.*)'\
+          --exclude='(/hydrogen-drumkits/.*)'\
+          --exclude='(/guitarix/.*)'\
+          --exclude='(/stardict-xmlittre/.*)'\
+          --exclude='(/kmymoney.*)'\
+          --exclude='(/pleiades.*)'\
+          --exclude='(/kstars-data-extra-tycho2.*)'\
+          --exclude='(/gcj.*)'\
+          --exclude='(/libgjc.*)'\
+          --exclude='(/latex-cjk.*)'\
+          --exclude='(/scala.*)'\
+          --exclude='(/groovy.*)'\
+          --exclude='(/coinor-.*)' \
+          --exclude='(/iceweasel-l10n-.*)' \
+          --exclude='(/debian-installer-netboot-images.*)'
+#+end_src
+
+*** debmirror.conf
+#+begin_src 
+# Output options
+$verbose=1;
+$progress=1;
+$debug=0;
+
+$host="ftp.debian.org";
+$user="anonymous";
+$passwd="anonymous@";
+$remoteroot="debian";
+$download_method="http";
+@sections="main,contrib,non-free";
+@arches="amd64";
+
+$omit_suite_symlinks=0;
+$skippackages=0;
+
+$i18n=0;
+$getcontents=0;
+$do_source=0;
+$max_batch=0;
+
+# Save mirror state between runs; value sets validity of cache in days
+$state_cache_days=0;
+
+# Security/Sanity options
+$ignore_release_gpg=1;
+$ignore_release=0;
+$check_md5sums=0;
+$ignore_small_errors=1;
+
+# Cleanup
+$cleanup=1;
+$post_cleanup=1;
+
+# Locking options
+$timeout=300;
+
+# FTP/HTTP options
+$passive=1;
+
+# set proxy if you need it
+#$proxy="http://10.0.0.1:3128";
+
+# Dry run
+$dry_run=0;
+
+# Don't keep diff files but use them
+$diff_mode="use";
+
+# The config file must return true or perl complains.
+# Always copy this.
+1;
+#+end_src
+
+*** cron-debmirror
+
+#+begin_src 
+# place this file at /etc/cron.d/debmirror
+
+
+# change the paths if you need to
+
+# mirror every day at 5am
+0 5 * * * root /PATH/TO/mirror.sh >> /var/log/debmirror-debian.log 2>&1
+#+end_src
+
+* Linux/Migrate Wiki.js to Another Server
+:PROPERTIES:
+:ONE:      one-default-doc
+:CUSTOM_ID: /blog/migrate-wiki-js-to-another-server/
+:CREATED:  <2024-09-18 Sun 07:54>
+:END:
+Documented steps I took to migrate Wiki.JS from one server to another. The
+original instance was running on docker. The new instance is on an LXC container.
+
+** Migrating Steps
+** Overview
+The original server runs WikiJS through docker. One container contains the
+PostgresDB and the other contains the node server
+
+New server will be running WikiJS natively
+
+** Exporting the database on old server
+From the old server, run the following command to dump the database to a
+file.
+
+#+begin_src bash
+pg_dump wiki -U wiki -F c > wikibackup.dump
+#+end_src
+
+I'm using podman to host my containers. My command is a little different. I'll
+run pgdump on the container running the node server
+
+#+begin_src bash
+podman exec 5eab35c74818 pg_dump wiki -U wikijs -F c > wikibackup.dump
+#+end_src
+
+Now move the dump file to your new server. I like using python's http server.
+
+#+begin_src bash
+  # Run on the old server
+  python -m http.server
+
+  # Download the file on the new server
+  wget https://OLD-SERVER-IP/wikibackup.dump
+#+end_src
+
+** Importing the database
+Start with installing postgres
+
+#+begin_src 
+sudo apt install postgresql
+#+end_src
+
+Now edit the following lines in /etc/postgresql/NUMBER/main/pg_hba.conf
+
+#+begin_src 
+# CHANGE THIS LINE TO TRUST
+#local   all             postgres                                peer
+local   all             postgres                                trust
+
+# CHANGE THIS LINE TO MD5
+#local   all             all                                    peer 
+local   all             all                                     md5
+#+end_src
+
+Restart the postgres service
+
+#+begin_src
+systemctl restart postgresql
+systemctl enable postgresql
+#+end_src
+
+Now log into the postgres user account and create the database. This will be
+what we later merge our dump into. Fyi, if your docker container had a DB 
+different than "wikijs", make sure to create that user instead.
+
+#+begin_src 
+sudo -i -u postgres
+psql
+CREATE USER wikijs WITH PASSWORD 'your_password';
+CREATE DATABASE wiki;
+GRANT ALL PRIVILEGES ON DATABASE wiki TO wikijs;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO wikijs;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO wikijs;
+ALTER USER wikijs WITH SUPERUSER;
+ALTER USER wikijs WITH CREATEDB;
+ALTER USER wikijs WITH CREATEROLE;
+ALTER USER wikijs WITH REPLICATION;
+ALTER USER wikijs WITH BYPASSRLS;
+\q
+exit
+#+end_src
+
+With the database created, restore the database dump you transferred to the new
+server earlier.
+#+begin_src 
+pg_restore wikibackup.dump.1 -d wiki -U wikijs
+#+end_src
+
+Install the Wiki server, then edit the config.yml file to include the username
+and password created in the previous section.
+
+#+begin_src bash
+  # Installing Node
+  apt install curl
+  curl -sL https://deb.nodesource.com/setup_lts.x | bash -
+  apt install -y nodejs
+
+  # Installing the application
+  wget https://github.com/Requarks/wiki/releases/latest/download/wiki-js.tar.gz
+  mkdir /var/wiki
+  tar xzf wiki-js.tar.gz -C /var/wiki
+  cd /var/wiki
+  cp config.sample.yml config.yml
+  vim config.yml
+#+end_src
+
+At this point you can test the server by running ~node server~ in the wiki
+folder. Create a systemd unit afterward to start the service on boot
+
+#+begin_src 
+cat <<OEM >/etc/systemd/system/wiki.service
+[Unit]
+Description=Wiki.js
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/node server
+Restart=always
+# Consider creating a dedicated user for Wiki.js here:
+User=nobody
+Environment=NODE_ENV=production
+WorkingDirectory=/var/wiki
+
+[Install]
+WantedBy=multi-user.target
+OEM
+
+systemctl daemon-reload
+systemctl enable --now wiki
+#+end_src
+* Linux/Adding Bitwarden to the Pinephone Pro
+:PROPERTIES:
+:ONE:      one-default-doc
+:CUSTOM_ID: /blog/adding-bitwarden-to-the-pinephone-pro/
+:CREATED:  <2025-05-14 Sun 21:20>
+:END:
+Directions on adding Bitwarden on the Pinephone Pro on PMOS PHOSH. It relies the
+Firefox Bitwarden extension and a .desktop file that's used to open it.
+
+** Bitwarden Setup
+** Adding the extension
+Reduce your screen scaling to the lowest available in the PHOSH
+settings. This prevents rendering glitches.
+
+- Open Firefox
+- Install the Bitwarden extension from https://addons.mozilla.org
+- Press "C-b" to open the firefox sidebar. Use the drop down to switch from the
+  bookmarks view to Bitwarden. Login afterward.
+
+# [[./QI4X.png]]
+
+** Getting the extension ID
+Navigate to about:debugging#/runtime/this-firefox
+
+Scroll down until you see the extension ID and copy it to a text file. We'll
+need it later.
+
+ # [[./I293.png]]
+
+** Creating the .desktop file
+This is the meat of it all. Create the following desktop file and paste in these content
+
+~~/.local/share/applications/bitwarden.desktop~
+
+#+begin_src bash
+[Desktop Entry]
+Name=Bitwarden
+Comment=Manage your passwords
+Exec=firefox-esr --new-window "moz-extension://YOUR_EXTENSION_ID/popup/index.html"
+Terminal=false
+Type=Application
+Icon=/home/user/.local/share/applications/images/bitwarden.png
+Categories=Network;WebBrowser;
+StartupWMClass=Firefox-esr
+#+end_src
+
+Bitwarden should now be added to your desktop. If you don't see it pop up, make
+sure the firefox-esr application exists and is in your path. If the .desktop
+file cant find the program in the path it gets ignored.
+
+My permissions for the file is 0644
+
+* Linux/Corebooting Thinkpad X220 With CH341A Programmer
+This isn't going to be a walkthrough of corebooting your Thinkpad X220. These
+are the steps you need to get the flasher working and connected to your system
+
+*Fyi: My host system is Windows 11 and a virtual machine with USB redirection*
+*was used to flash the system*
+
+*I exported the factory default ROMS to my PC*
+
+** Step 1 - Buy the flasher
+I purchased the following CH341A programmer with the clip from Amazon. If you
+google this online, some people will report that the clip fried there chip
+because it runs at 5volts instead of 3.3v. I read some post online debunking
+this. The chip will start at 5volts and then move to 3.3v. The user reported
+that the fried chips were likely caused by improper placement of the clip.
+
+This clip worked fine
+
+
+[[https://www.amazon.com/dp/B07SHSL9X9][KeeYees SOP8 SOIC8 Test Clip and CH341A USB Programmer Flash for Most of 24 25
+Series BIOS Chip with PDF Tutorial]]
+
+** Step 2 - Install the Drivers
+I'm running this on Windows 11 and using a virtualbox to do the flashing. I
+installed these drivers on the host machine and then installed "AsProgrammer" to
+test if the connection between the programmer and the bios was working.
+
+Driver: https://github.com/KrisKasprzak/CH341/
+AsProgrammer: https://github.com/nofeletru/UsbAsp-flash/
+
+** Step 3 - Connecting to the BIOS
+With the driver installed, I opened ASProgrammer and had it attempt to read the
+data from the BIOS. I was getting an error saying "Check Settings". This was
+because the clip wasn't properly seated on the bios chip.
+
+Here are the images of how I have things connected. Make sure the positioning of
+the red cable matches below. This will be the exact setup you need to flash the
+BIOS. Check your hardware connections and even 
+
+
+[[./12Fz.gpg]]
+
+[[./6PIP.jpg]]
+
+[[3vEa.jpg]]
+
+** Step 4 - Installing Coreboot
+I followed Bryce's guide for the rest. The only important thing I did was
+install "flashrom" from the Ubuntu Repos. I didn't bother figuring out how to
+compile flashrom with support for the CH341A. It worked great. I did see that I
+had two different chips to flash from. I chose the one with the longer name
+("w25q64bv-w25q64cv-w25q64fv"). I don't think it would have made a difference
+since reading both flash chips had the same filehash.
+
+I used the github repo from nenadstoisavljevic and copied the bootsplash image
+and any settings in the configuration of coreboot. The only thing I didn't copy
+from that github repo were all the additional payloads that were selected.
+
+
+https://brycevandegrift.xyz/blog/corebooting-a-thinkpad-x220/
+
+https://github.com/nenadstoisavljevic/x220-coreboot-guide
+
+My flashing failed once because the virtual machine was freaking out. I reset
+the system and reseated the USB (leaving the clip untouched). It worked after : )
+
+[[./VWip.jpg]]
+
+** Image of original BIOS 
+View my github below with the original BIOS images I took prior to corebooting.
+
+https://github.com/peterunix/ThinkpadX220BIOS
+* Pinebook Pro/Custom Kernel
+:PROPERTIES:
+:ONE: one-default-doc
+:CUSTOM_ID: /blog/pbp-custom-kernel/
+:CREATED: <2023-07-22 Sun 15:57>
+:END:
+Here's how to compile [[https://gitlab.manjaro.org/tsys/linux-pinebook-pro][tsys']] mainline linux kernel for the Pinebook Pro.
+I'm using the "debian way" of installing the kernel.
+When compiling the kernel, we can tell "make" to package the binaries as multiple debian archive files (.deb).
+Afterward, we can simple run "dpkg -i .deb" to install it.
+
+** Setting up our enviroment
+** Dependencies
+
+Compilation dependencies
+
+#+begin_src shell
+sudo apt-get install linux-headers-$(uname -r) libncurses-dev gawk flex bison openssl libssl-dev dkms libelf-dev libudev-dev libpci-dev libiberty-dev autoconf bc fakeroot
+#+end_src
+
+Linux Source Files
+
+#+begin_src shell
+git clone --depth=1 https://gitlab.manjaro.org/tsys/linux-pinebook-pro
+cd linux-pinebook-pro
+#+end_src
+
+** Compiling the kernel
+The ~ARCH~ variable specifies the target machines architecture.
+
+The ~CROSS_COMPILE~ variable specifies which compiler the system should use.
+
+Running "make menuconfig" opens an ncurses menu which you can use to modify the kernel.
+You don't need to change anything.
+Run the command and exit the ncurses menu to save the kernel configuration to "$PWD/.config"
+
+#+begin_src shell
+export ARCH=arm64
+export CROSS_COMPILE=aarch64-linux-gnu
+
+# Exit the ncurses menu to save the default config
+make -j 6 menuconfig
+make -j 6 deb-pkg
+#+end_src
+
+The compiling process should take about two hours. My pinebook was left on a desk and stayed consistently at 68.4-69.8 degrees Celsius.
+The output deb files are in "../"
+
+** Installing the kernel
+I forgot the exact names of the output deb files.
+
+#+begin_src shell
+sudo dpkg -i linux-headers-*.deb
+sudo dpkg -i linux-image-*.deb
+sudo dpkg -i linux-libc-*.deb
+#+end_src
+
+*DON'T REBOOT YET!* It turns out that uboot, at least from the debian
+installer, isn't compiled with a gzip decompressor.
+If you haven't noticed, your linux kernel and initrd are actually both
+gzip archives!
+This confused the heck out of me at first. You'll need to decompress the files and put them back in /boot
+
+#+begin_src shell
+# We need to rename them with the suffix ".gz" or else gzip returns errors
+cd ~
+mv /boot/vmlinuz-5.10.0-rc5-1-pinebookpro-arm64+ ~/vmlinuz-5.10.0-rc5-1-pinebookpro-arm64+.gz
+gzip -d ~/vmlinuz-5.10.0-rc5-1-pinebookpro-arm64+.gz
+mv ~/vmlinuz-5.10.0-rc5-1-pinebookpro-arm64+ /boot/
+
+mv /boot/initrd.img-5.10.0-rc5-1-pinebookpro-arm64+ ~/initrd.img-5.10.0-rc5-1-pinebookpro-arm64+.gz
+gzip -d ~/initrd.img-5.10.0-rc5-1-pinebookpro-arm64+.gz
+mv ~/initrd.img-5.10.0-rc5-1-pinebookpro-arm64+
+#+end_src
+
+*DONE!* You can boot into your new mainline kernel now.
+*** 
+** UBOOT (IMPORTANT)
+
+Remove "maxcpus=4" from /boot/extlinux/extlinux.conf
+
+This option was automatically added and is supposed to make boot times
+faster.
+Just remove it from the uboot config. The boot times are fine without
+it and are infact LONGER if you keep it.
+
+FYI: Normally the default kernel re-enables the two large cores once
+it's booted. For some reason this one does not.
+
+#+begin_src
+## /boot/extlinux/extlinux.conf
+default 10
+menu title U-Boot menu
+prompt 0
+timeout 10
+
+
+label l0
+        menu label Debian GNU/Linux bullseye/sid 5.10.0-rc5-1-pinebookpro-arm64+
+        linux /vmlinuz-5.10.0-rc5-1-pinebookpro-arm64+
+        initrd /initrd.img-5.10.0-rc5-1-pinebookpro-arm64+
+        fdt /rk3399-pinebook-pro.dtb
+        append root=PARTLABEL=mmcblk1-RootFS console=ttyS2,1500000n8 console=tty0 ro quiet splash plymouth.ignore-serial-consoles maxcpus=6 coherent_pool=1M
+#+end_src
+
+** ENCRYPTION
+I couldn't boot from my encrypted debian install.
+According to [[https://forum.pine64.org/showthread.php?tid=8765][this post]], you can update your initrd to include modules to decrypt the file system, but the display won't work.
+I couldn't even get a prompt to appear using the serial console when attempting this.
+I'm opting for an encrypted home partition instead.
+
+* Pinebook Pro/Keyboard Firmware Update
+:PROPERTIES:
+:ONE: one-default-doc
+:CUSTOM_ID: /blog/pbp-keyboard-firmware-update/
+:CREATED: <2023-07-22 Sun 15:57>
+:END:
+This is a verbatim copy of the directions written on [[https://github.com/jackhumbert/pinebook-pro-keyboard-updater][jackhumbert's]]
+git.
+
+** Installation
+
+#+begin_src shell
+# compile
+git clone https://github.com/jackhumbert/pinebook-pro-keyboard-updater
+cd pinebook-pro-keyboard-updater
+sudo apt-get install build-essential libusb-1.0-0-dev xxd
+make
+
+# For ISO keyboard
+# step-1
+sudo ./updater step-1 iso
+sudo reboot
+
+# after reboot, step-2
+sudo ./updater step-2 iso
+sudo reboot
+
+# For ANSI keyboard
+# step-1
+sudo ./updater step-1 ansi
+sudo reboot
+
+# after reboot, step-2
+sudo ./updater step-2 ansi
+sudo reboot
+
+# updating to the revised ansi firmware after steps 1 and 2
+sudo ./updater flash-kb firmware/default_ansi.hex
+
+# updating to the revised iso firmware after steps 1 and 2
+sudo ./updater flash-kb firmware/default_iso.hex
+#+end_src
+
+** Modifications
+1. Corrected Fn+F9-12 keys for ANSI (ISO version didn't have this issue)
+2. Arrow (and other) keys work with the Pine (GUI) key
+3. NumLock is respected only in the Fn layer, i.e. NumLock can be left on all the time
+4. Privacy switches now send keycodes when being enabled/disabled, for working into scripts/notifications
+
+** Key codes
+F14: Microphone Enabled
+F18: Microphone Disabled
+F13: Wifi Enabled
+F17: Wifi Disabled
+F15: Camera Enabled
+F19: Camera Disabled
+
+* Pinebook Pro/Netbsd Installation
+:PROPERTIES:
+:ONE: one-default-doc
+:CUSTOM_ID: /blog/pbp-keyboard-firmware-update/
+:CREATED: <2023-07-22 Sun 16:00>
+:END:
+Guide for installing NetBSD on the Pinebook Pro including the installation of
+packages, setting up networking, and other quality of life changes.
+
+** Assumptions
+- You've wrote the [[https://wiki.pine64.org/index.php/Pinebook_Pro_Software_Release#NetBSD_.5BmicroSD_.2FeMMC_Boot.5D][netbsd]] image to your microsd/emmc
+- You've booted into the system
+
+If you have problems booting from the microsd card, try disabling the emmc
+chip. It used to be the case that you were only able to boot from microsd if the
+chip was disabled. This info may become outdated.
+
+** Configuring Network
+Now its time to set up Wifi. There are at least two ways to do it:
+
+1. Manually configuring wpa_supplicant
+2. Using wpa_cli (frontend to wpa_supplicant)
+
+This page will use the manual method. If you'd like to use wpa_cli, here's a
+[[https://wiki.archlinux.org/index.php/Wpa_supplicant#Connecting_with_wpa_cli][link]] to the arch wiki page
+
+Identify your wirless network interface with ~ifconfig~:
+
+#+begin_src shell
+ifconfig
+> lo0 flags....
+> run0: flags..... <---- Substitute this interface for yours when referenced
+#+end_src 
+
+Edit the system ~rc.conf~ file and configure ~wpa_supplicant~ & ~dhcpcd~ to run at boot
+
+#+begin_src shell
+$ vi /etc/rc.conf
+#Append the following
+dhcpcd=YES
+dhcpcd_flags="${dhcpcd_flags} -b"  #This ensures boot wont hang when network isn't present
+wpa_supplicant=YES
+wpa_supplicant_flags="-B -i run0 -c /etc/wpa_supplicant.conf"
+#+end_src
+
+Create your ~wpa_supplicant.conf~. This will contain your wireless SSID and
+PASSWORD. Use the wpa_supplicant CLI if you require hashed passwords rather than
+clear text passwords.
+
+#+begin_src shell
+$ vi /etc/wpa_supplicant.conf
+ctrl_interface=/var/run/wpa_supplicant
+ctrl_interface_group=wheel
+update_config=1
+network={
+        ssid="my favourite network"
+        psk="hunter2"
+}
+
+# Starting wpa_supplicant
+/etc/rc.d/wpa_supplicant start
+#+end_src
+
+** Configuring package manager
+Netbsd has a commented URL for downloading binary packages in
+~~/.profile~. Uncomment it then source the file
+
+#+begin_src shell
+$ vi ~/.profile
+export PKG_PATH="https://..."
+. ~/.profile
+# Alternatively reboot here
+#+end_src
+
+Update the repository
+
+#+begin_src shell
+pkg_add -v pkgin
+pkgin update
+
+"Warning earm doesn't match your current architecture...."
+Still want to proceed? [y/N]
+#+end_src
+
+Stop here. We have to make sure our architecture is set correctly, or else packages won't install properly.
+Fortunatley this is pretty simple.
+
+#+begin_src shell
+# Note how I overwrote the file.
+# If you choose to instead append the text, make sure you edit repositories.conf to delete the original url
+
+$ echo $PKG_PATH > /usr/pkg/etc/pkgin/repositories.conf
+#+end_src
+
+** Installing a desktop enviroment
+
+#+begin_src shell
+pkgin install xfce4 xinit
+
+# Linking our X system so xinit can read from it. This avoids errors.
+ln -s /usr/X11R7/bin/X /usr/pkg/bin/X
+
+# Adding xfce4-session to our .xinitrc
+echo "exec xfce4-session" > ~/.xinitrc
+
+# Booting the DE using the xinitrc file
+startx
+#+end_src
+
+- Give XFCE4 a moment to load in.
+- Alt+f1 will bring you back to the tty prompt.
+- Alt+f2 will bring you to the gui
+  
+* Pinebook Pro/Setting Up Zram
+:PROPERTIES:
+:ONE: one-default-doc
+:CUSTOM_ID: /blog/pbp-setting-up-zram/
+:CREATED: <2023-07-22 Sun 16:06>
+:END:
+ZRAM is essentially compressed memory. Your system uses some of it's
+CPU cycles to compress redundant data into a reserved area of your ram.
+Think of it as swap space, but without writing to your drive.
+
+This is how to enable zram on ALARM/Manjaro ARM
+
+** Checking if ZRAM is supported
+
+#+begin_src shell
+$ insmod | grep zram
+
+Output: zram    ????? ?
+#+end_src
+
+If you get similar results, zram should be supported.
+
+** Setting up ZRAM
+
+Load the zram module and create a 12GB zram device using ~lzo-rle~ for
+compression. 
+ 
+ #+begin_src shell
+ sudo modprobe zram && sudo zramctl -a lzo-rle -s 12G zram0
+ #+end_src
+ 
+Enabling swapping on the zram device
+ 
+ #+begin_src shell
+ sudo mkswap /dev/zram0 && sudo swapon /dev/zram0
+ #+end_src
+ 
+Verify the 12GB of ZRAM is being used as swap
+
+ #+begin_src shell
+free -h
+ 
+total        used        free      shared  buff/cache   available
+Mem:         3.7Gi       429Mi     2.7Gi        30Mi       562Mi
+Swap:        11Gi          0B        11Gi
+ #+end_src
+ 
+* Pinebook Troubleshooting/Pro Common Issues
+:PROPERTIES:
+:ONE: one-default-doc
+:CUSTOM_ID: /blog/pbp-troubleshooting-common-issues
+:CREATED: <2023-07-22 Sun 16:06>
+:END:
+A list of issues I've experienced first hand with the Pinebook Pro and
+resolutions.
+
+** Powerkey shuts off machine
+The powerkey is not in the most ideal locations. Edit /etc/systemd/logind.conf
+and change "HandlePowerKey=poweroff" to "HandlePowerKey=ignore"
+
+** Can't boot at all after flashing EMMC
+You could either use an emmc to usb adapter to reflash your EMMC (LAME).  You
+could use your official pine64 UART cable to see if you could fix the problem
+that way (EH).  The third option is that you carefully remove the pinebooks back
+plate with the display opened.  It's important to open the display before
+removing the back panel to prevent the flimsy plastic or chassis from cracking
+(yup, that could happen).  Once opened, flip the emmc switch to disable the emmc
+([[https://wiki.pine64.org/wiki/Pinebook_Pro#Key_Internal_Parts][reference]]).  With the laptop still open, begin the booting from your microsd.
+Once you see the LED turn green, quickly flip the switch to turn on the emmc
+again.  Since the EMMC is not present, the pinebook first boots from the
+micro-sd.  Our goal is to turn on the EMMC early on in the kernel's boot up
+phase, so this way the emmc gets recognized.  If you flip the switch to late,
+the EMMC will not appear as a drive.  Once booted, you could either reflash a
+new pinebook image or remove the bootloader from the emmc.
+
+** Removing the bootloader
+Uboot resides within the first 35 or so megabytes of the drive. This is why you
+end up seeing free space preceding the boot partition of your drive. Without
+this free space, uboot would be overwriting your bootfiles, so it's important
+you add it if you're ever doing any manual partitioning (i.e installing Gentoo).
+I'm including two methods. The first blindly overwrites the beginning of the
+drive - potentially damaging the boot partition. The second specifically removes
+the parts of the drive containing uboot, keeping your boot parition safe. If you
+don't care about being able to boot from the emmc, use the first method.
+
+#+begin_src shell
+# I forgot how many megabytes of space uboot takes # Method 1
+(destructive...maybe) dd if=/dev/zero of=/dev/BLKDEV bs=1M count=35 conv=fsync
+
+# Method 2 (non-destructive) dd if=/dev/zero of=/dev/BLKDEV bs=32k seek=1
+conv=fsync &>/dev/null dd if=/dev/zero of=/dev/BLKDEV bs=64k seek=128 conv=fsync
+&>/dev/null dd if=/dev/zero of=/dev/BLKDEV bs=64k seek=192 conv=fsync
+&>/dev/null
+#+end_src
+
+** Loose screws that fall out
+Some people reported that their screws to the bottom plate would fall out after
+sometime. I've never experienced this, but I still took the liberty of
+preventing it from happening.  Go to the auto parts section of any store and get
+yourself either low strength or medium strength threadlocker. Avoid getting high
+strength threadlocker since you obviously still want to be able to easily
+unscrew them in the future. Add that to your Pinebook Pro's screws and you're
+good to go.  I used Permatex Threadlocker Blue (Medium Strength) 24200 which I
+bought from Walmart. It works just fine.
+
+** Blinking red light and not booting
+Pretty sure this is indicative of a kernel panic. Nothing will be displayed on
+the screen. The only way to tell what's going on is to use the UART cable for
+the pinebook pro. Buy it if you don't have it. It's useful.
+
+** Damaged thermal pad. Getting a replacement.
+Purchase yourself a 4mm thermal pad from Amazon and you'll be all set.  Cut a 1
+inch by 1 inch square.
+* Pinebook Pro/Use NVME as Root
+:PROPERTIES:
+:ONE: one-default-doc
+:CUSTOM_ID: /blog/pbp-use-nvme-as-root
+:CREATED: <2023-07-22 Sun 16:06>
+:END:
+Directions on using the Pinebook Pro's NVME as a root partition and the EMMC as
+
+** Assumptions
+- You have an NVME drive installed and formatted with a single EXT4 partition
+- Running Manjaro Arm or ALARM. Untested, though Debian may work the same as
+  well. This process relies on the existence of ~/boot/extlinux/extlinux.conf~
+
+** Mounting the system
+
+#+begin_src shell
+mount /dev/nvme0n1p1 /mnt
+cd /mnt
+mkdir dev sys proc mnt
+#+end_src
+
+** Copying root files
+
+Use rsync to transfer the files. This excludes pseudo file systems.
+
+#+begin_src shell
+rsync -aHxv --numeric-ids --progress /* /mnt --exclude=/dev --exclude=/proc --exclude=/sys --exclude=/mnt
+#+end_src
+
+** Changing the root to nvme
+
+Rename the boot folder which was copied to the NVME. This isn't needed. Edit
+your extlinux.conf file on the EMMC, then change the setting for the root
+partition path.
+
+#+begin_src shell
+$ mv /mnt/boot /mnt/boot.old
+$ vim /boot/extlinux/extlinux.conf
+
+# Change "root=LABEL=ROOT" to "root=/dev/nvme0n1p1"
+#+end_src
+
+*** Fix for read only boot partition error
+If the boot partition is "read only", you can remount it with rw
+permissions as so:
+
+#+begin_src shell
+$ mount /dev/mmcblk1p1 /boot -o remount,rw
+#+end_src
+
+* Pinebook Pro/Write to SPI Flash
+:PROPERTIES:
+:ONE: one-default-doc
+:CUSTOM_ID: /blog/pbp-write-to-spi-flash
+:CREATED: <2023-07-22 Sun 16:06>
+:END:
+Directions for flashing a custom bootloader to internal Pinebook Pro's SPI Flash
+chip. This makes it it unnecessary to have boot code on the emmc or microsd,
+enabling full NVME boot. NVME boot extremely is hit or miss.
+
+Be prepared to recover your broken SPI flash if an error occurs.
+When a binary is written to the SPI flash, the SPI flash will be what chooses which drives to boot from.
+Any problems when writing to the SPI can render your machine soft bricked.
+Learn about the SPI flash and recovery options here:
+
+1. https://wiki.pine64.org/index.php/Pinebook_Pro_SPI
+2. https://wiki.pine64.org/index.php/Pinebook_Pro#Using_the_SPI_flash_device
+
+** Note
+
+This guide is a simpler rewrite of [[https://forum.pine64.org/showthread.php?tid=8439][pcm72's]] forum post. I'd recommend reading that whole thread before proceeding.
+We're going to be flashing the Pinebook Pro's SPI flash so that it contains boot code for the nvme.
+Your kernel needs to be compiled with SPI support. A simple check will be to see if /dev/mtd0 exists.
+I'm using Manjaro Arm.
+
+** Downloading files
+Download the files from [[https://github.com/pcm720/rockchip-u-boot/releases][pcm72's git release page.]]
+
+** Flashing the SPI
+This is all you have to do:
+
+#+begin_src shell
+dd if=spiflash.bin of=/dev/mtd0 status=progress
+#+end_src
+
+** Important details
+In pc72's post, he explained why booting from micro-sd will fail.
+You basically have to remove all boot code from your micro-sd to have the SPI boot from it.
+
+Here's how you do that:
+#+begin_src shell
+dd if=/dev/zero bs=32k seek=1 count=1 of=<microSD>
+dd if=/dev/zero bs=64k seek=128 count=64 of=<microSD>
+dd if=/dev/zero bs=64k seek=192 count=64 of=<microSD>
+#+end_src
+
+** Boot order
+1. micro-sd
+2. nvme
+3. emmc
+
+I'm not sure if it's capable of USB boot.
+
+
+* Qemu/Chroot Into a Different Architecture
+:PROPERTIES:
+:ONE: one-default-doc
+:CUSTOM_ID: /blog/qemu-chroot-into-different-architecture
+:CREATED: <2023-07-22 Sun 16:06>
+:END:
+Directions on using the qemu-user-static package to chroot into a system using
+emulation. This uses the qemu binaries on the host system to emulate the chroot
+system.
+
+** Setting up the chroot
+** Preparing the chroot environment
+
+Mount the system you're going to chroot into.
+
+#+begin_src shell
+mount /dev/sdb2 /mnt
+mount /dev/sdb1 /mnt/boot
+#+end_src
+
+** Package Installation
+Install the following packages on the host
+- The emulation binaries will be placed in /usr/bin/qemu-*-static.  These are
+  standalone emulation applications and don't require dependencies in chroot.
+- The arch-install-scripts provide the "arch-chroot" wrapper script.
+
+#+begin_src shell
+apt install qemu-user-static arch-install-scripts
+#+end_src
+
+
+** Copying the binaries to the chroot $PATH
+
+The chroot system must have the emulation binary in its own path. Place the
+~qemu-arm-static~ binary in the ~/usr/bin/~ folder.
+
+#+begin_src shell
+cp /usr/bin/qemu-arm-static /mnt/usr/bin
+#+end_src
+
+** Chroot into the system
+
+This was tested on Raspbian ARM for the Raspberry Pi
+#+begin_src shell
+arch-chroot /mnt qemu-arm-static /bin/bash
+#+end_src
+* Qemu/Choot Into an Img File
+:PROPERTIES:
+:ONE: one-default-doc
+:CUSTOM_ID: /blog/qemu-chroot-into-img-file
+:CREATED: <2023-07-22 Sun 16:06>
+:END:
+Directions for mounting an IMG file in Linux. Tested with Raspbian ARM
+
+** Mounting the image
+** Explanation of the task
+IMG files found in arm images are complete disk dumps made to a file. The IMG
+file will contain all of the partition information, just as you'd see it if
+running ~dd if=/dev/sda bs=4K | cat~
+
+The mount command allows you to pass the exact start and end sectors you'd like
+to mount. Using this, we will mount the start and end of our partition inside
+the img file.
+
+** Getting Starting Sector
+
+The output of this command will contain the start and end sectors of each
+partition. You can tell which partition is your IMG file's root partition by
+comparing the sizes. Larger typically means root.
+
+
+#+begin_src shell
+fdisk -l file.img
+
+[...]
+Units: sectors of 1 * 512 = 512 bytes
+[...]
+
+Device                                    Boot  Start     End Sectors  Size Id Type
+2021-05-07-raspios-buster-armhf-lite.img1        8192  532479  524288  256M  c W95 FAT32 (LBA)
+2021-05-07-raspios-buster-armhf-lite.img2      532480 3661823 3129344  1.5G 83 Linux
+#+end_src
+
+My root partition starts on sector 532480. This is a logical sector offset. It's
+a way to identify where this partition starts on a disk. What I need is the
+exact starting and ending byte instead. We have to convert the logical sector
+offset into a byte offset.
+
+** Mounting the IMG
+Multiply the start sector (532480) by the sector size (512). I'm using bash
+syntax to accomplish this.
+
+#+begin_src shell
+mount -o loop,offset=$((512*532480)),rw
+~/2021-05-07-raspios-buster-armhf-lite.img /mnt
+#+end_src
+
+This will mount the drive. Since the partition partition, I don't have to worry
+about specifying the ending offset.
+* Qemu/Mount Virtual Images
+:PROPERTIES:
+:ONE: one-default-doc
+:CUSTOM_ID: /blog/qemu-mount-virtual-images
+:CREATED: <2023-07-22 Sun 16:06>
+:END:
+#+begin_src shell
+apt-get install -y libguestfs-tools
+
+# Mounting
+guestmount -a windows.qcow2 /mnt/
+
+# Mounting read-only mode
+guestmount -a windows.qcow2 /mnt/ --ro
+
+# Unmount
+guestunmount /mnt
+#+end_src
+* Qemu/Windows Xp Fix Smb Not Working
+:PROPERTIES:
+:ONE: one-default-doc
+:CUSTOM_ID: /blog/qemu-windows-xp-fix-smb-not-working
+:CREATED: <2023-07-22 Sun 16:06>
+:END:
+Directions on fixing SMB on Windows XP system. The environment is running under
+Debian + Qemu
+
+** Explanation of fix
+SMB 1.0 has to be enabled if you try to pass a local folder as an smb share to a WinXP Qemu VM.
+Qemu creates the temporary file /tmp/smb.conf that holds the configurations for samba.
+The values of this are hard coded and can only be modified after it's automatically created by Qemu.
+
+** Enabling NT1 support
+Add the "/min protocol = NT1/" line to the global section of /tmp/smb.conf.
+You can either edit that file after the VM boots up then restart, or you can use "/sed/" to replace the "/min protocol/" line while the VM is in a pre-boot state.
+
+Here's a template for a shell script that makes this change:
+
+#+begin_src
+qemu-system-x86_64 [...] &
+
+# Editing the configuration file while the VM is booting
+sed -e 's/\[qemu\]/min protocol = NT1\n\[qemu\]/' -i /tmp/qemu-smb.*/smb.conf
+#+end_src
+
+**  Tip:
+Depending on how fast Windows boots up, you might have to restart if you don't
+see SMB working right away.
+
+* Qemu/Windows Xp Installation
+:PROPERTIES:
+:ONE: one-default-doc
+:CUSTOM_ID: /blog/qemu-windows-xp-installation
+:CREATED: <2023-07-22 Sun 16:06>
+:END:
+** Installation
+*** Dependencies
+- [[https://archive.org/download/WinXPProSP3x86/en_windows_xp_professional_with_service_pack_3_x86_cd_vl_x14-73974.iso][Windows XP ISO (archive.org)]]
+- [[https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.141-1/][Virtio Floppy Image (fedorapeople.org)]]
+- qemu & spice-gtk (installed via apt-get)
+
+** Installing Windows XP
+*Product Key: MRX3F-47B9T-2487J-KWKMF-RPWBY*
+
+Here's the shell script to start the installation.
+Windows XP will automatically search through the virtio.vfd floppy image when locating the storage drivers.
+That floppy image has all the drivers your networking, virtual display, virtio, etc.
+*Mouse input and networking won't work until after you're logged in*.
+
+#+begin_src shell
+  qemu-system-x86_64 \
+      -enable-kvm \
+      -cpu host -smp 4 \
+      -m 3G \
+      -boot d \
+      -cdrom  "WINDOWSXP.iso" \
+      -fda "VIRTIO.vfd" \
+      -vga qxl \
+      -spice port=55555,addr=0.0.0.0,disable-ticketing \
+      -chardev spicevmc,id=vdagent,name=vdagent \
+      -device virtio-net,netdev=netdevice -netdev user,id=netdevice,smb=$HOME \
+      -drive file=windowsxp.qcow2,if=virtio,cache=none,aio=native
+#+end_src
+
+After you run that, use a spice client to connect to the VM. I use spice-gtk.
+
+** Installing Mouse Drivers
+When you log in, WindowsXP is going to open a wizard that lets you automatically add new hardware.
+Use your keyboard to go through these prompts.
+This step is important since it will install the drivers to get your mouse working
+
+After that's done, poweroff the VM and replace your qemu shell script with the following:
+
+#+begin_src shell
+qemu-system-x86_64 \
+	-enable-kvm \
+	-daemonize \
+	-cpu host -smp 4 \
+	-m 3G \
+	-device virtio-net,netdev=netdevice -netdev user,id=netdevice,smb=$HOME \
+ 	-fda "VIRTIO.vfd" \
+	-usb \
+	-device ich9-usb-ehci1,id=usb \
+	-device ich9-usb-uhci1,masterbus=usb.0,firstport=0,multifunction=on \
+	-device ich9-usb-uhci2,masterbus=usb.0,firstport=2 \
+	-device ich9-usb-uhci3,masterbus=usb.0,firstport=4 \
+	-chardev spicevmc,name=usbredir,id=usbredirchardev1 \
+	-device usb-redir,chardev=usbredirchardev1,id=usbredirdev1 \
+	-chardev spicevmc,name=usbredir,id=usbredirchardev2 \
+	-device usb-redir,chardev=usbredirchardev2,id=usbredirdev2 \
+	-chardev spicevmc,name=usbredir,id=usbredirchardev3 \
+	-device usb-redir,chardev=usbredirchardev3,id=usbredirdev3 \
+	-vga qxl \
+	-spice port=55555,disable-ticketing \
+	-usbdevice tablet \
+	-device virtio-serial \
+	-chardev spicevmc,id=vdagent,name=vdagent \
+	-device virtserialport,chardev=vdagent,name=com.redhat.spice.0 \
+	-drive file=windowsxp.qcow2,if=virtio,cache=none,aio=native
+#+end_src
+
+You really only need to remove your WindowsXP iso, but I added more qemu arguemnts to enable USB redirection in spice-gtk.
+
+** Installing Ethernet and Display Drivers
+Open up a command prompt and type "devmgmt.msc" to open the *Device Manager*.
+Under "Unknown Devices", right click each item to open the properties, then re-install the driver.
+Since our VIRTIO.VFD file is still attached, Windows XP will automatically install the drivers for the networking, display, etc.
+
+** Sharing HOST folder through SMB
+In the shell snippets above, I have *smb=$HOME* added to expose my home folder as an SMB share on the guest.
+Qemu will use a newer version of SMB that Windows XP wont support, causing the whole thing to be broken.
+To fix this, we have to edit Qemu's temporary SMB.CONF file while the Virtual Machine is booting up.
+
+Add the *sed* command to the bottom of your Qemu shell script.
+When Windows XP boots up, you should be able to access your files using this UNC path: ~\\10.0.2.4\qemu~
+
+#+begin_src shell
+  qemu-system-x86_64 \
+      -daemonize...
+
+  # Fixing SMB
+  sed -e 's/\[qemu\]/min protocol = NT1\n\[qemu\]/' -i /tmp/qemu-smb.*/smb.conf
+#+end_src
+
+* Misc/Finding the Default Wireless Password to TG1672G Routers
+:PROPERTIES:
+:ONE: one-default-doc
+:CUSTOM_ID: /blog/tg1672G-default-wifi-password
+:CREATED: <2023-07-22 Sun 16:06>
+:END:
+Directions for finding the default wireless password on TG1672G routers. These
+routers have a predictable scheme for the "randomly" generated password. The
+router is commonly used in Central America with locations using TIGO as their ISP.
+
+** Cracking the code
+** Password schema
+This pattern is used for the password. Stupid, I know.
+
+#+begin_src 
+TG1672G<FIRST BYTE OF BSSID NIC SPECIFIC><LAST FOUR OF SSID>
+#+end_src
+
+** Getting the password
+
+Without being connected to a wireless network, run the following in a Windows
+Command Prompt as administrator.
+
+#+begin_src
+C:\windows\system32> netsh wlan show all
+
+  SSID 20 : ARRIS-81A2
+    Network type            : Infrastructure
+    Authentication          : WPA2-Personal
+    Encryption              : CCMP 
+    BSSID 1                 : 98:6b:3d:61:81:a0
+         Signal             : 24%  
+         Radio type         : 802.11n
+         Band               : 2.4 GHz
+         Channel            : 1 
+         Bss Load:
+             Connected Stations:         0
+             Channel Utilization:        35 (13 %)
+             Medium Available Capacity:  31250 (1000000 us/s)
+         Basic rates (Mbps) : 1 2 5.5 11
+         Other rates (Mbps) : 6 9 12 18 24 36 48 54
+
+#+end_src
+
+That command will list out all local wireless networks. The first byte of the
+NIC Specific is "61" and the last part of the password is final 4 of the SSID.
+
+Putting it all together, the password will be ~TG1672G6181A2~
+
+This will fail if the router is the wrong model or the password is changed.
+* Misc/Running Ollama Portably
+:PROPERTIES:
+:ONE: one-default-doc
+:CUSTOM_ID: /blog/portable-ollama-installation
+:CREATED: <2023-07-22 Sun 16:06>
+:END:
+Directions for creating a portable installation of Ollama. The LLM files will be
+stored in the same folder as the binaries and sourced automatically
+
+** Creating the portable installation
+*** Install Ollama Normally
+Install Ollama using this link. The default installation folder will be ~%localappdata%\Programs\Ollama~
+
+https://ollama.com/download
+
+** Creating a batch script
+Create a file named "START_OLLAMA.bat" in ~%localappdata%\Programs\Ollama~
+
+#+begin_src shell
+@echo off
+title Ollama Portable
+set OLLAMA_ORIGINS=*
+set OLLAMA_HOST=127.0.0.1
+set userprofile=%cd%\data
+set localappdata=%cd%\data\AppData\Local
+start cmd /k "%cd%\ollama.exe" serve
+start cmd /k "%cd%\ollama.exe" -v
+#+end_src
+
+** Downloading LLMs
+Run the batch script. The first terminal window will be a live running
+server. The second pop-up terminal can be used to run ~ollama.exe~. Download your
+LLM using this command
+
+#+begin_src shell
+ollama.exe run gemma3:12b
+#+end_src
+
+Replace the Gemma model with any other model available in https://ollama.com/library
+
+** Copying the folder
+Copy this entire folder to anywhere you'd like. I have it on an external
+drive. This application will run portably after this.
+
+** Disabling automatic updates
+I believe the ~"ollama app.exe"~ handles application updates. This causes issues
+with the portable installation, as some of the files don't get updated in the
+same folder as the installer and have to be manually copied over.
+
+I don't intend on updating this. Rename ~"ollama app.exe"~ to ~"ollama app.exe.1"~
+to prevent updates.
+
+** Uninstalling Ollama from host
+In %localappdata%\Programs\Ollama, run the uninstaller to remove it from the
+host system. The only thing you'll be left with is the portable installation
+that was copied earlier.
+* Windows/Cloning a Bios Boot Drive to Disimilar Hardware with UEFI 
+:PROPERTIES:
+:ONE: one-default-doc
+:CUSTOM_ID: /blog/cloning-bios-drive-to-uefi-with-disimilar-hardware
+:CREATED: <2023-09-13 Sun 15:51>
+:END:
+Documented steps for cloning a drive to another computer. The source computer is
+running an MBR partition table. The target computer is of completely different
+hardware and runs UEFI 
+
+** Overview
+I had a clone an old Dell Machine to a new Dell Optiplex SFF 7010. The
+problem was the new computer had an NVME drive with storage controller
+drivers that weren't even in the Windows 11 installation media. On top
+of that, the original computer was Windows 10 but was BIOS only,
+meaning it wouldn't boot at all on the UEFI only machine.
+
+These are the steps it took to clone the drive to a new machine.
+
+1. Clone the drive to the internal NVME using Clonezilla (UEFI version)
+2. Repartition the drive to create a 512MB-1GB EFI partition at the
+   first sector
+3. Boot into the Windows 11 installer and loading the drivers to
+   detect the cloned drive
+4. Use the Command Prompt to rebuild the EFI files onto the EFI partition
+5. Still in the recovery prompt, load the drivers into the windows
+   installation using the command prompt and an external flash drive
+
+** Starting the disk clone
+Use Clonezilla to do a Disk to Disk clone with the source drive
+plugged into a hard drive bay. If you have a 2.5" drive you can get
+away with a straight USB to SATA adapter.
+
+- [[https://clonezilla.org/downloads/download.php?branch=stable][Download Page]]
+- [[https://sourceforge.net/projects/clonezilla/files/clonezilla_live_stable/3.1.0-22/clonezilla-live-3.1.0-22-amd64.iso/download?use_mirror=gigenet][Direct Link (source forge)]]
+  
+** Downloading the Drivers
+Download the drivers from the manufaturer support website. Dell
+distributes them as exe files, so you'll have to run the exe files and
+then select the option to extract the files to a directory. For other
+manufaturers, you may have to use 7ZIP to extract the EXE files and
+copy the driver files to a USB drive for later.
+
+Whenever you boot into the windows recovery environment to run
+commands, you have to load the driver for your storage
+controller. Click on "Custom Installation" and "Load Driver" to load
+the storage driver from your flash drive.
+
+** Converting the drive to GPT
+After the drive is cloned you can either use the MBR2GPT.exe command
+line utility to convert the partition table type or use a third party
+tool like [[https://www.diskpart.com/download-home.html][Aoemi (proprietary freeware)]].
+
+I tried troubleshooting the MBR2GPT a while, but would always get this
+error message when attempting the conversion: ~mbr2gpt cannot find
+room for efi~. I gave up and used the freeware instead which took 0
+time to convert it. I had to remove the NVME drive from the computer
+then plug it into my workstation using another NVME to USB
+adapter. After that, I opened Aoemi, right clicked the drive, then
+clicked "Convert to GPT".
+
+** Creating the EFI Partition
+Either through Aoemi or GPARTED, create a 1GB FAT32 partition on the first sector
+of the drive. It should be your first partition.
+
+Then boot into windows recovery and use bcdboot to rebuild the EFI
+files based on the cloned windows installation
+
+#+begin_src
+diskpart
+list disk
+select disk 2 (selecting the cloned drive)
+list part
+select part 1 (this is the 1GB efi partition)
+format fs=fat32 quick
+assign letter=z: (mounting the EFI partition)
+list vol (double checking the volume of the OS drive...it was E)
+exit
+
+bcdboot E:\Windows /s Z: /f ALL  (restoring efi files)
+#+end_src
+
+** Loading the drivers
+While still booted into the recovery disk, I loaded the drivers from
+the USB flash drive to the windows image
+
+#+begin_src
+dism /Image:E:\ /Add-Drivers:D:\ /Recurse
+#+end_src
+
+After that, you should be able to boot into Windows in UEFI mode!
+
+* Windows/Automatic CHKDSK Scans Using Powershell & Email Alerts
+:PROPERTIES:
+:ONE: one-default-doc
+:CUSTOM_ID: /blog/automating-chkdsk-scan-with-powershell-and-email-alerts
+:CREATED: <2024-08-22 Sun 16:06>
+:END:
+Directions for using a Powershell script I wrote to schedule automatic CHKDSK
+scans whenever an NTFS or DISK error appears in the event log.
+
+If corruption occurs more than once per week, an email is sent out to your
+desired address. SFC & DISM scans are scheduled for 10PM. CHKDSKs on the corrupt
+drive are scheduled for 12AM
+
+It can be run through a scheduled task locally or deployed as a response policy
+in remote management software.
+
+** Note
+This can be run standalone, although ideally you set it up as an automatic
+response in your RMM software. There are fail-safes in place to prevent the
+script from running multiple times due to alert spam.
+
+**Important**: A python EXE file is used to send the emails out. The source code
+to script is on my github [[https://github.com/peterunix/Python-Sendmail][LINK]]. The build in this project is compiled from that.
+
+** How to implement with RMM
+- Edit the script and add your SMTP credentials on the last line.
+- Add this script as a component in your RMM
+- Update your RMM and have the script be a response to the following event
+  errors
+
+#+begin_src
+Get-EventLog -LogName System -EntryType Error -Source Ntfs -Message "A corruption was discovered in the file system structure on volume*" -ErrorAction 'SilentlyContinue'
+Get-EventLog -LogName System -EntryType Error -Source Disk -Message "The device, *has a bad block*" -ErrorAction 'SilentlyContinue'
+Get-EventLog -LogName System -EntryType Error -Source Disk -Message "The driver detected a controller error on*" -ErrorAction 'SilentlyContinue'
+#+end_src
+
+** Running standalone
+You can schedule this to run automatically on your PC through the task
+scheduler. My suggestion is have it run daily at some arbitrary hour.
+
+Edit or remove the lines for email alerts
+
+** Source Code
+Repository: [[https://github.com/peterunix/PS-ScheduleCHKDSKandScans][https://github.com/peterunix/PS-ScheduleCHKDSKandScans]]
+
+#+begin_src powershell
+
+<#
+.SYNOPSIS
+Scans the event log for drive errors. Schedules SFC & DISM Scan to run
+at 10PM and CHKDSKs at 12AM.
+
+.DESCRIPTION
+Event logs are created with timestamps of when the script ran
+successfully and scheduled a CHKDSK.  Additionally, the file
+C:\Windows\LastChkdsk.txt is created with the same event log
+data. This file's timestamp is checked to make sure the chkdsk doesn't
+run more than once a week. If the last CHKDSK was within the week, an
+email will be sent out VIA SMTP to your address. In theory, a drive
+with frequently corrupt blocks is failing hence the email alert.
+
+The way bad drives are identified is through searching the event log
+and then locating the drive using the event logs message data. Hard
+coded is the pattern matching and proper commands to find the drive
+associated with a bad block error.
+
+If you wish to extend this script to include more event log
+detections, the _LocateEvents and _Schedulechkdsk functions are what
+you're interested in
+
+.NOTES
+Best practice is to configure this as an automatic response to your
+device monitoring alerts in RMM. There's are failsafe methods to
+ensure that this script doesn't run multiple times for the same alert.
+
+.LINK
+Github: https://github.com/peterunix/PS-ScheduleCHKDSKandScans
+#>
+
+function _CreateEventLogEntry{
+<#
+Create a custom event log. Used later on when reporting the time and
+reason a CHKDSK scan was done
+#>
+    param (
+	[Parameter(Mandatory=$true)][string]$Message,
+	[Parameter(Mandatory=$true)][string]$LogName,
+	[Parameter(Mandatory=$true)][string]$LogType,
+	[Parameter(Mandatory=$true)][string]$LogSource
+    )
+    # Define the log name and source
+    # Check if the source exists; if not, create it
+    if (-not [System.Diagnostics.EventLog]::SourceExists($LogSource)){
+	New-EventLog -LogName $LogName -Source $LogSource
+    }
+    # Define the event message and event ID
+    $eventID = 1000
+    # Convert the string LogType to EventLogEntryType
+    $entryType = [System.Diagnostics.EventLogEntryType]::Information
+    switch ($LogType) {
+        "Error" { $entryType = [System.Diagnostics.EventLogEntryType]::Error }
+        "Warning" { $entryType = [System.Diagnostics.EventLogEntryType]::Warning }
+        "Information" { $entryType = [System.Diagnostics.EventLogEntryType]::Information }
+        "SuccessAudit" { $entryType = [System.Diagnostics.EventLogEntryType]::SuccessAudit }
+        "FailureAudit" { $entryType = [System.Diagnostics.EventLogEntryType]::FailureAudit }
+        default { throw "Invalid LogType: $LogType" }
+    }
+    # Write the informational event to the log
+    Write-EventLog -LogName $LogName -Source $LogSource -EventId $eventID -EntryType $entryType -Message $message
+}
+
+# Lists the hard disk name (\\device\harddisvolume4) and the drive letter its mounted to (C:)
+function _GetHarddiskVolumes{
+<#
+Returns a list of hard disk names (\\device\harddiskvolume4) and the
+drive letter its mounted to. It's used to find the drive letter by
+searching the hard disk name given in the event log
+#>
+    # Build System Assembly in order to call Kernel32:QueryDosDevice.
+    $DynAssembly = New-Object System.Reflection.AssemblyName('SysUtils')
+    $AssemblyBuilder = [AppDomain]::CurrentDomain.DefineDynamicAssembly($DynAssembly, [Reflection.Emit.AssemblyBuilderAccess]::Run)
+    $ModuleBuilder = $AssemblyBuilder.DefineDynamicModule('SysUtils', $False)
+    # Define [Kernel32]::QueryDosDevice method
+    $TypeBuilder = $ModuleBuilder.DefineType('Kernel32', 'Public, Class')
+    $PInvokeMethod = $TypeBuilder.DefinePInvokeMethod('QueryDosDevice', 'kernel32.dll', ([Reflection.MethodAttributes]::Public -bor [Reflection.MethodAttributes]::Static), [Reflection.CallingConventions]::Standard, [UInt32], [Type[]]@([String], [Text.StringBuilder], [UInt32]), [Runtime.InteropServices.CallingConvention]::Winapi, [Runtime.InteropServices.CharSet]::Auto)
+    $DllImportConstructor = [Runtime.InteropServices.DllImportAttribute].GetConstructor(@([String]))
+    $SetLastError = [Runtime.InteropServices.DllImportAttribute].GetField('SetLastError')
+    $SetLastErrorCustomAttribute = New-Object Reflection.Emit.CustomAttributeBuilder($DllImportConstructor, @('kernel32.dll'), [Reflection.FieldInfo[]]@($SetLastError), @($true))
+    $PInvokeMethod.SetCustomAttribute($SetLastErrorCustomAttribute)
+    $Kernel32 = $TypeBuilder.CreateType()
+    $Max = 65536
+    $StringBuilder = New-Object System.Text.StringBuilder($Max)
+    Get-WmiObject Win32_Volume | ? { $_.DriveLetter } | % {
+	$ReturnLength = $Kernel32::QueryDosDevice($_.DriveLetter, $StringBuilder, $Max)
+	if ($ReturnLength){
+	    $DriveMapping = @{
+		DriveLetter = $_.DriveLetter
+		DevicePath = $StringBuilder.ToString()
+	    }
+	    New-Object PSObject -Property $DriveMapping
+	}
+    }
+}
+
+function _LocateEvents{
+<#
+Finds event related to disk errors. Returns a string with the type of
+disk error it is. This is used in the CHKDSK function and different
+code is ran to find the drive based off the event log.
+
+It only returns the most recent event. If there are two different
+drives alerting at the same time, only one of the drives will be
+scanned.
+#>
+    if ($EVENT = Get-EventLog -LogName System -EntryType Error -Source Ntfs -Message "A corruption was discovered in the file system structure on volume*" -ErrorAction 'SilentlyContinue' | Select -First 1){
+	if ($EVENT.TimeGenerated -gt (Get-Date).AddDays(-1)){
+	    $EVENTTYPE = "NTFS"
+	    return @($EVENT, $EVENTTYPE)
+	}}
+
+    if ($EVENT = Get-EventLog -LogName System -EntryType Error -Source Disk -Message "The device, *has a bad block*" -ErrorAction 'SilentlyContinue' | Select -First 1){
+	if ($EVENT.TimeGenerated -gt (Get-Date).AddDays(-1)){
+	    $EVENTTYPE = "Bad Block"
+	    return @($EVENT, $EVENTTYPE)
+	}
+    }
+
+    if ($EVENT = Get-EventLog -LogName System -EntryType Error -Source Disk -Message "The driver detected a controller error on*" -ErrorAction 'SilentlyContinue' | Select -First 1){
+	if ($EVENT.TimeGenerated -gt (Get-Date).AddDays(-1)){
+	    $EVENTTYPE = "Driver Detection"
+	    return @($EVENT, $EVENTTYPE)
+	}
+    }
+
+    if ($EVENT -eq $null){
+	"No disk error events found. Exiting gracefully"
+	Exit 1
+    }
+}
+
+
+function _ScheduleDismSFC{
+<#
+Schedules an SFC and DISM to run at 10PM.
+#>
+    $taskName = "Schedule SFC & DISM at 10PM"
+    $taskExists = Get-ScheduledTask | Where-Object {$_.TaskName -match $taskname }
+
+    if ($taskExists){
+	"The task for $taskName already exists"
+    } else{
+	$action = New-ScheduledTaskAction -Execute 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -command "sfc /scannow ; dism /online /cleanup-image /restorehealth"'
+	$trigger = New-ScheduledTaskTrigger -Once -At 10pm
+	$task = Register-ScheduledTask -TaskName $taskName -Trigger $trigger -Action $action -User System
+	$task | Set-ScheduledTask
+    }
+}
+
+function _ScheduleCHKDSK{
+<#
+Schedules an SFC scan and then uses the returned values of the
+_LocateEvents function to find the drive that needs to be repaired.
+
+Different code is required to find the drive from the event, hence the
+switch statement.
+#>
+    # Depending on the type of error, different code will run to find the drive
+    $EVENT,$EVENTTYPE = _LocateEvents
+    if ($EVENT -eq $null){
+	"Didn't locate an event for a drive error thats occurred within the last 24 hours. Exiting gracefully"
+	"No changes were made."
+	Exit 1
+    }
+
+    _ScheduleDismSFC
+    $taskName = "Schedule CHKDSK at 12AM"
+
+
+    switch($EVENTTYPE){
+	"NTFS"{
+	    # Check if CHKDSK task already exists
+	    $taskExists = Get-ScheduledTask | Where-Object {$_.TaskName -match $taskName }
+	    # Create task if it doesn't exist
+	    if ($taskExists -eq $null){
+		# Find the volume letter from the event
+		$eventString=($EVENT).message | Select-String -Pattern "[A-Z]:" -AllMatches
+		$driveLetter=($eventString.Matches | Select -First 1).value
+		if ($driveLetter -match "C:"){
+		    $action = New-ScheduledTaskAction -Execute "C:\Windows\System32\cmd.exe /c 'echo y | chkdsk.exe /x /f $driveLetter & shutdown /r /t 0 /f'"
+		} else{
+		    $action = New-ScheduledTaskAction -Execute "C:\Windows\System32\cmd.exe /c 'echo y | chkdsk.exe /x /f $driveLetter'"
+		}
+		# Schedule the task
+		$trigger = New-ScheduledTaskTrigger -Once -At 12AM
+		$settings = New-ScheduledTaskSettingsSet -StartWhenAvailable:$true
+		$task = Register-ScheduledTask -TaskName $taskName -Trigger $trigger -Action $action -User System -Settings $settings
+		$task | Set-ScheduledTask
+		# Recreating the logfile show a scan was done
+		Write-Host "Corrupt Volume Chkdsk Scheduled: $driveLetter $(Get-Date)"
+		Add-Content "Corrupt Volume Chkdsk Scheduled: $driveLetter $(Get-Date)" -Path $TXTLOG | Out-Null
+		_CreateEventLogEntry -LogName "Application" -LogSource "ChkdskScript" -Message "Corrupt Volume Chkdsk Scheduled: $driveLetter $(Get-Date)" -LogType "Information"
+	    } else{"CHKDSK Scheduled task already exists. Exiting" ; Exit 1}
+	}
+	"Bad Block"{
+	    # Check if CHKDSK task already exists
+	    $taskExists = Get-ScheduledTask | Where-Object {$_.TaskName -match $taskName }
+	    # Create task if it doesn't exist
+	    if ($taskExists -eq $null){
+		$eventString = $EVENT.Message | Select-String -Pattern "\\device\\Harddisk[1-100]\\..." -AllMatches
+		$driveName = ($eventString.Matches | Select -First 1).value
+		$driveNumber = $driveName.Substring($driveName.length-1)
+		$driveLetter = (_GetHarddiskVolumes | Where {$_.DevicePath -like "*$driveNumber"}).DriveLetter
+		# Reboot if the OS drive is scanned. Otherwise don't.
+		if ($driveLetter -match "C:"){
+		    $action = New-ScheduledTaskAction -Execute "C:\Windows\System32\cmd.exe /c 'echo y | chkdsk.exe /x /f $driveLetter & shutdown /r /t 0 /f'"
+		} else{
+		    $action = New-ScheduledTaskAction -Execute "C:\Windows\System32\cmd.exe /c 'echo y | chkdsk.exe /x /f $driveLetter'"
+		}
+		$trigger = New-ScheduledTaskTrigger -Once -At 11pm
+		$settings = New-ScheduledTaskSettingsSet -StartWhenAvailable:$true
+		$task = Register-ScheduledTask -TaskName $taskName -Trigger $trigger -Action $action -User System -Settings $settings
+		$task | Set-ScheduledTask
+		# Recreating the logfile show a scan was done
+		Write-Host "Corrupt Disk Chkdsk Scheduled: $driveName $driveNumber $driveLetter $(Get-Date)"
+		Add-Content "Corrupt Disk Chkdsk Scheduled: $driveName $driveNumber $driveLetter $(Get-Date)" -Path $TXTLOG | Out-Null
+		_CreateEventLogEntry -LogName "Application" -LogSource "ChkdskScript" -Message "Corrupt Disk Chkdsk Scheduled: $driveName $driveNumber $driveLetter $(Get-Date)" -LogType "Information"
+	    } else{"CHKDSK Scheduled task already exists. Exiting" ; Exit 1}
+	}
+	"Driver Detection"{
+	    # Check if CHKDSK task already exists
+	    $taskExists = Get-ScheduledTask | Where-Object {$_.TaskName -match $taskName }
+	    # Create task if it doesn't exist
+	    if ($taskExists -eq $null){
+		$eventString = $EVENT.Message | Select-String -Pattern "\\device\\Harddisk[1-100]\\..." -AllMatches
+		$driveName = ($eventString.Matches | Select -First 1).value
+		$driveNumber = $driveName.Substring($driveName.length-1)
+		$driveLetter = (Get-CimInstance -ClassName Win32_DiskDrive |
+		  Where-Object {$_.DeviceID -like "*$driveNumber"} |
+		  Get-CimAssociatedInstance -Association Win32_DiskDriveToDiskPartition |
+		  Get-CimAssociatedInstance -Association Win32_LogicalDiskToPartition |
+		  Select-Object DeviceID).DeviceID
+		if ($driveLetter -match "C:"){
+		    $action = New-ScheduledTaskAction -Execute "C:\Windows\System32\cmd.exe /c 'echo y | chkdsk.exe /x /f $driveLetter & shutdown /r /t 0 /f'"
+		} else{
+		    $action = New-ScheduledTaskAction -Execute "C:\Windows\System32\cmd.exe /c 'echo y | chkdsk.exe /x /f $driveLetter'"
+		}
+		$trigger = New-ScheduledTaskTrigger -Once -At 11pm
+		$settings = New-ScheduledTaskSettingsSet -StartWhenAvailable:$true
+		$task = Register-ScheduledTask -TaskName $taskName -Trigger $trigger -Action $action -User System -Settings $settings
+		$task | Set-ScheduledTask
+		# Recreating the logfile show a scan was done
+		Write-Host "Corrupt Disk Chkdsk Scheduled: $driveName $driveNumber $driveLetter $(Get-Date)"
+		Add-Content "Corrupt Disk Chkdsk Scheduled: $driveName $driveNumber $driveLetter $(Get-Date)" -Path $TXTLOG | Out-Null
+		_CreateEventLogEntry -LogName "Application" -LogSource "ChkdskScript" -Message "Corrupt Disk Chkdsk Scheduled: $driveName $driveNumber $driveLetter $(Get-Date)" -LogType "Information"
+	    } else{"CHKDSK Scheduled task already exists. Exiting" ; Exit 1}
+	}
+    }
+}
+
+function _Main{
+    param (
+	[Parameter(Mandatory=$true)][string]$Email,
+	[Parameter(Mandatory=$true)][string]$Password,
+	[Parameter(Mandatory=$true)][string]$SMTPServer,
+	[Parameter(Mandatory=$true)][string]$SMTPPort,
+	[Parameter(Mandatory=$true)][string]$Recipient
+    )
+    # Scheduling the scans to run only if the last CHKDSK scan was done more than a week ago
+    $TXTLOG = "C:\Windows\LastChkdsk.txt"
+    if (Test-Path $TXTLOG){
+	$TXTLOGATTRIBUTES = Get-Item $TXTLOG -ErrorAction SilentlyContinue
+	# If the log file is younger than 7 days...
+	if ($TXTLOGATTRIBUTES.LastWriteTime -gt (Get-Date).AddDays(-7)){
+	    _CreateEventLogEntry -LogName "Application" -LogSource "ChkdskScript" -Message "Corrupt Volume Chkdsk Scheduled: $driveLetter $(Get-Date)" -LogType "Information"
+	    "Last scan was run on: " + $TXTLOGATTRIBUTES.LastWriteTime
+	    "No action was taken since it was last done less than 7 days ago"
+	    "This incident will be recorded since bad blocks are no bueno"
+
+	    # Sending the report email
+	    & .\sendmail.exe -I smtp.gmail.com -i $SMTPPort -u $Email -p $Password -r $Recipient -s "Datto Possible Disk Failure" -m `
+	      "
+		The CHKDSK Monitor already repaired this drive.
+		An alert popped up again, which may indicate drive failure.
+		Check this computer out!
+
+		Site Name: $env:CS_PROFILE_NAME
+		Site UID: $env:CS_PROFILE_UID
+		Device Name: $env:COMPUTERNAME
+		Device Description: $env:CS_PROFILE_DESC
+		Domain: $env:CS_DOMAIN
+		"
+	} else{
+	    # Run the CHKDSK if $TXTLOG is older than 7 days
+	    _ScheduleCHKDSK
+	}
+    } else {
+	# Run the CHKDSK if $TXTLOG doesn't exist
+	"Could not find $TXTLOG. Running the script for the first time"
+	_ScheduleCHKDSK
+    }
+}
+
+
+
+_Main -Email EMAIL@EMAIL.COM -Password PASSWORDHERE -SMTPServer smtp.gmail.com -SMTPPort 587 -Recipient "RECIPIENT@EMAIL.com"
+#+end_src
+
+* Windows/Creating a Decent Portable Terminal
+:PROPERTIES:
+:ONE: one-default-doc
+:CUSTOM_ID: /blog/creating-decent-portable-terminal
+:CREATED: <2025-06-06 Sun 16:06>
+:END:
+Directions for creating a portable build of Alacritty with a portable set of
+busybox tools and windows CLI applications.
+
+The goal is to have a good terminal emulator that can be ran on any system. I
+prefer avoiding WSL and Cygwin.
+
+** Directory Structure
+
+Alacritty is the terminal emulator. In the same folder is a RUNME.bat that
+configures the environment and sources the alacritty.toml file.
+
+All files placed in the ~bin~ folder will be added to the path. I have a separate
+~shim~ folder contains wrapper scripts to run busybox functions and applications
+in the subfolders within ~bin~
+
+#+begin_src 
+  Alacritty-v0.15.1-portable.exe
+  alacritty.toml
+  RUNME.bat
+  shims
+    awk.cmd
+    vim.cmd
+    [...]
+  bin
+    7zr.exe
+    aria2c.exe
+    busybox.exe
+    pageant.exe
+    plink.exe
+    pscp.exe
+    psftp.exe
+    python
+    curl
+    vim91
+    [...]
+#+end_src
+
+** Installing
+
+- Download Alacritty from https://github.com/alacritty/alacritty/releases
+- Create a bin and shims folder in the same folder as the application
+- Create your ~RUNME.bat~ and ~alacritty.toml~ files
+
+*** RUNME.bat:
+
+#+begin_src shell
+@echo off
+cd /d "%~dp0"
+set PATH=%~dp0bin;%~dp0shims;%PATH%
+start /b "" Alacritty-v0.15.1-portable.exe --config-file "%~dp0alacritty.toml"
+#+end_src
+
+*** alacritty.toml:
+
+#+begin_src shell
+[window]
+opacity = 0.9
+padding.x = 10
+padding.y = 10
+decorations = "Full"
+decorations_theme_variant = "Light" # "Dark"
+
+[terminal.shell]
+program = "powershell.exe"
+args = ["-NoExit", "-Command", "Set-Location $env:USERPROFILE"]
+
+[font]
+normal.family = "Aporetic Sans Mono"
+bold.family = "Aporetic Sans Mono Bold"
+italic.family = "Aporetic Sans Mono Italic"
+bold_italic.family = "Aporetic Sans Mono Bold Italic"
+
+size = 15.0
+
+[keyboard]
+bindings = [
+   { key = "V", mods = "Control|Shift", action = "Paste" },
+   { key = "C", mods = "Control|Shift", action = "Copy" }
+]
+#+end_src
+
+*** Adding applications to PATH
+Place standalone binaries in the bin folder. Subfolders aren't decended.
+
+Files placed in the shims folder are added to the PATH too. Create a new wrapper
+script for each custom application you want to run
+
+I used a script to create most the wrapper scripts for busybox. Separately I
+manually created wrappers to run applications such as Python and Vim portable.
+
+arch.cmd:
+#+begin_src shell
+@echo off
+"%~dp0\..\bin\busybox.exe" arch %*
+#+end_src
+
+*** Using Alacritty
+Run the RUNME.bat. Your config file will be sourced and all files in the ~bin~ and
+~shims~ folders will be in your ~$PATH~
+* Windows/Merging HyperV Snapshots With Powershell
+:PROPERTIES:
+:ONE: one-default-doc
+:CUSTOM_ID: /blog/template
+:CREATED: <2023-08-25 Sun 13:40>
+:END:
+Directions for how to merge multiple HyperV snapshot differencing files.
+
+** Merging the snapshot
+*** Identify your child avhdx file
+#+begin_src powershell
+Get-VM | Get-VMHardDiskDrive | Select VMName,Path
+
+VMName            Path
+------            ----
+Domain Controller D:\VMs\Domain Controller_1023082130.avhdx
+#+end_src
+
+** Installing the Hyper-V Powershell CMDLETS
+#+begin_src powershell
+Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V-Management-PowerShell
+#+end_src
+
+
+** Merge the AVHDX
+*Make sure your VM is turned off*. The Merge-VHD operation requires
+the avhdx file be offline.
+
+The destination path will be the snapshot or VHDX file that you want
+to merge into. This will automatically merge any of the parent
+snapshots in between the one you're using and the one you're merging
+into.
+
+So if you're merging from the fifth snapshot into the first snapshot,
+it'll merge the fifth into the fourth, the fourth into the third, the
+third into the second, and the second into the first.
+
+#+begin_src powershell
+Merge-VHD -Path "D:\VMs\Domain Controller_1023082130.avhdx" -DestinationPath "D:\VMs\Domain Controller.vhdx"y
+#+end_src
+
+** Set VM Drive
+Merging the snapshot deletes the snapshot after. Update the drive path
+of your VM to the snapshot you merged into
+
+#+begin_src powershell
+Set-VMHardDiskDrive -VMName "Domain Controller" -Path "D:\VMs\Domain Controller.vhdx" -ControllerType SCSI
+#+end_src
+* Windows/Simulating Bad Blocks on NTFS Filesystems
+:PROPERTIES:
+:ONE: one-default-doc
+:CUSTOM_ID: /blog/simulating-bad-blocks-on-ntfs-drive
+:CREATED: <2023-12-03 Sun 19:02>
+:END:
+Directions for simulating a file system corruption error on an NTFS drive on a
+Windows host system. This is useful when you are testing tools that require this
+error exist.
+
+** Simulating Corruption
+
+https://github.com/jamersonpro/ntfsmarkbad
+
+*** Creating the test environment
+
+Create the folder for our demo environment
+
+#+begin_src powershell
+mkdir BadBlocktest
+cd BadBlockTest
+#+end_src
+
+Download the NtfsMarkBad tool
+
+#+begin_src powershell
+Invoke-WebRequest -Uri "https://github.com/jamersonpro/ntfsmarkbad/releases/download/v0.0.2/NtfsMarkBad.exe" -Outfile "NtfsMarkBad.exe" -UseBasicParsing
+#+end_src
+
+Create a virtual hard disk file
+
+#+begin_src powershell
+New-VHD -Path "BadBlocks.vhd" -Fixed -SizeBytes 100MB
+Mount-VHD .\BadBlocks.vhd
+#+end_src
+
+** Setting up the NTFS Volume
+*** Creating a filesystem
+Open DiskMGMT.msc. The first prompt will be to format the
+drive. Select GPT and format the device using NTFS with the default
+settings.
+
+Now use NtfsMarkbad.exe with the drive letter of the mounted VHD. Copy the
+"First Volume Sector" value for later.
+
+#+begin_src powershell
+./NtfsMarkbad.exe G:
+
+Output:
+NTFSMARKBAD 0.0.2 x64     https://github.com/jamersonpro/ntfsmarkbad
+
+Scanning volume...
+First volume sector: 128 **MAKE NOTE OF THIS**
+Last volume sector: 16511
+Bytes per sector: 512
+Sectors per cluster: 8
+Total cluster count: 2047
+Completed.
+#+end_src
+
+These commands will create a file slightly larger than 1MB in size. Files less
+than this will get stored directly in the MFT Table instead of on sectors of the
+FS
+
+#+begin_src powershell
+fsutil.exe file createnew G:\file.txt 1048576
+fsutil.exe file queryextents G:\file.txt
+
+Output: VCN: 0x0        Clusters: 0x100      LCN: 0x5c0
+#+end_src
+
+The NtfsMarkBad.exe software requires a range of sectors to mark as bad. Using
+the data from the ~queryextents~ command, copy this template to mark your drive as
+bad. The sections you need to replace with your own values are commented
+
+#+begin_src powershell
+  $SectorsPerCluster=8
+  $FirstVolumeSector=1000
+  $VCN=[uint32]"0x0"        # Change this
+  $CLUSTERS=[uint32]"0x100" # Change this
+  $LCN=[uint32]"0x5c0"      # Change this
+
+  $LCN = ($VCN + $LCN)
+  $StartingSector = (($LCN * $SectorsPerCluster) + $FirstVolumeSector)
+  $EndingSector = ((($LCN + $CLUSTERS -1) * $SectorsPerCluster) + $FirstVolumeSector)
+
+  ./NtfsMarkBad.exe G: $StartingSector $EndingSector
+#+end_src
+
+*** Output Example
+#+begin_src
+PS F:\Programs\Forensics>   ./NtfsMarkBad.exe D: $StartingSector $EndingSector
+NTFSMARKBAD 0.0.2 x64     https://github.com/jamersonpro/ntfsmarkbad
+
+Scanning volume...
+First volume sector: 128
+Last volume sector: 200831
+Bytes per sector: 512
+Sectors per cluster: 8
+Total cluster count: 25087
+The number of clusters skipped since they already marked bad: 0
+The number of clusters skipped since they are in use: 1360
+The number of selected clusters: 108
+Adding 108 clusters to the Bad Clusters File...
+Completed.
+PS F:\Programs\Forensics>
+#+end_src
+
+PS C:\Users\Peter\Downloads>   ./NtfsMarkBad.exe G: $StartingSector $EndingSector
+NTFSMARKBAD 0.0.2 x64     https://github.com/jamersonpro/ntfsmarkbad
+
+Scanning volume...
+First volume sector: 128
+Last volume sector: 16511
+Bytes per sector: 512
+Sectors per cluster: 8
+Total cluster count: 2047
+The number of clusters skipped since they already marked bad: 0
+The number of clusters skipped since they are in use: 131
+The number of selected clusters: 0
+No clusters to add to the Bad Clusters File.
+
+*** CHKDSK Sample Output
+#+begin_src powershell
+PS C:\Users\Peter\BadBlocksTest> chkdsk /f G:
+The type of the file system is NTFS.
+
+Chkdsk cannot run because the volume is in use by another
+process.  Chkdsk may run if this volume is dismounted first.
+ALL OPENED HANDLES TO THIS VOLUME WOULD THEN BE INVALID.
+Would you like to force a dismount on this volume? (Y/N)
+#+end_src
+* Windows/Creating and Viewing a Storport on Windows Server
+:PROPERTIES:
+:ONE: one-default-doc
+:CUSTOM_ID: /blog/windows-server-create-and-view-storport-trace
+:CREATED: <2023-07-22 Sun 16:24>
+:END:
+Trace
+Site under construction. This page has to be re-read and remembered. I believe
+this is to use a excel template to parse a storport trace. It will calculate the
+latency of SAS drives though I think the output was weirdly documented along
+with the template.
+
+** Tracing
+*** Creating a StorPort trace using logman.exe
+LOGMAN.EXE is CLI utility for creating data collector sets.
+A data collector set can be thought of as a container for choosing which performance counters or trace events to log.
+All the logged data from the data collector will be stored in a single file.
+
+A performance counter provides high-level, numeric, metrics for system behavior.
+There are performance counters for CPU utilization, search indexing, disk utilization, processes, etc.
+It provides general information on how parts of your computer are behaving.
+
+Traces events are low-level events that get reported when something /note worthy/ happens with a system component or application.
+The Windows kernel may report each time a DLL is loaded, unloaded, a process starts/stops, etc.
+In this case, the StorPort driver trace reports things like latency, byte length, IO return codes, etc.
+
+Everything we're doing here can be done through the PERFMON.EXE GUI
+
+#+begin_src shell
+# Creating the TraceLog
+LOGMAN.EXE create trace "storport" -ow -o c:\PerfLogs\storport.etl -p "Microsoft-Windows-StorPort" 0xffffffffffffffff 0xff -nb 16 16 -bs 1024 -mode Circular -f bincirc -max 512 -ets
+
+# Starting the trace log
+LOGMAN.EXE start storport -ets
+
+# When you feel like you captured the issue in the log, stop it.
+LOGMAN.EXE stop storport -ets
+#+end_src
+
+#+begin_src shell
+# ARGUMENTS DEFINED
+*-ow* Overwrite an existing logfile
+
+*-o* Path for the existing log
+
+*-p* TODO
+
+*HexCodes* TODO
+
+*-nb* Number of event trace buffers
+
+*-bs* Event trace buffer size
+
+*-mode Circular* The event trace logger mode. Circular means the log file overwrites the oldest data constantly.
+
+*-f bincirc* Log format. We're using the circular binary format
+
+*-max 512* The max size in megabytes.
+
+*-ets* Send commands to Event Trace Sessions directly without saving or scheduling.
+#+end_src
+
+*** Viewing the trace data (Event Viewer Method)
+We used LOGMAN to create a trace log and store the output to C:/PerfLogs/storport.etl.
+Here's how you can open the file with Eventviewer
+
+- Open EventViewer
+- Click Action>OpenSavedLog
+- Navigate to your storport.etc file, open it, and click the option to copy the data to an event log.
+- Click on any log and select the "Details" tab
+
+The event property you're looking for is "RequestDuration_100ns".
+This is the TODOTODOTODO.
+The measurement is done in nano-seconds.
+To convert it to milliseconds, divide the value by 10,000
+
+#+begin_src shell
+# 22860ns is equal to 22ms
++ System 
+- EventData 
+  RequestDuration_100ns 22860 
+  Irp 0xffffe10c1e9f7a20 
+  Command 53 
+  SrbStatus 1 
+  OriginalIrp 0x0 
+  Port 0 
+  Bus 0 
+  Target 0 
+  LUN 0 
+  ScsiStatus 0 
+  ByteLengthOfTransfer 0 
+  BuildIoDuration_100ns 21 
+  StartIoDuration_100ns 121 
+#+end_src
+
+Less than 9ms = Excellent performance
+
+Less than 15ms = Good Performance
+
+Less than 25ms = Normal 
+
+More than 25ms = Poor Performance
+
+*** Viewing the trace data (StorportPACMAN.ps1 Method)
+StorportPacman.PS1 is a powershell script written by Paul Reynolds at Microsoft.
+It parses the STORPORT.ETL file into an organized, human readable, CSV file.
+
+For archival purposes, I'm including a full copy and paste of it here.
+
+#+begin_src shell
+#StorportPACMAN ported to Windows Powershell
+#Paul Reynolds PaulRey@microsoft.com -> Improvements: Robin Hermann (RHE)
+#version 1.1 updated for 2012 R2
+#version 1.2 updated with performance enhancments
+#version 1.3 updated to make filter for storport data more robust
+#version 1.4 updated to make filter for storport data able to use storport ets trace data (insightweb)
+#version 1.5 updated to include addition strings to flag storport data
+#version 1.6 updated to fix bug in parameter errors
+#version 1.7 updated to fix Excel 2016 ACE provider bug that converts hex to decimal on the fly
+#version 1.8 updated to allow flexibility in installation directory 
+#version 1.9 updated to clean up leading and trailing spaces in header information and data, which caused problems in an Office 2016 update regression issue
+#version 2.0 updated to show warnings if data has any records with SCSI Status not 0 and/or SRB Status not 1
+#version 3.0 RHE: updated to a function for more agility
+#version 3.1 RHE: add more parameters and fix the with $MyInvocation, $MyInvocation is an automatic variable populated at script run time, then if you execute $MyInvocation.MyCommand.Path in a powershell console or ISE isn't populated
+ 
+#You must run the script not the script content only!
+ 
+Function Convert-ETWTraceToReadableFileCSV {
+    [CmdletBinding()]
+ 
+    #read in parameters for requestdurationvalue and ETL location
+    Param(
+        [Parameter(Position=0,mandatory=$false,HelpMessage="Path to the Skript and the Excel PowerPivot Templates (storport2012.xlsx)")][string]$WorkFolderPath = "C:\StorPortPACMAN",
+        [Parameter(Position=1,mandatory=$false)][string]$Filter,
+        [Parameter(Position=2,mandatory=$false)][string]$ETL,
+        [Parameter(Position=3,mandatory=$false,HelpMessage="If you already converted the ETL to CSV")][string]$RAWXPerfCSVPath = $WorkFolderPath + '\raw-xperf.csv'
+    )
+ 
+    process {
+        #edit this string for future change to storport data headers 
+        $strStorportData = @('Microsoft-Windows-StorPort/Miniport','Microsoft-Windows-StorPort/Port /Info','Microsoft-Windows-StorPort/Port/win:Info','Microsoft-Windows-StorPort/TaskMiniportIORequestServiceTime');
+ 
+        [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms")
+ 
+        $storportpacmandirectory = $WorkFolderPath #Split-Path -Parent $MyInvocation.MyCommand.Path #"C:\StorPortPACMAN" 
+        $requestduration_multiplier = 1 #this will change to 10,000 if the OS is Server 2012 due to differences in requestduration units (milliseconds in 2008, 100ns in 2012)
+ 
+        #test if requestdurationvalue is present and a valid integer
+        If ($filter -eq ''){
+            $requestdurationvalue = 1000000 #default to 1000000 if not present(do NOT use commas)
+        } else {
+            If(($filter -as [Int64]) -eq $null) {
+                [System.Windows.Forms.MessageBox]::Show('The request duration filter is either not a valid integer or has commas.')
+                exit
+            } else {
+                $requestdurationvalue = [Int64]$filter
+            }
+        }
+ 
+        If ($RAWPerfCSVPath -eq '') {
+            #test if etl file is present and a valid file
+            If($etl -eq '') {
+                $ETLlocation = $storportpacmandirectory + '\storport.etl'
+                If (-not (Test-Path $ETLlocation -PathType leaf)) {
+                    [System.Windows.Forms.MessageBox]::Show('Sorry, but the file "Storport.etl" was not found.  Is it named correctly and in the storportpacman directory?')
+                    exit
+                }
+            } else {
+                If (-not (Test-Path $etl -PathType leaf)) {
+                  [System.Windows.Forms.MessageBox]::Show('Sorry, but the file "' + $etl + '" was not found.')
+                  exit
+                } else {
+                  $ETLlocation = $etl
+                }
+            }
+ 
+            Write-Progress -Activity "StorportPACMAN Progress" -Status "Converting ETL file to CSV file via XPERF" -PercentComplete "33"
+ 
+            try {
+                $myargs = "-i " + ('"{0}"' -f $ETLlocation) + " -o "  + ('"{0}"' -f $storportpacmandirectory) + "\raw-xperf.csv -tle"
+                Start-Process xperf -ArgumentList $myargs -Wait
+            }
+            catch {
+                [System.Windows.Forms.MessageBox]::Show('There was an error running XPerf.  Is it installed and in your system path?  The error message is ' + $_.Exception.Message)
+                exit
+            }
+        }
+ 
+ 
+        try {
+            $reader = New-Object System.IO.StreamReader($RAWXPerfCSVPath)
+            $writer = New-Object System.IO.StreamWriter($storportpacmandirectory + '\processed-xperf.csv')
+        } catch {
+            [System.Windows.Forms.MessageBox]::Show('There was an error creating the readers or writers.  Do you have write access to the ' + $storportpacmandirectory?  + ' The error message is ' + $_.Exception.Message)
+            exit
+        }
+ 
+ 
+        try {
+            Write-Progress -Activity "StorportPACMAN Progress" -Status "Scrubbing Data" -PercentComplete "50"
+ 
+            $already_wrote_header = 'false';
+            $request_duration_index = 14;
+            $record_counter = 0;
+            $scsi_status_not_0_counter=0;
+            $srb_status_not_1_counter=0;
+            $scsi_status_index = 16;
+            $srb_status_index = 17;
+ 
+            While ($reader.Peek() -gt -1) {
+                $original_record = $reader.ReadLine()
+ 
+                if ($original_record.Contains('OS Version:')) {
+                    #check if O/S is windows 2012 or greater and if it is, make requestduration multiplier 10000 since requestdurations changed from millisecond to 100 nanosecond increments
+                    #also request_duration column changes from 14 to 9
+ 
+                    if ([Double]$original_record.Substring(11,4) -ge 6.2) {
+                        $requestduration_multiplier = 10000;
+                        $request_duration_index = 9;
+                        $srb_status_index = 12;
+                        $scsi_status_index = 18;
+                    }
+ 
+                    #get the trace start date time
+                    $str_start_time = $original_record.Substring($original_record.IndexOf('Trace Start:') + ('trace start:').Length, $original_record.IndexOf(',', $original_record.IndexOf('Trace Start:')) - ($original_record.IndexOf('Trace Start:') + ('trace start:').Length));
+                    $int_start_time = [Int64]($str_start_time);
+                    $start_time = Get-Date('1/1/1601 12:00AM GMT');
+                    $start_time = $start_time.AddTicks($int_start_time);
+                    continue
+                }
+ 
+ 
+                #read in raw data and scrub it
+                $isStorportData = 'false';
+ 
+                foreach ($s in $strStorportData) {
+                    if ($original_record.Contains($s)) {
+                        $isStorportData = 'true';
+                        break;
+                    }
+                }
+ 
+                if ($isStorportData -eq 'true') { #this ignores all data except for lines with a string match in $strStorportData
+                    $storport_data = $original_record.Split(',');
+ 
+                    If(($storport_data[1] -as [Int64]) -ne $null) { #test for header versus data 
+                        $record_counter = $record_counter + 1;
+                        $dbl_delta_time = $storport_data[1] / 1000;
+                        $storport_data[1] = $start_time.AddMilliseconds($dbl_delta_time).ToLocalTime().ToString();
+ 
+                        #fix for Excel 2016 bug that converts hex to decimal on the fly
+                        if($request_duration_index -eq 9) {
+                            $storport_data[11] = '"' + $storport_data[11] + '"';
+                            $storport_data[12] = '"' + $storport_data[12] + '"';
+                            $storport_data[18] = '"' + $storport_data[18] + '"';
+                        }
+                        $header_flag = 'false'
+                    } else {
+                        $header_flag = 'true'
+                    }
+ 
+                    $original_record = $storport_data[1].Trim() + ',';
+ 
+                    for ($i = 9; $i -lt $storport_data.Length; $i++) {
+                        $original_record += $storport_data[$i].Trim() + ',';
+                    }
+ 
+                    #fix for 2012 changing record names
+                    if ($header_flag) {
+                        $original_record = $original_record.Replace('RequestDuration_100ns', 'RequestDuration in 100ns');
+                        $original_record = $original_record.Replace('BuildIoDuration_100ns', 'BuildIoDuration in 100ns');
+                        $original_record = $original_record.Replace('StartIoDuration_100ns', 'StartIoDuration in 100ns');
+                        $original_record = $original_record.Replace('ByteLengthOfTransfer', 'DataTransferLength');
+                    }
+ 
+                    #cleanup
+                    $original_record = $original_record.Replace('TimeStamp','DateTime');
+                    $original_record = $original_record.TrimEnd(',');
+                    $original_record = $original_record.Replace('(',$null);
+                    $original_record = $original_record.Replace(')',$null);
+                    $original_record = $original_record.Replace("\'",$null);
+ 
+ 
+                    if (($requestdurationvalue -ne -1) -AND ($header_flag -eq 'false')) {  #write out the data immediately if it is the header or there is no filter (-1 value for $requestdurationvalue)
+                        if ([Int64]($storport_data[$request_duration_index].Trim()) -lt ($requestdurationvalue * $requestduration_multiplier)) {
+                            #write the line if the value of requestduration is lower then the filter
+                            $writer.WriteLine($original_record)
+ 
+                            if ($request_duration_index -eq 9) {
+                                #scsi status check
+                                if (-Not ($storport_data[$scsi_status_index].Contains("0x00"))) {
+                                    $scsi_status_not_0_counter = $scsi_status_not_0_counter + 1;
+                                }
+ 
+                                #srb status check
+                                if (-Not ($storport_data[$srb_status_index].Contains("0x01"))) {
+                                    $srb_status_not_1_counter = $srb_status_not_1_counter + 1;
+                                }
+                            }
+ 
+                            else {
+ 
+                                #scsi status check
+                                if ($storport_data[$scsi_status_index].Trim() -ne "0") {
+                                    $scsi_status_not_0_counter = $scsi_status_not_0_counter + 1;
+                                }
+ 
+                                #srb status check
+                                if ($storport_data[$srb_status_index].Trim() -ne "1") {
+                                    $srb_status_not_1_counter = $srb_status_not_1_counter + 1;
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        if ($header_flag -eq 'true') {
+                            if ($already_wrote_header -eq 'false') {
+                                $writer.WriteLine($original_record)
+                            }
+ 
+                            $already_wrote_header = 'true';
+                        }
+                        else {
+                            $writer.WriteLine($original_record)
+ 
+                            if ($request_duration_index -eq 9) {
+                                #scsi status check
+                                if (-Not ($storport_data[$scsi_status_index].Contains("0x00"))) {
+                                    $scsi_status_not_0_counter += 1;
+                                }
+ 
+                                #srb status check
+                                if (-Not ($storport_data[$srb_status_index].Contains("0x01"))) {
+                                    $srb_status_not_1_counter += 1;
+                                }
+                            } else {
+                                #scsi status check                       
+                                if ($storport_data[$scsi_status_index].Trim() -ne "0") {
+                                    $scsi_status_not_0_counter += 1;
+                                }
+ 
+                                #srb status check
+                                if ($storport_data[$srb_status_index].Trim() -ne "1") {
+                                    $srb_status_not_1_counter += 1;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+ 
+            $writer.Flush()
+            $writer.Close()
+            $reader.Close()
+        }
+        catch {
+            [System.Windows.Forms.MessageBox]::Show('There was an error while scrubbing the data. The error message is ' + $_.Exception.Message)
+            exit
+        }
+ 
+        if ($record_counter -ne 0) {
+            # open exel spreadsheet
+            Write-Progress -Activity "StorportPACMAN Progress" -Status "Opening Excel Spreadsheet" -PercentComplete "66" 
+ 
+            if ($requestduration_multiplier -eq 10000) { #Check for Windows 2012
+                $workbookpath = $storportpacmandirectory + '\storport2012.xlsx'
+            } else {
+                $workbookpath = $storportpacmandirectory + '\storport2008.xlsx'
+            }
+ 
+            Try {
+                $excel = New-Object -ComObject Excel.Application
+                $excel.visible = $true
+                $workbook = $excel.workbooks.open($workbookpath)
+                $workbook.refreshall()
+ 
+                $mymessage = "Data Refresh Complete. Processed " + $record_counter.ToString() + " records.";
+ 
+                if ($scsi_status_not_0_counter -ne 0) {
+                    $mymessage = $mymessage + "`r`nWARNING: there were " + $scsi_status_not_0_counter.ToString() + " records that have a SCSI Status other than GOOD - please review the data.";
+                }
+ 
+                if ($srb_status_not_1_counter -ne 0) {
+                    $mymessage = $mymessage + "`r`nWARNING: there were " + $srb_status_not_1_counter.ToString() + " records that have a SRB Status of not completing successfully - please review the data.";
+                }
+ 
+                [System.Windows.Forms.MessageBox]::Show($mymessage);
+            } catch {
+                [System.Windows.Forms.MessageBox]::Show('There was an error opening one of the spreadsheets. Make sure both storport2012.xlsx and storport2008.xlsx are in the ' + $storportpacmandirectory + ' directory.  The error message is ' + $_.Exception.Message)
+                exit
+            }
+        } else {
+            [System.Windows.Forms.MessageBox]::Show('There was no Storport data in the ETL file.  Please check how you ran the Storport trace.')
+            exit
+        }
+    }
+}
+#+end_src
+
+*** Preparing our storport.etl file
+We have to use XPerf.exe to convert the ETL file into a CSV before we sort it with StorportPacman.ps1.
+Download the Windows Performance Toolkit from
+[[https://docs.microsoft.com/en-us/windows-hardware/get-started/adk-install][this Windows ADK link]].
+
+Once the toolkit is installed, convert the storport.etl file to a CSV
+
+#+begin_src shell
+xperf -i C:\Perflogs\storport.ETL -o C:\Perflogs\raw-xperf.csv -tle
+#+end_src
+
+Now finally download the PowerPivot Excel templates from [[http://wiki.webperfect.ch/index.php?title=Datei:Storport_Excel_PowerPivot-Templates.zip][wiki.webperfect.ch]]
+or my [[https://archive.org/details/storport-excel-power-pivot-templates][upload to archive.org]]
+
+Copy and paste the script into a ps1 file.
+Next, import it using this command
+
+#+begin_src shell
+Import-Module -Name ./StorportPacman.ps1
+#+end_src
+
+Now lets run the script.
+The name of your raw-xperf.csv file is important.
+Unless changed, raw-xperf.csv is the default filename the script looks for
+The filenames of the PowerPivot templates are sensitive too.
+
+#+begin_src shell
+# Remember to keep the xlsx and raw-xperf.csv files in the the same folder
+Convert-ETWTraceToReadableFileCSV -WorkFolderPath C:\PerfLogs\
+#+end_src
+* Mikrotik/Creating a Client to Site VPN With 
+:PROPERTIES:
+:ONE: one-default-doc
+:CUSTOM_ID: /blog/mikrotik-creating-client-to-site-vpn
+:CREATED: <2023-07-28 Sun 13:00>
+:END:
+Wireguard
+Directions for setting up a Wireguard client-to-site server on a Mikrotik. This
+is done using the command line from SSH or Winbox.
+
+** Server Configuration
+** Create Wireguard interface
+Add a new wireguard interface and give it the name "Wireguard1" The listening
+port is set to the default port number that the wireguard devs intended. The MTU
+value is default to what Mikrotik auto-fills
+
+#+begin_src bash
+/interface/wireguard/add listen-port=51820 mtu=1420 name=wireguard1
+#+end_src
+
+** Copy the server PUB and PRIV key 
+Now let's print out the servers private and public keys. This will be used when
+creating the client configuration files.
+
+#+begin_src bash
+/interface/wireguard/print
+
+=====OUTPUT=====
+name="wireguard1" mtu=1420 listen-port=51820 private-key="AUTO-GENERATED-PRIV-KEY" public-key="AUTO-GENERATED-PUB-KEY"
+#+end_src
+
+We have our Wireguard interface setup. Next we have to bind the interface to an IP address. The subnet for the interface should be new and unique. I set mine to 192.168.150.
+
+#+begin_src bash
+/ip/address/add address=192.168.150.1/24 interface=wireguard1 network=192.168.150.0
+#+end_src
+
+** Allow Wireguard traffic through the Mikrotiks firewall.
+
+#+begin_src bash
+/ip/firewall/filter/add action=accept chain=input dst-port=51820 protocol=udp
+#+end_src
+
+*** Optional: Move firewall to first index
+I had some other custom firewall rules I didn't want to conflict with
+Wireguard. This next step is completely optional, but I'm going to move my
+Wireguard rule to INDEX 1 of the filter chain.
+
+#+begin_src bash
+/ip/firewall/filter/print
+
+[...]
+16    chain=input action=accept protocol=udp dst-port=5182
+
+/ip/firewall/filter/move 16 destination=1
+#+end_src
+
+** Client Setup
+*** Message from the future
+Apologies for only including a powershell script on creating the configuration
+file.
+
+*** Generating Client Config
+
+Create a PowerShell script with the following content
+
+#+begin_src powershell
+Param(
+   [Parameter(Mandatory=$true)] [string]$ServerIP,
+   [Parameter(Mandatory=$true)] [string]$ServerPubkey,
+   [Parameter(Mandatory=$true)] [string]$ServerPort,
+   [Parameter(Mandatory=$true)] [string]$DnsServers,
+   [Parameter(Mandatory=$true)] [string]$ClientIP
+)
+
+# Generate a private key
+& 'C:\Program Files\WireGuard\wg.exe' genkey | Out-File $env:temp\privatekey.txt
+$privkey=Get-Content $env:temp\privatekey.txt
+
+# Generate the pubkey from the privkey
+$pubkey=$privkey | & 'C:\Program Files\WireGuard\wg.exe' pubkey
+
+$config = @"
+[Interface]
+PrivateKey = $privkey
+Address = $ClientIP
+DNS = $DnsServers
+
+[Peer]
+PublicKey = $ServerPubkey
+AllowedIPs = 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16
+Endpoint = $ServerIP`:$ServerPort
+PersistentKeepalive = 15
+"@
+
+$config
+"`n`nClient Public Key: $pubkey
+`n`n`nClient Private Key: $privkey
+`n`n`nMikrotik Command to add new peer:`n
+
+interface/wireguard/peers/add allowed-address=$ClientIP,10.10.10.0/24 interface=wireguard1 public-key=`"$pubkey`"
+`n
+#+end_src
+
+Execute the script
+
+#+begin_src powershell
+Set-ExecutionPolicy RemoteSigned -Scope Process
+.\wireguard_generate_client_conf.ps1
+
+cmdlet wireguard_generate_client_conf.ps1 at command pipeline position 1
+Supply values for the following parameters:
+ServerIP: unixfandom.com
+ServerPubkey: t3nasldfjasdlfjasldfjs9ui+7tnTkwHmQs=
+ServerPort: 51820
+DnsServers: 1.1.1.1
+ClientIP: 192.168.150.101
+[Interface]
+PrivateKey = kJalkdjadsfVnlsakdjflasjfzlkxcxljsb9=
+Address = 192.168.150.101
+DNS = 1.1.1.1
+
+[Peer]
+PublicKey = r3alsdfjalcoaio2oiasdjfaldskfjl=
+AllowedIPs = 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16
+Endpoint = unixfandom.com:51820
+PersistentKeepalive = 15
+
+
+Client Public Key: 2asdlfjasljcl31jas=
+
+
+
+Client Private Key: asldkjacj02askfjlsf=
+
+
+
+Mikrotik Command to add new peer:
+
+interface/wireguard/peers/add allowed-address=192.168.150.101,YOUR_INTERNAL_IP/24 interface=wireguard1 public-key="r3alsdfjalcoaio2oiasdjfaldskfjl="
+#+end_src
+
+Copy the ~[Interface]~ and ~[Peer]~ blocks into a wireguard.conf file on your desktop. That will be used by your wireguard client.
+
+After that, copy and paste the Mikrotik command outputted by the script. Replace
+~YOUR_INTERNAL_IP~ with the IP Range for your location – Not the IP range of the
+wireguard interface
+
+After you paste that command, you should be able to see your peer on the
+Mikrotik. Once you use your wireguard client with the wireguard.conf file,
+you'll also be able to see the recieve and transmit data in the WinBox Wireguard
+GUI screen.
+
+#+begin_src bash
+/interface/wireguard/peers/print detail
+
+Flags: X - disabled
+ 0   interface=wireguard1 public-key="r3alsdfjalcoaio2oiasdjfaldskfjl=" endpoint-address="" endpoint-port=0 current-endpoint-address=192.168.81.200 current-endpoint-port=65342
+     allowed-address=192.168.150.101/32,192.168.81.0/24 rx=1296 tx=368 last-handshake=10s
+#+end_src
+
+* Mikrotik/Securing Router With Firewall
+:PROPERTIES:
+:ONE: one-default-doc
+:CUSTOM_ID: /blog/mikrotik-securing-router-with-firewall
+:CREATED: <2023-07-28 Sun 12:55>
+:END:
+** Preamble
+Documented are firewall rules to enable after resetting your Mikrotik
+firewall. It will provide good baseline security.
+
+** Securing the firewall
+*** Fresh Start
+Incase you mess up or want a fresh start, run these two commands to clear all
+firewall rules and address lists. Note that if you re-run the command to add a
+filter, it'll either error out or duplicate if it already exists.
+
+#+begin_src bash
+/ip/firewall/filter remove [find dynamic=no]
+/ip/firewall/address-list remove [find dynamic=no]
+#+end_src
+
+** Default Firewall Rules
+These are the default IPv4 firewall filters suggested by Mikrotik. They work
+very well and prevent unwanted connections from the WAN interface. Note that
+IPv6 is disabled by default on Mikrotiks and were it to be enabled, any firewall
+rules below are not configured for it.
+
+On the line last line of the first code block, replace src-address=! with your
+LAN IP range.
+
+#+begin_src bash
+/ip/firewall/filter add action=fasttrack-connection chain=forward comment=FastTrack connection-state=established,related
+/ip/firewall/filter add action=accept chain=forward comment="Established, Related"  connection-state=established,related
+/ip/firewall/filter add action=drop chain=forward comment="Drop invalid" connection-state=invalid log=yes log-prefix=invalid
+/ip/firewall/filter add action=drop chain=forward comment="Drop tries to reach not public addresses from LAN" dst-address-list=not_in_internet in-interface=bridge1 log=yes log-prefix=!public_from_LAN out-interface=!bridge1
+/ip/firewall/filter add action=drop chain=forward comment="Drop incoming packets that are not NATted" connection-nat-state=!dstnat connection-state=new in-interface=ether1 log=yes log-prefix=!NAT
+/ip/firewall/filter add action=drop chain=forward comment="Drop incoming from internet which is not public IP" in-interface=ether1 log=yes log-prefix=!public src-address-list=not_in_internet
+/ip/firewall/filter add action=drop chain=forward comment="Drop packets from LAN that do not have LAN IP" in-interface=bridge1 log=yes log-prefix=LAN_!LAN src-address=!192.168.1.0/24
+
+/ip/firewall/address-list add address=0.0.0.0/8 comment=RFC6890 list=not_in_internet
+/ip/firewall/address-list add address=172.16.0.0/12 comment=RFC6890 list=not_in_internet
+/ip/firewall/address-list add address=192.168.0.0/16 comment=RFC6890 list=not_in_internet
+/ip/firewall/address-list add address=10.0.0.0/8 comment=RFC6890 list=not_in_internet
+/ip/firewall/address-list add address=169.254.0.0/16 comment=RFC6890 list=not_in_internet
+/ip/firewall/address-list add address=127.0.0.0/8 comment=RFC6890 list=not_in_internet
+/ip/firewall/address-list add address=224.0.0.0/4 comment=Multicast list=not_in_internet
+/ip/firewall/address-list add address=198.18.0.0/15 comment=RFC6890 list=not_in_internet
+/ip/firewall/address-list add address=192.0.0.0/24 comment=RFC6890 list=not_in_internet
+/ip/firewall/address-list add address=192.0.2.0/24 comment=RFC6890 list=not_in_internet
+/ip/firewall/address-list add address=198.51.100.0/24 comment=RFC6890 list=not_in_internet
+/ip/firewall/address-list add address=203.0.113.0/24 comment=RFC6890 list=not_in_internet
+/ip/firewall/address-list add address=100.64.0.0/10 comment=RFC6890 list=not_in_internet
+/ip/firewall/address-list add address=240.0.0.0/4 comment=RFC6890 list=not_in_internet
+/ip/firewall/address-list add address=192.88.99.0/24 comment="6to4 relay Anycast [RFC 3068]" list=not_in_internet
+#+end_src
+
+** Creating a Secure User Account
+Here we'll create a new administrative user and delete the default admin account. The username should be unique to prevent dictionary attacks.
+
+#+begin_src bash
+/user add name=SECURE_USER_NAME password=SUPER_SECURE_PASSWORD group=full
+/user remove admin
+#+end_src
+
+Afterward, we can set WinBox to only allow the user to login on a specific subnet.
+
+#+begin_src bash
+/user set USERNAME address=192.168.1.0/24
+#+end_src
+
+** Changing SSH/Winbox Ports
+Here we'll change the default SSH port to 1950 and the default Winbox port to 1951
+
+#+begin_src bash
+/ip/service/set ssh port=1950
+/ip/service/set winbox port=1951
+#+end_src
+
+** Preventing Brute Force
+*** Whitelisting a Trusted Host
+To prevent accidental lockouts caused by the firewall filters we're about to create, whitelist your server IP address by running the following commands. This will create an IP Address list called TRUSTED, then add a firewall filter to always accept traffic.
+
+#+begin_src bash
+# Our SERVER IP Address that get's whitlisted
+/ip/firewall/address-list add address=192.168.1.10 disabled=no list=TRUSTED
+
+# Creating a rule at INDEX 0 to always allow traffic from TRUSTED list
+/ip/firewall/filter add chain=input action=accept connection-state=new src-address-list=TRUSTED place-before=0 comment="Allow Trusted"
+/ip/firewall/filter add chain=input action=accept connection-state=new src-address-list=TRUSTED comment="Allow Trusted"
+Prevent FTP Brute Force
+After 3 failed login attempts, block the IP from using FTP for 20 minutes
+
+/ip/firewall/filter add chain=input protocol=tcp dst-port=21 src-address-list=ftp_blacklist action=drop \
+            comment="drop ftp brute forcers" disabled=no
+
+/ip/firewall/filter add chain=input protocol=tcp dst-port=21 connection-state=new \
+            src-address-list=ftp_stage3 action=add-src-to-address-list address-list=ftp_blacklist \
+            address-list-timeout=20m comment="" disabled=no
+
+/ip/firewall/filter add chain=input protocol=tcp dst-port=21 connection-state=new \
+            src-address-list=ftp_stage2 action=add-src-to-address-list address-list=ftp_stage3 \
+            address-list-timeout=1m comment="" disabled=no
+
+/ip/firewall/filter add chain=input protocol=tcp dst-port=21 connection-state=new src-address-list=ftp_stage1 \
+            action=add-src-to-address-list address-list=ftp_stage2 address-list-timeout=1m comment="" disabled=no
+
+/ip/firewall/filter add chain=input protocol=tcp dst-port=21 connection-state=new action=add-src-to-address-list \
+            address-list=ftp_stage1 address-list-timeout=1m comment="" disabled=no
+#+end_src
+
+*** Preventing SSH Brute Force
+
+#+begin_src bash
+/ip/firewall/filter add chain=input protocol=tcp dst-port=1950 src-address-list=ssh_blacklist action=drop \
+            comment="drop ssh brute forcers" disabled=no
+
+/ip/firewall/filter add chain=input protocol=tcp dst-port=1950 connection-state=new \
+            src-address-list=ssh_stage3 action=add-src-to-address-list address-list=ssh_blacklist \
+            address-list-timeout=20m comment="" disabled=no
+
+/ip/firewall/filter add chain=input protocol=tcp dst-port=1950 connection-state=new \
+            src-address-list=ssh_stage2 action=add-src-to-address-list address-list=ssh_stage3 \
+            address-list-timeout=1m comment="" disabled=no
+
+/ip/firewall/filter add chain=input protocol=tcp dst-port=1950 connection-state=new src-address-list=ssh_stage1 \
+            action=add-src-to-address-list address-list=ssh_stage2 address-list-timeout=1m comment="" disabled=no
+
+/ip/firewall/filter add chain=input protocol=tcp dst-port=1950 connection-state=new action=add-src-to-address-list \
+            address-list=ssh_stage1 address-list-timeout=1m comment="" disabled=no
+#+end_src
+
+*** Preventing WinBox Brute Force
+After 3 failed login attempts, block the IP from using Winboxfor 20 minutes
+
+#+begin_src bash
+/ip/firewall/filter add chain=input protocol=tcp dst-port=1951 src-address-list=winbox_blacklist action=drop \
+            comment="drop winbox brute forcers" disabled=no
+
+/ip/firewall/filter add chain=input protocol=tcp dst-port=1951 connection-state=new \
+            src-address-list=winbox_stage3 action=add-src-to-address-list address-list=winbox_blacklist \
+            address-list-timeout=20m comment="" disabled=no
+
+/ip/firewall/filter add chain=input protocol=tcp dst-port=1951 connection-state=new \
+            src-address-list=winbox_stage2 action=add-src-to-address-list address-list=winbox_stage3 \
+            address-list-timeout=1m comment="" disabled=no
+
+/ip/firewall/filter add chain=input protocol=tcp dst-port=1951 connection-state=new src-address-list=winbox_stage1 \
+            action=add-src-to-address-list address-list=winbox_stage2 address-list-timeout=1m comment="" disabled=no
+
+/ip/firewall/filter add chain=input protocol=tcp dst-port=1951 connection-state=new action=add-src-to-address-list \
+            address-list=winbox_stage1 address-list-timeout=1m comment="" disabled=no
+#+end_src
+
+** Disabling Access Via MAC Address
+Here we'll disable any form of login using the Mac Address rather than IP address.
+
+#+begin_src bash
+/tool/mac-server set allowed-interface-list=none
+/tool/mac-server print
+/tool/mac-server mac-winbox set allowed-interface-list=none
+/tool/mac-server mac-winbox print
+/tool/mac-server ping set enabled=no
+/tool/mac-server ping print
+/ip neighbor discovery-settings set discover-interface-list=none
+#+end_src
+
+** Disabling Services
+*** Login Services
+We only want SSH and WinBox services enabled. Here we'll disable everything except those
+
+#+begin_src bash
+/ip/service disable telnet,ftp,www,api,api-ssl
+/ip/service print
+#+end_src
+
+*** Miscellenous Services
+These services should already be disabled, but let's do it explicitly.
+
+#+begin_src bash
+# Disable Proxy Caching
+/ip/proxy set enabled=no
+
+# Disable Socks Proxy
+/ip/socks set enabled=no
+
+# Disable UPNP
+/ip/upnp set enabled=no
+/tool/bandwidth-server set enabled=no
+#+end_src
+
+*** Disabling DNS cache
+The router will cache DNS records by default. To avoid this causing any potential issues anything, we'll disable it
+
+#+begin_src bash
+/ip/dns set allow-remote-requests=no
+#+end_src
+
+* Mikrotik Setup Dynamically Changing IP With No-IP Api
+:PROPERTIES:
+:ONE: one-default-doc
+:CUSTOM_ID: /blog/mikrotik-setup-dynamic-dns-with-no-ip-api
+:CREATED: <2023-07-28 Sun 12:55>
+:END:
+
+Directions for how to configure dynamic DNS on a mikrotik. It leverages the
+No-IP REST API and the mikrotik's built-in scripting environment.
+
+** Dynamically Updating the IP
+**  Code
+Use the *System>Scripts* page and create a new script with this code. Change the variables under the *Script Settings* block. Set the name of the script to "NoIP"
+
+[[https://forum.mikrotik.com/viewtopic.php?t=120347][Source Page]]
+
+#+begin_src bash
+##############Script Settings##################
+
+:local NOIPUser "USERNAME"
+:local NOIPPass "PASSWORD"
+:local WANInter "ether1"
+:local NOIPDomain "NO-IP.DDNS.NET"
+
+###############################################
+
+# Get the current IP on the interface
+:local currentIP [/ip address get [find interface="$WANInter" disabled=no] address]
+
+# Strip the net mask off the IP address
+   :for i from=( [:len $currentIP] - 1) to=0 do={
+       :if ( [:pick $currentIP $i] = "/") do={
+           :set currentIP [:pick $currentIP 0 $i]
+       }
+   }
+
+:if ([:resolve $NOIPDomain] != $currentIP) do={
+      /tool fetch mode=http user=$NOIPUser password=$NOIPPass url="http://dynupdate.no-ip.com/nic/update\3Fhostname=$NOIPDomain&myip=$currentIP" keep-result=no
+      :log info "NO-IP Update: $NOIPDomain - $currentIP"
+}
+#+end_src
+
+** Running and scheduling the script
+Run the script a single time to update your DNS. 
+
+#+begin_src bash
+# "NoIP" is the name I set for the script
+/system/script/run NoIP
+#+end_src
+
+Schedule the script to run every few minutes.
+
+#+begin_src 
+# The name I gave my script was "NoIP"
+/system/scheduler/ add name=NoIPCheck interval=3m on-event=NoIP
+#+end_src

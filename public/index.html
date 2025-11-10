@@ -1,219 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta name="generator" content="Hugo 0.111.3">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="/css/gtd.css">
-  <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
-  
-  
-</head>
-<body>
-  
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1" /><link rel="stylesheet" type="text/css" href="/one.css" /><title>Homepage</title></head><body><div id="sidebar-left" onclick="followSidebarLink()"><div><div>Pages</div></div><ul><li><a href="/">Homepage</a></li><li><a href="/blog/inventory/">Queztaz/Tech Inventory</a></li><li><a href="/blog/emacs-with-bidirectional-google-calendar-sync/">Emacs/Emacs With BiDirectional Google Calendar Sync</a></li><li><a href="/blog/emacs-with-mu4e-and-multiple-gmail-accounts">Emacs/Setting up Mu4e and Multiple Gmail Accounts</a></li><li><a href="/blog/emacs-eww-hacks/">Emacs/EWW Hacks</a></li><li><a href="/blog/creating-offline-debian-mirror/">Linux/Creating an Offline Debian Mirror Repository</a></li><li><a href="/blog/migrate-wiki-js-to-another-server/">Linux/Migrate Wiki.js to Another Server</a></li><li><a href="/blog/adding-bitwarden-to-the-pinephone-pro/">Linux/Adding Bitwarden to the Pinephone Pro</a></li><li><a href="/blog/pbp-custom-kernel/">Pinebook Pro/Custom Kernel</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Keyboard Firmware Update</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Netbsd Installation</a></li><li><a href="/blog/pbp-setting-up-zram/">Pinebook Pro/Setting Up Zram</a></li><li><a href="/blog/pbp-troubleshooting-common-issues">Pinebook Troubleshooting/Pro Common Issues</a></li><li><a href="/blog/pbp-use-nvme-as-root">Pinebook Pro/Use NVME as Root</a></li><li><a href="/blog/pbp-write-to-spi-flash">Pinebook Pro/Write to SPI Flash</a></li><li><a href="/blog/qemu-chroot-into-different-architecture">Qemu/Chroot Into a Different Architecture</a></li><li><a href="/blog/qemu-chroot-into-img-file">Qemu/Choot Into an Img File</a></li><li><a href="/blog/qemu-mount-virtual-images">Qemu/Mount Virtual Images</a></li><li><a href="/blog/qemu-windows-xp-fix-smb-not-working">Qemu/Windows Xp Fix Smb Not Working</a></li><li><a href="/blog/qemu-windows-xp-installation">Qemu/Windows Xp Installation</a></li><li><a href="/blog/tg1672G-default-wifi-password">Misc/Finding the Default Wireless Password to TG1672G Routers</a></li><li><a href="/blog/portable-ollama-installation">Misc/Running Ollama Portably</a></li><li><a href="/blog/cloning-bios-drive-to-uefi-with-disimilar-hardware">Windows/Cloning a Bios Boot Drive to Disimilar Hardware with UEFI</a></li><li><a href="/blog/automating-chkdsk-scan-with-powershell-and-email-alerts">Windows/Automatic CHKDSK Scans Using Powershell & Email Alerts</a></li><li><a href="/blog/creating-decent-portable-terminal">Windows/Creating a Decent Portable Terminal</a></li><li><a href="/blog/template">Windows/Merging HyperV Snapshots With Powershell</a></li><li><a href="/blog/simulating-bad-blocks-on-ntfs-drive">Windows/Simulating Bad Blocks on NTFS Filesystems</a></li><li><a href="/blog/windows-server-create-and-view-storport-trace">Windows/Creating and Viewing a Storport on Windows Server</a></li><li><a href="/blog/mikrotik-creating-client-to-site-vpn">Mikrotik/Creating a Client to Site VPN With</a></li><li><a href="/blog/mikrotik-securing-router-with-firewall">Mikrotik/Securing Router With Firewall</a></li><li><a href="/blog/mikrotik-setup-dynamic-dns-with-no-ip-api">Mikrotik Setup Dynamically Changing IP With No-IP Api</a></li></ul></div><div id="sidebar-main"></div><div id="sidebar-header"><svg id="hamburger" viewBox="0 0 24 24" onclick="sidebarShow()"><path d="M21,6H3V5h18V6z M21,11H3v1h18V11z M21,17H3v1h18V17z"></path></svg><a href="/">Homepage</a></div><div id="sidebar-content"><div id="sidebar"><ul><li><a href="/">Homepage</a></li><li><a href="/blog/inventory/">Queztaz/Tech Inventory</a></li><li><a href="/blog/emacs-with-bidirectional-google-calendar-sync/">Emacs/Emacs With BiDirectional Google Calendar Sync</a></li><li><a href="/blog/emacs-with-mu4e-and-multiple-gmail-accounts">Emacs/Setting up Mu4e and Multiple Gmail Accounts</a></li><li><a href="/blog/emacs-eww-hacks/">Emacs/EWW Hacks</a></li><li><a href="/blog/creating-offline-debian-mirror/">Linux/Creating an Offline Debian Mirror Repository</a></li><li><a href="/blog/migrate-wiki-js-to-another-server/">Linux/Migrate Wiki.js to Another Server</a></li><li><a href="/blog/adding-bitwarden-to-the-pinephone-pro/">Linux/Adding Bitwarden to the Pinephone Pro</a></li><li><a href="/blog/pbp-custom-kernel/">Pinebook Pro/Custom Kernel</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Keyboard Firmware Update</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Netbsd Installation</a></li><li><a href="/blog/pbp-setting-up-zram/">Pinebook Pro/Setting Up Zram</a></li><li><a href="/blog/pbp-troubleshooting-common-issues">Pinebook Troubleshooting/Pro Common Issues</a></li><li><a href="/blog/pbp-use-nvme-as-root">Pinebook Pro/Use NVME as Root</a></li><li><a href="/blog/pbp-write-to-spi-flash">Pinebook Pro/Write to SPI Flash</a></li><li><a href="/blog/qemu-chroot-into-different-architecture">Qemu/Chroot Into a Different Architecture</a></li><li><a href="/blog/qemu-chroot-into-img-file">Qemu/Choot Into an Img File</a></li><li><a href="/blog/qemu-mount-virtual-images">Qemu/Mount Virtual Images</a></li><li><a href="/blog/qemu-windows-xp-fix-smb-not-working">Qemu/Windows Xp Fix Smb Not Working</a></li><li><a href="/blog/qemu-windows-xp-installation">Qemu/Windows Xp Installation</a></li><li><a href="/blog/tg1672G-default-wifi-password">Misc/Finding the Default Wireless Password to TG1672G Routers</a></li><li><a href="/blog/portable-ollama-installation">Misc/Running Ollama Portably</a></li><li><a href="/blog/cloning-bios-drive-to-uefi-with-disimilar-hardware">Windows/Cloning a Bios Boot Drive to Disimilar Hardware with UEFI</a></li><li><a href="/blog/automating-chkdsk-scan-with-powershell-and-email-alerts">Windows/Automatic CHKDSK Scans Using Powershell & Email Alerts</a></li><li><a href="/blog/creating-decent-portable-terminal">Windows/Creating a Decent Portable Terminal</a></li><li><a href="/blog/template">Windows/Merging HyperV Snapshots With Powershell</a></li><li><a href="/blog/simulating-bad-blocks-on-ntfs-drive">Windows/Simulating Bad Blocks on NTFS Filesystems</a></li><li><a href="/blog/windows-server-create-and-view-storport-trace">Windows/Creating and Viewing a Storport on Windows Server</a></li><li><a href="/blog/mikrotik-creating-client-to-site-vpn">Mikrotik/Creating a Client to Site VPN With</a></li><li><a href="/blog/mikrotik-securing-router-with-firewall">Mikrotik/Securing Router With Firewall</a></li><li><a href="/blog/mikrotik-setup-dynamic-dns-with-no-ip-api">Mikrotik Setup Dynamically Changing IP With No-IP Api</a></li></ul></div><article><div class="title-empty"></div><div><p>Hi all (^_^)/
+</p>
 
-<main>
-  <title>Queztaz/</title>
-  <style>
-    .toggle-content {
-        display: visible;  
-        margin-top: 1em;
-	
-    }
-    .toggle-button {
-        cursor: pointer;
-        user-select: none;
-	
-    }
-    img {
-	width:30%;
-    }
-  </style>
+<p>I&apos;m Peter, 23, and I enjoy computers &amp; philosophy.
+</p>
 
-  <p style="text-align: center;">
-    "We are not thinking machines. We are feeling machines that think"
-  </p>
-  <img src="/images/homepage.png" alt="homepage.png">
-  <center><p>RÉSUMÉ</a></center>
+<pre><code class="one-hl one-hl-block">&#9484;&#9472;<span class="one-hl-rainbow-delimiters-depth-1">[</span>queztaz@queztaz-space<span class="one-hl-rainbow-delimiters-depth-1">]</span>&#9472;&#9472;<span class="one-hl-rainbow-delimiters-depth-1">[</span>20:13<span class="one-hl-rainbow-delimiters-depth-1">]</span>&#9472;&#9472;<span class="one-hl-rainbow-delimiters-depth-1">[</span>/home/queztaz/<span class="one-hl-rainbow-delimiters-depth-1">]</span>
+&#9492;&#9472;&gt; $ cowsay BLEH, PHILOSOPHY
+ __________________
+&lt; BLEH, PHILOSOPHY &gt;
+ ------------------
+        <span class="one-hl-string">\ </span>  ^__^
+         <span class="one-hl-string">\ </span> <span class="one-hl-rainbow-delimiters-depth-1">(</span>oo<span class="one-hl-rainbow-delimiters-depth-1">)</span><span class="one-hl-string">\_</span>______
+            <span class="one-hl-rainbow-delimiters-depth-1">(</span>__<span class="one-hl-rainbow-delimiters-depth-1">)</span><span class="one-hl-string">\ </span>      <span class="one-hl-rainbow-delimiters-unmatched">)</span><span class="one-hl-string">\/</span><span class="one-hl-sh-escaped-newline">\</span>
+                ||----w |
+                ||     ||</code></pre>
 
-  
-  <h1 class="toggle-button" onclick="toggleDropdown('dropdown-peter', this)">📂 Peter ▼</h1>
-  <div id="dropdown-peter" class="toggle-content" style="display: block;">
-    <ul>
-      
-      <li>
-	<span style="font-size: small;">2025-05-18</span>
-	<a href="/peter/vita-gentile/">Operazione: Vita Gentile</a>
-      </li>
-      
-    </ul>
-  </div>
-<br>
-  
-  <h1 class="toggle-button" onclick="toggleDropdown('dropdown-queztaz', this)">📂 Queztaz ▼</h1>
-  <div id="dropdown-queztaz" class="toggle-content" style="display: block;">
-    <ul>
-      
-      <li>
-	<span style="font-size: small;">2025-06-06</span>
-	<a href="/queztaz/creating-a-decent-portable-terminal-windows/">Creating a Decent Portable Terminal Windows</a>
-      </li>
-      
-      <li>
-	<span style="font-size: small;">2025-05-15</span>
-	<a href="/queztaz/uncategorized/running-ollama-portably/">Running Ollama Portably</a>
-      </li>
-      
-      <li>
-	<span style="font-size: small;">2025-01-17</span>
-	<a href="/queztaz/emacs/emacs-with-bidirectional-google-calendar-sync/">Emacs With Directional Google Calendar Sync</a>
-      </li>
-      
-      <li>
-	<span style="font-size: small;">2025-01-12</span>
-	<a href="/queztaz/linux/creating-an-offline-debian-mirror-repository/">Creating an Offline Debian Mirror Repository</a>
-      </li>
-      
-      <li>
-	<span style="font-size: small;">2025-01-11</span>
-	<a href="/queztaz/emacs/emacs-with-mu4e-and-multiple-gmail-accounts/">Emacs with Mu4e and Multiple Gmail Accounts</a>
-      </li>
-      
-      <li>
-	<span style="font-size: small;">2024-09-18</span>
-	<a href="/queztaz/linux/migrate-wiki.js-to-another-server/">Migrate Wiki.js to Another Server</a>
-      </li>
-      
-      <li>
-	<span style="font-size: small;">2024-08-30</span>
-	<a href="/queztaz/linux/corebooting-thinkpad-x220-with-ch341a-programmer/">Corebooting Thinkpad X220 With CH341A Programmer</a>
-      </li>
-      
-      <li>
-	<span style="font-size: small;">2024-08-22</span>
-	<a href="/queztaz/windows/automating-chkdsk-scans-using-powershell-with-email-alerts-for-rmm/">Automatic CHKDSK Scans Using Powershell &amp; Email Alerts</a>
-      </li>
-      
-      <li>
-	<span style="font-size: small;">2024-05-14</span>
-	<a href="/queztaz/linux/adding-bitwarden-to-the-pinephone-pro/">Adding Bitwarden to the Pinephone Pro</a>
-      </li>
-      
-      <li>
-	<span style="font-size: small;">2024-05-14</span>
-	<a href="/queztaz/emacs/emacs-eww-hacks/">Emacs EWW Hacks</a>
-      </li>
-      
-      <li>
-	<span style="font-size: small;">2023-12-16</span>
-	<a href="/queztaz/uncategorized/getting-the-default-wireless-password-to-tg1672g-routers/">Finding the Default Wireless Password to TG1672G Routers</a>
-      </li>
-      
-      <li>
-	<span style="font-size: small;">2023-12-03</span>
-	<a href="/queztaz/windows/simulating-bad-blocks-on-ntfs-filesystems/">Simulating Bad Blocks NTFS Filesystems</a>
-      </li>
-      
-      <li>
-	<span style="font-size: small;">2023-09-13</span>
-	<a href="/queztaz/windows/cloning-a-bios-boot-drive-to-disimilar-hardware-with-uefi/">Cloning a Bios Boot Drive to Disimilar Hardware with UEFI</a>
-      </li>
-      
-      <li>
-	<span style="font-size: small;">2023-08-25</span>
-	<a href="/queztaz/windows/merging-hyperv-snapshots-with-powershell/">Merging HyperV Snapshots With Powershell</a>
-      </li>
-      
-      <li>
-	<span style="font-size: small;">2023-07-28</span>
-	<a href="/queztaz/mikrotik/mikrotik-creating-a-client-to-site-vpn-with-wireguard/">Mikrotik Creating a Client to Site VPN With Wireguard</a>
-      </li>
-      
-      <li>
-	<span style="font-size: small;">2023-07-28</span>
-	<a href="/queztaz/mikrotik/mikrotik-securing-router-with-firewall/">Mikrotik Securing Router With Firewall</a>
-      </li>
-      
-      <li>
-	<span style="font-size: small;">2023-07-28</span>
-	<a href="/queztaz/mikrotik/mikrotik-setup-dynamically-changing-ip-with-no-ip-api/">Mikrotik Setup Dynamically Changing IP With No-IP Api</a>
-      </li>
-      
-      <li>
-	<span style="font-size: small;">2023-07-22</span>
-	<a href="/queztaz/windows/windows-server-creating-and-viewing-a-storport-trace/">Windows Server Creating and Viewing a Storport Trace</a>
-      </li>
-      
-      <li>
-	<span style="font-size: small;">2023-07-22</span>
-	<a href="/queztaz/qemu/qemu-windows-xp-fix-smb-not-working/">Qemu Windows Xp Fix Smb Not Working</a>
-      </li>
-      
-      <li>
-	<span style="font-size: small;">2023-07-22</span>
-	<a href="/queztaz/qemu/qemu-windows-xp-installation/">Qemu Windows Xp Installation</a>
-      </li>
-      
-      <li>
-	<span style="font-size: small;">2023-07-22</span>
-	<a href="/queztaz/qemu/qemu-mount-virtual-images/">Qemu Mount Virtual Images</a>
-      </li>
-      
-      <li>
-	<span style="font-size: small;">2023-07-22</span>
-	<a href="/queztaz/qemu/qemu-chroot-into-a-different-architecture/">Qemu Chroot Into a Different Architecture</a>
-      </li>
-      
-      <li>
-	<span style="font-size: small;">2023-07-22</span>
-	<a href="/queztaz/pinebook-pro/pinebook-pro-troubleshooting-common-issues/">Pinebook Pro Troubleshooting Common Issues</a>
-      </li>
-      
-      <li>
-	<span style="font-size: small;">2023-07-22</span>
-	<a href="/queztaz/pinebook-pro/pinebook-pro-setting-up-zram/">Pinebook Pro Setting Up Zram</a>
-      </li>
-      
-      <li>
-	<span style="font-size: small;">2023-07-22</span>
-	<a href="/queztaz/pinebook-pro/pinebook-pro-write-to-spi-flash/">Pinebook Pro Write to Spit Flash</a>
-      </li>
-      
-      <li>
-	<span style="font-size: small;">2023-07-22</span>
-	<a href="/queztaz/pinebook-pro/pinebook-pro-use-nvme-as-root/">Pinebook Pro Use Nvme as Root</a>
-      </li>
-      
-      <li>
-	<span style="font-size: small;">2023-07-22</span>
-	<a href="/queztaz/pinebook-pro/pinebook-pro-netbsd-installation/">Pinebook Pro Netbsd Installation</a>
-      </li>
-      
-      <li>
-	<span style="font-size: small;">2023-07-22</span>
-	<a href="/queztaz/pinebook-pro/pinebook-pro-keyboard-firmware-update/">Pinebook Pro Keyboard Firmware Update</a>
-      </li>
-      
-      <li>
-	<span style="font-size: small;">2023-07-22</span>
-	<a href="/queztaz/pinebook-pro/pinebook-pro-custom-kernel/">Pinebook Pro Custom Kernel</a>
-      </li>
-      
-    </ul>
-  </div>
+<p>This is my blog! It&apos;s statically built using <a href="https://github.com/tonyaldon/one.el?tab=readme-ov-file">one.el</a>. All of the webpages you see
+are stored in one emacs org document! WOW!
+</p>
 
-  <script>
-    function toggleDropdown(id, header) {
-	const content = document.getElementById(id);
-	const isVisible = getComputedStyle(content).display === "block";
-	content.style.display = isVisible ? "none" : "block";
-
-	
-	const name = header.textContent.match(/📂 (.*?)(?: ▲| ▼)/)[1];
-	header.innerHTML = `📂 ${name} ${isVisible ? '▼' : '▲'}`;
-    }
-  </script>
-</main>
-
-</body>
-</html>
+<p>I post about computers and anything I&apos;m working on. There&apos;s currently no set
+pattern to it. Whatever I intuitively comes to mind I post.
+</p>
+</div>
+<div class="nav"><a href="/blog/simulating-bad-blocks-on-ntfs-drive">RANDOM</a><a href="/blog/inventory/">NEXT</a></div></article></div></body><script>
+function sidebarShow() {
+  if (window.innerWidth < 481)
+    document.getElementById('sidebar-left').style.width = '75vw';
+  else {
+    document.getElementById('sidebar-left').style.width = 'min(300px, 34vw)';
+  }
+  document.getElementById('sidebar-main').setAttribute('onclick', 'sidebarHide()');
+  document.getElementById('sidebar-main').style.display = 'block';
+}
+function sidebarHide() {
+  document.getElementById('sidebar-left').style.width = '0';
+  document.getElementById('sidebar-main').style.display = 'none';
+}
+</script></html>
