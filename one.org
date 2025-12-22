@@ -59,6 +59,185 @@ Remote into a VPS to run emacs and tmux.
 ** Freedom Mode
 Thinkpad with Tail's linux.
 
+* Emacs/EWW Hacks
+:PROPERTIES:
+:ONE:      one-default-doc
+:CUSTOM_ID: /blog/emacs-eww-hacks/
+:CREATED:  <2024-05-14 Tue 08:32>
+:END:
+Collection of emacs snippets to enhance the eww experience.
+
+** Quick Search
+
+Quick search prompts the user for a search query. Type anything into the field
+and press enter to search using duckduckgo.com. If the first word is a keyword,
+such as "wiki", a different search engine will be used.
+
+#+begin_src emacs-lisp
+(defun my-is-url (string)
+  "Checks if STRING is a valid URL."
+  (let ((url-parts (url-generic-parse-url string)))
+    (and url-parts (url-type url-parts))))
+
+(defvar my-eww-search-engines
+  '(("w"      . "https://en.wikipedia.org/w/index.php?search=%s")
+    ("wiki"   . "https://en.wikipedia.org/w/index.php?search=%s")
+    ("wikipedia" . "https://en.wikipedia.org/w/index.php?search=%s")
+    ("yt"     . "https://yewtu.be/search?q=%s")
+    ("yewt"   . "https://yewtu.be/search?q=%s")
+    ("yewtu"  . "https://yewtu.be/search?q=%s")
+    ("wu"     . "https://www.catalog.update.microsoft.com/Search.aspx?q=%s")
+    ("wuc"    . "https://www.catalog.update.microsoft.com/Search.aspx?q=%s")
+    ("winup"  . "https://www.catalog.update.microsoft.com/Search.aspx?q=%s")
+    ("winupdate" . "https://www.catalog.update.microsoft.com/Search.aspx?q=%s")
+    ("windowsupdate" . "https://www.catalog.update.microsoft.com/Search.aspx?q=%s")
+    ("ns"     . "https://www.nslookup.io/domains/%s/dns-records/")
+    ("nslookup" . "https://www.nslookup.io/domains/%s/dns-records/")
+    ("who"    . "https://www.whois.com/whois/%s")
+    ("whois"  . "https://www.whois.com/whois/%s"))
+  "Alist mapping search keywords to URL templates.")
+
+(defun my-eww-search (query)
+  "Perform a keyword-based search using EWW or Gemini AI when keyword is 'ai'."
+  (interactive "sSearch Query: ")
+  (let* ((parts (split-string query " "))
+         (keyword (downcase (car parts)))
+         (engine-url (cdr (assoc keyword my-eww-search-engines))))
+    (cond
+     ;; Case 1: Known keyword-based search
+     (engine-url
+      (let ((search-terms (mapconcat #'identity (cdr parts) " "))
+            (url (format engine-url (url-hexify-string (mapconcat #'identity (cdr parts) " ")))))
+        (switch-to-buffer (generate-new-buffer "*eww-search*"))
+        (eww-mode)
+        (eww url)
+        (evil-normal-state)))
+
+     ;; Case 2: No keyword -> use full query in DuckDuckGo
+     (t
+      (let ((url (format "https://lite.duckduckgo.com/lite/?q=%s"
+                         (url-hexify-string query))))
+        (switch-to-buffer (generate-new-buffer "*eww-search*"))
+        (eww-mode)
+        (eww url)
+        (evil-normal-state))))))
+#+end_src
+
+** Redirect to the archive.org
+Use this to redirect some pages to another site. Redirection requires Emacs be built with libxml2 support.
+
+#+begin_src emacs-lisp
+  (defun eww-reddit-redirect(url) "Redirect reddit.com to old.reddit.com
+    automatically."  (replace-regexp-in-string "https://www.reddit.com"
+    "https://web.archive.org/web/2/https://old.reddit.com" url))
+
+  (defun eww-archive-org-redirect(url) "Redirects stackoverflow to use the Archive.org"
+    (replace-regexp-in-string "https://stackoverflow.com"
+    "https://web.archive.org/web/2/https://stackoverflow.com" url))
+
+  (setq eww-url-transformers '(eww-remove-tracking eww-reddit-redirect eww-archive-org-redirect))
+#+end_src
+
+** Open page with Archive.org
+Run ~M-x~ ~eww-open-latest-archived-page~ to open the current page using the
+archive.org. This can bypass JavaScript requirements and firewalls
+
+#+begin_src emacs-lisp
+(defun eww-open-latest-archived-page ()
+  "Open the latest archived version of the current EWW page using the Wayback Machine."
+  (interactive)
+  (if (eq major-mode 'eww-mode)
+      (let ((url (plist-get eww-data :url)))
+        (if url
+            (eww-browse-url (concat "https://web.archive.org/web/2/" url))
+          (message "No URL found in EWW buffer.")))
+    (message "Not in an EWW buffer.")))
+#+end_src
+
+** Quasi Default Web Browser
+With this code, Emacs will prompt the user to open a link with EWW before
+defaulting a graphical web browser.
+
+#+begin_src emacs-lisp
+  (defalias 'gk-urls-external-browser 'browse-url-xdg-open)
+
+  (defun gk-browse-url (&rest args)
+    "Prompt for whether or not to browse with EWW, if no browse
+  with external browser."
+    (apply
+     (if (y-or-n-p "Browse with EWW? ")
+	 'eww-browse-url
+       #'gk-urls-external-browser)
+     args))
+
+  (setq browse-url-browser-function #'gk-browse-url) 
+#+end_src
+
+** Open EWW at startup
+
+#+begin_src emacs-lisp
+(defun my/open-eww-in-background()
+  (switch-to-buffer (generate-new-buffer "eww"))
+  (eww-mode)
+  (eww "https://lite.duckduckgo.com/lite/")
+  (switch-to-buffer "*scratch*")
+  )
+
+(my/open-eww-in-background)
+#+end_src
+
+** Auto Rename Buffers
+Automatically sets the buffername to be the name of the current website.
+
+#+begin_src emacs-lisp
+(setq eww-auto-rename-buffer t)
+#+end_src
+
+** Simple Styling
+#+begin_src emacs-lisp
+(setq browse-url-browser-function 'eww-browse-url) ; Use eww as the default browser
+(setq shr-use-fonts  nil)  ; No special fonts
+(setq shr-use-colors nil) ; No colours
+(setq shr-indentation 4) ; Left-side margin
+(setq shr-width 70) ; Fold text to 70 columns
+(setq eww-search-prefix "https://lite.duckduckgo.com/lite/?q=") ; Use another engine for searching
+#+end_src
+
+** Force EWW to open new buffers by default
+Typically EWW only runs as a single buffer, similar to Eshell. This function will
+make a new EWW buffer by default instead of replacing the previous.
+
+#+begin_src emacs-lisp
+(defun modi/force-new-eww-buffer (orig-fun &rest args)
+      "When prefix argument is used, a new eww buffer will be created,
+      regardless of whether the current buffer is in `eww-mode'."
+      (if current-prefix-arg
+	    (with-temp-buffer
+	          (apply orig-fun args))
+	(apply orig-fun args)))  
+    (advice-add 'eww :around #'modi/force-new-eww-buffer)
+#+end_src
+
+** Search highlighted region
+Highlighting a url will open it using EWW. If you highlight text, it'll google
+the string instead.
+
+#+begin_src emacs-lisp
+  (defun my/eww-search-selected (start end)
+    "Searches the selected text in EWW. If it's a URL, opens it directly. If not, searches Google."
+    (interactive "r")
+    (when (use-region-p)
+      (let ((region (buffer-substring-no-properties start end)))
+	(if (my/is-url region)
+	    (eww-browse-url region)
+	  (split-window-right)
+	  (balance-windows)
+	  (other-window 1)
+	  (let ((query (replace-regexp-in-string "\n" " " region)))
+	    (eww-browse-url (concat "https://www.google.com/search?q=" (url-hexify-string query))))))))
+(define-key map (kbd "C-c s") 'my/eww-search-selected)
+#+end_src
+
 * Emacs/Emacs With BiDirectional Google Calendar Sync
 :PROPERTIES:
 :ONE: one-default-doc
@@ -349,8 +528,6 @@ troubleshooting.
 Documented steps I take to setup Mu4e with two Gmail accounts. This page will
 contain the directions for using app password authentication. It will be updated
 when XOAUTH2.0 is required.
-
-** Installation
 
 ** Gmail
 I'm using app passwords while they still last. Eventually this section will
@@ -731,138 +908,6 @@ Evaluate the code blocks above and launch Mu4e
 #+begin_src 
 M-x mu4e
 #+end_src
-* Emacs/EWW Hacks
-:PROPERTIES:
-:ONE:      one-default-doc
-:CUSTOM_ID: /blog/emacs-eww-hacks/
-:CREATED:  <2024-05-14 Tue 08:32>
-:END:
-Collection of emacs snippets to enhance the eww experience.
-
-** Hack list
-** Simple Styling
-#+begin_src emacs-lisp
-(setq browse-url-browser-function 'eww-browse-url) ; Use eww as the default browser
-(setq shr-use-fonts  nil)  ; No special fonts
-(setq shr-use-colors nil) ; No colours
-(setq shr-indentation 4) ; Left-side margin
-(setq shr-width 70) ; Fold text to 70 columns
-(setq eww-search-prefix "https://google.com/search?q=") ; Use another engine for searching
-#+end_src
-
-** Rename EWW Buffers to Website Names
-
-#+begin_src emacs-lisp
-(setq eww-auto-rename-buffer t)
-#+end_src
-
-
-** Force EWW to open new buffers by default
-Normally EWW only runs as a single buffer, similar to Eshell. This function will
-make a new EWW buffer by default instead of replacing the previous.
-
-#+begin_src emacs-lisp
-  (use-package eww
-    :ensure t
-    :config
-    (defun modi/force-new-eww-buffer (orig-fun &rest args)
-      "When prefix argument is used, a new eww buffer will be created,
-      regardless of whether the current buffer is in `eww-mode'."
-      (if current-prefix-arg
-	  (with-temp-buffer
-	    (apply orig-fun args))
-	(apply orig-fun args)))  
-    (advice-add 'eww :around #'modi/force-new-eww-buffer)
-    )
-#+end_src
-
-
-** Faster Searches
-This function will prompt you for a string and allow you to search for it using your favorite
-search engine. If the string is a url it'll open it up.
-
-#+begin_src emacs-lisp
-  (defun my/is-url (string)
-    "Checks if STRING is a valid URL."
-    (let ((url-parts (url-generic-parse-url string)))
-      (and url-parts (url-type url-parts))))
-
-  (defun my/eww-search (x)
-    "Searches stuff in eww"
-    (interactive "sSearch Query: ")
-    (switch-to-buffer (generate-new-buffer "eww"))
-    (eww-mode)
-    (eww (concat "https://lite.duckduckgo.com/lite/?q=" (replace-regexp-in-string " " "+" x)))
-    )
-
-  ; Binding it using evil mode
-  (evil-define-key 'normal eww-mode-map "ss" 'my/eww-search)
-#+end_src
-
-** Search highlighted region
-Highlighting a url will open it using EWW. If you highlight text, it'll google
-the string instead.
-
-#+begin_src emacs-lisp
-  (defun my/eww-search-selected (start end)
-    "Searches the selected text in EWW. If it's a URL, opens it directly. If not, searches Google."
-    (interactive "r")
-    (when (use-region-p)
-      (let ((region (buffer-substring-no-properties start end)))
-	(if (my/is-url region)
-	    (eww-browse-url region)
-	  (split-window-right)
-	  (balance-windows)
-	  (other-window 1)
-	  (let ((query (replace-regexp-in-string "\n" " " region)))
-	    (eww-browse-url (concat "https://www.google.com/search?q=" (url-hexify-string query))))))))
-(define-key map (kbd "C-c s") 'my/eww-search-selected)
-#+end_src
-
-** Redirect Reddit to Reddit.old
-Self explanatory. I had to compile emacs 29.2 with libxml2 support to get it to
-work. The URL transformers function wasn't available with my package managers
-emacs version.
-
-#+begin_src emacs-lisp
-  (defun eww-reddit-redirect(url)
-    "Redirect reddit.com to old.reddit.com automatically."
-    (replace-regexp-in-string "https://www.reddit.com" "https://old.reddit.com" url))
-
-  (setq eww-url-transformers '(eww-remove-tracking eww-reddit-redirect))
-#+end_src
-
-** Quasi Default Web Browser
-Have EWW act as a default web browser [[https://old.reddit.com/r/emacs/comments/6ha4tl/a_little_trick_with_eww/][source]]
-
-#+begin_src 
-  (defalias 'gk-urls-external-browser 'browse-url-xdg-open)
-
-  (defun gk-browse-url (&rest args)
-    "Prompt for whether or not to browse with EWW, if no browse
-  with external browser."
-    (apply
-     (if (y-or-n-p "Browse with EWW? ")
-	 'eww-browse-url
-       #'gk-urls-external-browser)
-     args))
-
-  (setq browse-url-browser-function #'gk-browse-url) 
-#+end_src
-
-** Open EWW at startup
-
-#+begin_src emacs-lisp
-(defun my/open-eww-in-background()
-  (switch-to-buffer (generate-new-buffer "eww"))
-  (eww-mode)
-  (eww "https://lite.duckduckgo.com/lite/")
-  (switch-to-buffer "*scratch*")
-  )
-
-(my/open-eww-in-background)
-#+end_src
-
 * Linux/Creating an Offline Debian Mirror Repository
 :PROPERTIES:
 :ONE:      one-default-doc
@@ -2368,6 +2413,60 @@ to prevent updates.
 In %localappdata%\Programs\Ollama, run the uninstaller to remove it from the
 host system. The only thing you'll be left with is the portable installation
 that was copied earlier.
+* Misc/Resetting Unifi Controller Password with MongoDB CLI
+:PROPERTIES:
+:ONE: one-default-doc
+:CUSTOM_ID: /blog/resetting-unifi-controller-password-with-mongodb-cli
+:CREATED: <2023-07-22 Sun 16:06>
+:END:
+Directions for resetting the admin users password on a Unifi Controller. I did
+this for a Unifi Network Controller running off of a Windows machine.
+
+** Resetting the password
+
+First download the MongoDB CLI tool using either of these two links. I have
+tested this on older Unifi Controller versions all the way up to version 9.5 
+
+- https://archive.org/download/mongodb-win32-x86_64-3.2.0/mongodb-win32-x86_64-3.2.0.zip
+- https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-3.2.0.zip
+
+Extract the zip file and open it with CMD.exe (*not powershell*)
+
+Run the following command to print out the admin users username and encrypted password
+
+#+begin_src text
+mongo.exe --port 27117 ace --eval "db.admin.find().forEach(printjson);"
+#+end_src
+
+The output should resemble this:
+
+#+begin_src text 
+CMD> mongo.exe --port 27117 ace --eval "db.admin.find().forEach(printjson);"
+[...]
+        },
+        "x_shadow" : "$6$9Ter1EZ9$lSt6/tkoPguHqsDK0mXmUsZ1WE2qCM4m9AQ.x9/eVNJxws.hAxt2Pe8oA9TFB7LPBgzaHBcAfKFoLpRQlpBiX1",
+        "name" : "admin",
+        "time_created" : NumberLong(1764786455),
+        "email" : "null@null.null",
+        "last_login_timestamp" : NumberLong(1764789489),
+        "last_login_ip" : "127.0.0.1"
+}
+[...]
+#+end_src
+
+The Unifi controller password is stored encrypted using the ~SHA512 Crypt(3) $6$~
+algorithm. Use the command below to change the password for "admin" to be
+"password". To set a custom password, use a hash calculator to create a new
+password using ~SHA512 Crypt(3) $6$~. Modify the command below and replace the
+existing hash (~$6$[...]iX1~) with the newly generated hash
+
+Hash Calculator: https://tomi.cc/hash/
+
+#+begin_src text
+mongo.exe --port 27117 ace --eval ^"db.admin.update^( { \^"name\^" : \^"admin\^" }, { $set : { \^"x_shadow\^" : \^"$6$9Ter1EZ9$lSt6/tkoPguHqsDK0mXmUsZ1WE2qCM4m9AQ.x9/eVNJxws.hAxt2Pe8oA9TFB7LPBgzaHBcAfKFoLpRQlpBiX1\^" } } ^)^"
+#+end_src
+
+
 * Windows/Cloning a Bios Boot Drive to Disimilar Hardware with UEFI 
 :PROPERTIES:
 :ONE: one-default-doc
@@ -2935,7 +3034,6 @@ Domain Controller D:\VMs\Domain Controller_1023082130.avhdx
 Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V-Management-PowerShell
 #+end_src
 
-
 ** Merge the AVHDX
 *Make sure your VM is turned off*. The Merge-VHD operation requires
 the avhdx file be offline.
@@ -2960,6 +3058,7 @@ of your VM to the snapshot you merged into
 #+begin_src powershell
 Set-VMHardDiskDrive -VMName "Domain Controller" -Path "D:\VMs\Domain Controller.vhdx" -ControllerType SCSI
 #+end_src
+
 * Windows/Simulating Bad Blocks on NTFS Filesystems
 :PROPERTIES:
 :ONE: one-default-doc
@@ -3099,7 +3198,7 @@ Would you like to force a dismount on this volume? (Y/N)
 :CREATED: <2023-07-22 Sun 16:24>
 :END:
 Trace
-Site under construction. This page has to be re-read and remembered. I believe
+Site under construction. This page I have to re-read and remember. I believe
 this is to use a excel template to parse a storport trace. It will calculate the
 latency of SAS drives though I think the output was weirdly documented along
 with the template.
@@ -3521,6 +3620,97 @@ The filenames of the PowerPivot templates are sensitive too.
 # Remember to keep the xlsx and raw-xperf.csv files in the the same folder
 Convert-ETWTraceToReadableFileCSV -WorkFolderPath C:\PerfLogs\
 #+end_src
+* Windows/Windows 11 PowerShell Upgrade Script
+:PROPERTIES:
+:ONE: one-default-doc
+:CUSTOM_ID: /blog/windows-11-powershell-upgrade-script
+:CREATED: <2025-12-22 Mon 07:37>
+:END:
+This is a script I wrote to upgrade Windows 10 computers to Windows 11 by
+downloading an ISO file. It deploys some fixes and checks to increase the
+success rate of computers upgrading when deployed VIA RMM
+
+- Install 7ZIP and copy ~7z.exe~ and ~7x.dll~ from ~C:\Program Files\7-Zip~ into the
+  same folder as the script
+- Update the URL to the ISO file using the massgrave.dev link in the script comments
+
+** Script Source
+
+#+begin_src powershell
+# Source for direct links: https://massgrave.dev/windows_11_links
+# Use that page to replace this one if it breaks
+$ISOURL="https://software-static.download.prss.microsoft.com/dbazure/888969d5-f34g-4e03-ac9d-1f9786c66749/26200.6584.250915-1905.25h2_ge_release_svc_refresh_CLIENT_CONSUMER_x64FRE_en-us.iso"
+
+$ProgressPreference="SilentlyContinue"
+# https://social.technet.microsoft.com/Forums/windows/en-US/51104081-4ed7-4fdd-8b12-5d1f5be532ae/windows-10-feature-update-via-cmd-powershell-or-gpo
+# Exit if not running Windows 10
+$WINVER = (Get-CimInstance -ClassName Win32_OperatingSystem).Caption
+if ( $WINVER -notlike "*Windows 10*"){
+  Write-Host "This script only works with Windows 10. Current OSVersion: $WINVER"
+  Exit 1
+}
+
+# Exit if TPM2.0 is not present
+$tpm=(Get-WmiObject -Namespace "Root\CIMV2\Security\MicrosoftTpm" -Class Win32_Tpm | select specversion | Select-String "2.0")
+
+if (-not $tpm){
+   "TPM 2.0 is not available. Please attempt to upgrade manually. Exiting script to prevent hangs"
+   Exit 1
+}
+
+# These folders can cause Windows Updates to fail
+Stop-Service -Name wuauserv
+Remove-Item 'C:\$Windows.~WS' -Recurse -Force -ErrorAction SilentlyContinue
+Remove-Item 'C:\$Windows.~BT' -Recurse -Force -ErrorAction SilentlyContinue
+Remove-Item 'C:\$GetCurrent' -Recurse -Force -ErrorAction SilentlyContinue
+Start-Service -Name wuauserv
+
+# Restarting the Windows installer Service
+Stop-Service -Name msiserver
+Start-Service -Name msiserver
+
+# Removing Registry keys that specifically block Windows 11 upgrades
+# These keys would have been manually added by a technician
+reg DELETE HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate /v "ProductVersion"/f
+reg DELETE HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate /v "TargetReleaseVersion" /f
+reg DELETE HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate /v "TargetReleaseVersionInfo" /f
+reg DELETE HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate /v "DeferFeatureUpdates" /f
+reg DELETE HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate /v "DeferFeatureUpdatesPeriodInDay" /f
+
+# Clear local group policy
+if ($env:ClearLocalGP -eq $true){
+  Remove-Item "$env:WinDir\System32\GroupPolicyUsers" -Recurse -Force -ErrorAction SilentlyContinue
+  Remove-Item "$env:WinDir\System32\GroupPolicy" -Recurse -Force -ErrorAction SilentlyContinue
+}
+
+# Uninstalls the Windows 10 Update Assistant.
+Stop-Process -Name "Windows10UpgraderApp" -Force
+Start-Process -FilePath "C:\Program Files (x86)\WindowsInstallationAssistant\Windows10UpgraderApp.exe" -ArgumentList "/forceuninstall" -wait
+$dir="C:\Windows\Temp\Windows11UpgradeFiles"
+
+# Downloading the ISO file
+Write-Host "Starting upgrade using ISO File"
+if (Test-Path -Path "$dir\ExtractedISO") {
+  Remove-Item -Recurse -Path "$dir\ExtractedISO" -Force
+}
+mkdir "$dir"
+mkdir "$dir\ExtractedISO"
+Write-Host "Downloading ISO from $ISOURL"
+Invoke-WebRequest -URI "$ISOURL" -OutFile "$dir\Windows11.iso"
+  
+
+Write-Host "Extracting ISO Setup Files"
+./7z.exe x "$dir\windows11.iso" -o"$dir\ExtractedISO\"
+rm "$dir\Windows11.iso"
+
+Write-Host "Running DISM"
+dism /online /cleanup-image /restorehealth
+Write-Host "Running SFC"
+sfc /scannow
+
+Start-Process -FilePath "$dir\ExtractedISO\setup.exe" -ArgumentList '/Auto Upgrade /DynamicUpdate Disable /Telemetry disable /compat IgnoreWarning /ShowOOBE none /EULA accept' -Wait
+#+end_src
+
 * Mikrotik/Creating a Client to Site VPN With 
 :PROPERTIES:
 :ONE: one-default-doc
