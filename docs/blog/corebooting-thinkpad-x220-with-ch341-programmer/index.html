@@ -1,0 +1,116 @@
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1" /><link rel="stylesheet" type="text/css" href="/one.css" /><title>Linux/Corebooting Thinkpad X220 With CH341A Programmer</title></head><body><div id="sidebar-left" onclick="followSidebarLink()"><div><div>Pages</div></div><ul><li><a href="/">Homepage</a></li><li><a href="/blog/inventory/">Queztaz/Tech Inventory</a></li><li><a href="/blog/emacs-eww-hacks/">Emacs/EWW Hacks</a></li><li><a href="/blog/emacs-with-bidirectional-google-calendar-sync/">Emacs/Emacs With BiDirectional Google Calendar Sync</a></li><li><a href="/blog/emacs-with-mu4e-and-multiple-gmail-accounts">Emacs/Setting up Mu4e and Multiple Gmail Accounts</a></li><li><a href="/blog/creating-offline-debian-mirror/">Linux/Creating an Offline Debian Mirror Repository</a></li><li><a href="/blog/migrate-wiki-js-to-another-server/">Linux/Migrate Wiki.js to Another Server</a></li><li><a href="/blog/adding-bitwarden-to-the-pinephone-pro/">Linux/Adding Bitwarden to the Pinephone Pro</a></li><li><a href="/blog/corebooting-thinkpad-x220-with-ch341-programmer/">Linux/Corebooting Thinkpad X220 With CH341A Programmer</a></li><li><a href="/blog/pbp-custom-kernel/">Pinebook Pro/Custom Kernel</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Keyboard Firmware Update</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Netbsd Installation</a></li><li><a href="/blog/pbp-setting-up-zram/">Pinebook Pro/Setting Up Zram</a></li><li><a href="/blog/pbp-troubleshooting-common-issues">Pinebook Troubleshooting/Pro Common Issues</a></li><li><a href="/blog/pbp-use-nvme-as-root">Pinebook Pro/Use NVME as Root</a></li><li><a href="/blog/pbp-write-to-spi-flash">Pinebook Pro/Write to SPI Flash</a></li><li><a href="/blog/qemu-chroot-into-different-architecture">Qemu/Chroot Into a Different Architecture</a></li><li><a href="/blog/qemu-chroot-into-img-file">Qemu/Choot Into an Img File</a></li><li><a href="/blog/qemu-mount-virtual-images">Qemu/Mount Virtual Images</a></li><li><a href="/blog/qemu-windows-xp-fix-smb-not-working">Qemu/Windows Xp Fix Smb Not Working</a></li><li><a href="/blog/qemu-windows-xp-installation">Qemu/Windows Xp Installation</a></li><li><a href="/blog/tg1672G-default-wifi-password">Misc/Finding the Default Wireless Password to TG1672G Routers</a></li><li><a href="/blog/portable-ollama-installation">Misc/Running Ollama Portably</a></li><li><a href="/blog/resetting-unifi-controller-password-with-mongodb-cli">Misc/Resetting Unifi Controller Password with MongoDB CLI</a></li><li><a href="/blog/turning-a-firestick-into-a-portable-pc">Misc/Turning an Amazon FireStick into a Portable Computer</a></li><li><a href="/blog/cloning-bios-drive-to-uefi-with-disimilar-hardware">Windows/Cloning a Bios Boot Drive to Disimilar Hardware with UEFI</a></li><li><a href="/blog/automating-chkdsk-scan-with-powershell-and-email-alerts">Windows/Automatic CHKDSK Scans Using Powershell & Email Alerts</a></li><li><a href="/blog/creating-decent-portable-terminal">Windows/Creating a Decent Portable Terminal</a></li><li><a href="/blog/template">Windows/Merging HyperV Snapshots With Powershell</a></li><li><a href="/blog/simulating-bad-blocks-on-ntfs-drive">Windows/Simulating Bad Blocks on NTFS Filesystems</a></li><li><a href="/blog/windows-server-create-and-view-storport-trace">Windows/Creating and Viewing a Storport on Windows Server</a></li><li><a href="/blog/windows-11-powershell-upgrade-script">Windows/Windows 11 PowerShell Upgrade Script</a></li><li><a href="/blog/mikrotik-creating-client-to-site-vpn">Mikrotik/Creating a Client to Site VPN With</a></li><li><a href="/blog/mikrotik-securing-router-with-firewall">Mikrotik/Securing Router With Firewall</a></li><li><a href="/blog/mikrotik-setup-dynamic-dns-with-no-ip-api">Mikrotik Setup Dynamically Changing IP With No-IP Api</a></li></ul></div><div id="sidebar-main"></div><div id="sidebar-header"><svg id="hamburger" viewBox="0 0 24 24" onclick="sidebarShow()"><path d="M21,6H3V5h18V6z M21,11H3v1h18V11z M21,17H3v1h18V17z"></path></svg><a href="/">Homepage</a></div><div id="sidebar-content"><div id="sidebar"><ul><li><a href="/">Homepage</a></li><li><a href="/blog/inventory/">Queztaz/Tech Inventory</a></li><li><a href="/blog/emacs-eww-hacks/">Emacs/EWW Hacks</a></li><li><a href="/blog/emacs-with-bidirectional-google-calendar-sync/">Emacs/Emacs With BiDirectional Google Calendar Sync</a></li><li><a href="/blog/emacs-with-mu4e-and-multiple-gmail-accounts">Emacs/Setting up Mu4e and Multiple Gmail Accounts</a></li><li><a href="/blog/creating-offline-debian-mirror/">Linux/Creating an Offline Debian Mirror Repository</a></li><li><a href="/blog/migrate-wiki-js-to-another-server/">Linux/Migrate Wiki.js to Another Server</a></li><li><a href="/blog/adding-bitwarden-to-the-pinephone-pro/">Linux/Adding Bitwarden to the Pinephone Pro</a></li><li><a href="/blog/corebooting-thinkpad-x220-with-ch341-programmer/">Linux/Corebooting Thinkpad X220 With CH341A Programmer</a></li><li><a href="/blog/pbp-custom-kernel/">Pinebook Pro/Custom Kernel</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Keyboard Firmware Update</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Netbsd Installation</a></li><li><a href="/blog/pbp-setting-up-zram/">Pinebook Pro/Setting Up Zram</a></li><li><a href="/blog/pbp-troubleshooting-common-issues">Pinebook Troubleshooting/Pro Common Issues</a></li><li><a href="/blog/pbp-use-nvme-as-root">Pinebook Pro/Use NVME as Root</a></li><li><a href="/blog/pbp-write-to-spi-flash">Pinebook Pro/Write to SPI Flash</a></li><li><a href="/blog/qemu-chroot-into-different-architecture">Qemu/Chroot Into a Different Architecture</a></li><li><a href="/blog/qemu-chroot-into-img-file">Qemu/Choot Into an Img File</a></li><li><a href="/blog/qemu-mount-virtual-images">Qemu/Mount Virtual Images</a></li><li><a href="/blog/qemu-windows-xp-fix-smb-not-working">Qemu/Windows Xp Fix Smb Not Working</a></li><li><a href="/blog/qemu-windows-xp-installation">Qemu/Windows Xp Installation</a></li><li><a href="/blog/tg1672G-default-wifi-password">Misc/Finding the Default Wireless Password to TG1672G Routers</a></li><li><a href="/blog/portable-ollama-installation">Misc/Running Ollama Portably</a></li><li><a href="/blog/resetting-unifi-controller-password-with-mongodb-cli">Misc/Resetting Unifi Controller Password with MongoDB CLI</a></li><li><a href="/blog/turning-a-firestick-into-a-portable-pc">Misc/Turning an Amazon FireStick into a Portable Computer</a></li><li><a href="/blog/cloning-bios-drive-to-uefi-with-disimilar-hardware">Windows/Cloning a Bios Boot Drive to Disimilar Hardware with UEFI</a></li><li><a href="/blog/automating-chkdsk-scan-with-powershell-and-email-alerts">Windows/Automatic CHKDSK Scans Using Powershell & Email Alerts</a></li><li><a href="/blog/creating-decent-portable-terminal">Windows/Creating a Decent Portable Terminal</a></li><li><a href="/blog/template">Windows/Merging HyperV Snapshots With Powershell</a></li><li><a href="/blog/simulating-bad-blocks-on-ntfs-drive">Windows/Simulating Bad Blocks on NTFS Filesystems</a></li><li><a href="/blog/windows-server-create-and-view-storport-trace">Windows/Creating and Viewing a Storport on Windows Server</a></li><li><a href="/blog/windows-11-powershell-upgrade-script">Windows/Windows 11 PowerShell Upgrade Script</a></li><li><a href="/blog/mikrotik-creating-client-to-site-vpn">Mikrotik/Creating a Client to Site VPN With</a></li><li><a href="/blog/mikrotik-securing-router-with-firewall">Mikrotik/Securing Router With Firewall</a></li><li><a href="/blog/mikrotik-setup-dynamic-dns-with-no-ip-api">Mikrotik Setup Dynamically Changing IP With No-IP Api</a></li></ul></div><article><div class="title"><h1>Linux/Corebooting Thinkpad X220 With CH341A Programmer</h1></div><div class="toc"><div><div>Table of content</div><div>
+<ul>
+<li><a href="#one-baeab1b18">Step 1 - Buy the flasher</a></li>
+<li><a href="#one-19b36cbbc3">Step 2 - Install the Drivers</a></li>
+<li><a href="#one-cba28d7ac5">Step 3 - Connecting to the BIOS</a></li>
+<li><a href="#one-dbc76ef4e3">Step 4 - Installing Coreboot</a></li>
+<li><a href="#one-dd99b72f51">Image of original BIOS</a></li>
+</ul>
+</div></div></div><div><p>This isn&apos;t going to be a walkthrough of corebooting your Thinkpad X220. These
+are the steps you need to get the flasher working and connected to your system
+</p>
+
+<p><b>Fyi: My host system is Windows 11 and a virtual machine with USB redirection</b>
+<b>was used to flash the system</b>
+</p>
+
+<p><b>I exported the factory default ROMS to my PC</b>
+</p>
+</div>
+<div><h2 id="one-baeab1b18">Step 1 - Buy the flasher</h2><div><p>I purchased the following CH341A programmer with the clip from Amazon. If you
+google this online, some people will report that the clip fried there chip
+because it runs at 5volts instead of 3.3v. I read some post online debunking
+this. The chip will start at 5volts and then move to 3.3v. The user reported
+that the fried chips were likely caused by improper placement of the clip.
+</p>
+
+<p>This clip worked fine
+</p>
+
+
+<p><a href="https://www.amazon.com/dp/B07SHSL9X9">KeeYees SOP8 SOIC8 Test Clip and CH341A USB Programmer Flash for Most of 24 25
+Series BIOS Chip with PDF Tutorial</a>
+</p>
+</div>
+</div>
+<div><h2 id="one-19b36cbbc3">Step 2 - Install the Drivers</h2><div><p>I&apos;m running this on Windows 11 and using a virtualbox to do the flashing. I
+installed these drivers on the host machine and then installed &quot;AsProgrammer&quot; to
+test if the connection between the programmer and the bios was working.
+</p>
+
+<p>Driver: <a href="https://github.com/KrisKasprzak/CH341/">https://github.com/KrisKasprzak/CH341/</a>
+AsProgrammer: <a href="https://github.com/nofeletru/UsbAsp-flash/">https://github.com/nofeletru/UsbAsp-flash/</a>
+</p>
+</div>
+</div>
+<div><h2 id="one-cba28d7ac5">Step 3 - Connecting to the BIOS</h2><div><p>With the driver installed, I opened ASProgrammer and had it attempt to read the
+data from the BIOS. I was getting an error saying &quot;Check Settings&quot;. This was
+because the clip wasn&apos;t properly seated on the bios chip.
+</p>
+
+<p>Here are the images of how I have things connected. Make sure the positioning of
+the red cable matches below. This will be the exact setup you need to flash the
+BIOS. Check your hardware connections and even 
+</p>
+
+
+<p><figure><img src="/images/corebooting-thinkpad-x220-with-CH341A-programmer/12Fz.jpg" alt="12Fz" style="max-width:100%;border-radius:8px;" /></figure>
+</p>
+
+<p><figure><img src="/images/corebooting-thinkpad-x220-with-CH341A-programmer/6PIP.jpg" alt="6PIP" style="max-width:100%;border-radius:8px;" /></figure>
+</p>
+
+<p><figure><img src="/images/corebooting-thinkpad-x220-with-CH341A-programmer/3vEA.jpg" alt="3vEA" style="max-width:100%;border-radius:8px;" /></figure>
+</p>
+</div>
+</div>
+<div><h2 id="one-dbc76ef4e3">Step 4 - Installing Coreboot</h2><div><p>I followed Bryce&apos;s guide for the rest. The only important thing I did was
+install &quot;flashrom&quot; from the Ubuntu Repos. I didn&apos;t bother figuring out how to
+compile flashrom with support for the CH341A. It worked great. I did see that I
+had two different chips to flash from. I chose the one with the longer name
+(&quot;w25q64bv-w25q64cv-w25q64fv&quot;). I don&apos;t think it would have made a difference
+since reading both flash chips had the same filehash.
+</p>
+
+<p>I used the github repo from nenadstoisavljevic and copied the bootsplash image
+and any settings in the configuration of coreboot. The only thing I didn&apos;t copy
+from that github repo were all the additional payloads that were selected.
+</p>
+
+
+<p><a href="https://brycevandegrift.xyz/blog/corebooting-a-thinkpad-x220/">https://brycevandegrift.xyz/blog/corebooting-a-thinkpad-x220/</a>
+</p>
+
+<p><a href="https://github.com/nenadstoisavljevic/x220-coreboot-guide">https://github.com/nenadstoisavljevic/x220-coreboot-guide</a>
+</p>
+
+<p>My flashing failed once because the virtual machine was freaking out. I reset
+the system and reseated the USB (leaving the clip untouched). It worked after : )
+</p>
+
+<p><figure><img src="/images/corebooting-thinkpad-x220-with-CH341A-programmer/VWip.jpg" alt="VWip" style="max-width:100%;border-radius:8px;" /></figure>
+</p>
+</div>
+</div>
+<div><h2 id="one-dd99b72f51">Image of original BIOS</h2><div><p>View my github below with the original BIOS images I took prior to corebooting.
+</p>
+
+<p><a href="https://github.com/peterunix/ThinkpadX220BIOS">https://github.com/peterunix/ThinkpadX220BIOS</a>
+</p>
+</div>
+</div>
+<div class="nav"><a href="/blog/adding-bitwarden-to-the-pinephone-pro/">PREV</a><a href="/blog/pbp-use-nvme-as-root">RANDOM</a><a href="/blog/pbp-custom-kernel/">NEXT</a></div></article></div></body><script>
+function sidebarShow() {
+  if (window.innerWidth < 481)
+    document.getElementById('sidebar-left').style.width = '75vw';
+  else {
+    document.getElementById('sidebar-left').style.width = 'min(300px, 34vw)';
+  }
+  document.getElementById('sidebar-main').setAttribute('onclick', 'sidebarHide()');
+  document.getElementById('sidebar-main').style.display = 'block';
+}
+function sidebarHide() {
+  document.getElementById('sidebar-left').style.width = '0';
+  document.getElementById('sidebar-main').style.display = 'none';
+}
+</script></html>

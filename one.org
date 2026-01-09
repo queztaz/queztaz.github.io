@@ -1495,6 +1495,11 @@ file cant find the program in the path it gets ignored.
 My permissions for the file is 0644
 
 * Linux/Corebooting Thinkpad X220 With CH341A Programmer
+:PROPERTIES:
+:ONE:      one-default-doc
+:CUSTOM_ID: /blog/corebooting-thinkpad-x220-with-ch341-programmer/
+:CREATED:  <2025-05-14 Sun 21:20>
+:END:
 This isn't going to be a walkthrough of corebooting your Thinkpad X220. These
 are the steps you need to get the flasher working and connected to your system
 
@@ -1560,12 +1565,13 @@ https://github.com/nenadstoisavljevic/x220-coreboot-guide
 My flashing failed once because the virtual machine was freaking out. I reset
 the system and reseated the USB (leaving the clip untouched). It worked after : )
 
-[[./VWip.jpg]]
+image:corebooting-thinkpad-x220-with-CH341A-programmer/VWip.jpg
 
 ** Image of original BIOS 
 View my github below with the original BIOS images I took prior to corebooting.
 
 https://github.com/peterunix/ThinkpadX220BIOS
+
 * Pinebook Pro/Custom Kernel
 :PROPERTIES:
 :ONE: one-default-doc
@@ -2466,6 +2472,55 @@ Hash Calculator: https://tomi.cc/hash/
 mongo.exe --port 27117 ace --eval ^"db.admin.update^( { \^"name\^" : \^"admin\^" }, { $set : { \^"x_shadow\^" : \^"$6$9Ter1EZ9$lSt6/tkoPguHqsDK0mXmUsZ1WE2qCM4m9AQ.x9/eVNJxws.hAxt2Pe8oA9TFB7LPBgzaHBcAfKFoLpRQlpBiX1\^" } } ^)^"
 #+end_src
 
+
+* Misc/Turning an Amazon FireStick into a Portable Computer
+:PROPERTIES:
+:ONE: one-default-doc
+:CUSTOM_ID: /blog/turning-a-firestick-into-a-portable-pc
+:CREATED: <2026-01-08 Thu 07:43>
+:END:
+I turned my Firestick into a portable PC. I use it as a thin client to connect
+to my remote RDP and SSH servers.
+
+These are the parts used:
+
+- [[https://www.amazon.com/dp/B0CJM1GNFQ][Amazon Firestick TV Stick 4K (New Model, but make sure the old name variant is
+  selected instead of new name. Old name runs Android and the new name runs
+  Linux)]]
+- [[https://www.amazon.com/dp/B078KSHVCS][USB Powercable for Firestick (Eliminates need for AC Adapter)]]
+- [[https://www.amazon.com/dp/B083WML1XB][AuviPal 3-Port Micro USB OTG Hub Adapter (3 USB Ports + Power Port)]]
+- [[https://www.amazon.com/dp/B0DJ96HX4L][Elecrow Portable Monitor with Keyboard]]
+- [[https://www.amazon.com/dp/B0DJ96HX4L][Mini HDMI to HDMI Adapter for the Portable Monitor]]
+
+I used this YouTube link to enable installing third party APKs on the Android
+Version of the Firestick.
+
+https://www.youtube.com/watch?v=1GR2dOZcMKM&pp=ygUUZG93bmxvYWRlciBmaXJlc3RpY2s%3D
+
+Then I installed Tailscale from F-DROID and RDP from APKPure to connect
+remotely. There is a bug where the on-screen keyboard will appear and stay
+covering the screen while the USB keyboard is attached. This can sometimes
+softlock your Firestick and require a reboot to get rid of.
+
+Fortunately RDP apps aren't effected by this bug. My firestick is now a real
+cruddy emergency PC. It works great as a media player still : )
+
+This link can be followed to replace the stock Amazon keyboard with another
+using ADB.
+
+https://www.techdoctoruk.com/leankey-keyboard-for-firestick/
+
+Remapping keys can potentially be done with these links:
+
+https://android.stackexchange.com/questions/54160/android-keyboard-and-remapping-the-ctrl-key
+
+https://github.com/ris58h/custom-keyboard-layout
+
+image:turning-an-amazon-firestick-into-a-portable-pc/PXL_20260108_155508870.jpg
+
+image:turning-an-amazon-firestick-into-a-portable-pc/PXL_20260108_155540290.jpg
+
+image:turning-an-amazon-firestick-into-a-portable-pc/PXL_20260108_171243185.jpg
 
 * Windows/Cloning a Bios Boot Drive to Disimilar Hardware with UEFI 
 :PROPERTIES:
@@ -3624,7 +3679,7 @@ Convert-ETWTraceToReadableFileCSV -WorkFolderPath C:\PerfLogs\
 :PROPERTIES:
 :ONE: one-default-doc
 :CUSTOM_ID: /blog/windows-11-powershell-upgrade-script
-:CREATED: <2025-12-22 Mon 07:37>
+:CREATED: <2025-12-22 Mon 08:02>
 :END:
 This is a script I wrote to upgrade Windows 10 computers to Windows 11 by
 downloading an ISO file. It deploys some fixes and checks to increase the
