@@ -1,18 +1,18 @@
 <!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1" /><link rel="stylesheet" type="text/css" href="/one.css" /><title>Pinebook Pro/Use NVME as Root</title></head><body><div id="sidebar-left" onclick="followSidebarLink()"><div><div>Pages</div></div><ul><li><a href="/">Homepage</a></li><li><a href="/blog/inventory/">Queztaz/Tech Inventory</a></li><li><a href="/blog/emacs-eww-hacks/">Emacs/EWW Hacks</a></li><li><a href="/blog/emacs-with-bidirectional-google-calendar-sync/">Emacs/Emacs With BiDirectional Google Calendar Sync</a></li><li><a href="/blog/emacs-with-mu4e-and-multiple-gmail-accounts">Emacs/Setting up Mu4e and Multiple Gmail Accounts</a></li><li><a href="/blog/creating-offline-debian-mirror/">Linux/Creating an Offline Debian Mirror Repository</a></li><li><a href="/blog/migrate-wiki-js-to-another-server/">Linux/Migrate Wiki.js to Another Server</a></li><li><a href="/blog/adding-bitwarden-to-the-pinephone-pro/">Linux/Adding Bitwarden to the Pinephone Pro</a></li><li><a href="/blog/corebooting-thinkpad-x220-with-ch341-programmer/">Linux/Corebooting Thinkpad X220 With CH341A Programmer</a></li><li><a href="/blog/pbp-custom-kernel/">Pinebook Pro/Custom Kernel</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Keyboard Firmware Update</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Netbsd Installation</a></li><li><a href="/blog/pbp-setting-up-zram/">Pinebook Pro/Setting Up Zram</a></li><li><a href="/blog/pbp-troubleshooting-common-issues">Pinebook Troubleshooting/Pro Common Issues</a></li><li><a href="/blog/pbp-use-nvme-as-root">Pinebook Pro/Use NVME as Root</a></li><li><a href="/blog/pbp-write-to-spi-flash">Pinebook Pro/Write to SPI Flash</a></li><li><a href="/blog/qemu-chroot-into-different-architecture">Qemu/Chroot Into a Different Architecture</a></li><li><a href="/blog/qemu-chroot-into-img-file">Qemu/Choot Into an Img File</a></li><li><a href="/blog/qemu-mount-virtual-images">Qemu/Mount Virtual Images</a></li><li><a href="/blog/qemu-windows-xp-fix-smb-not-working">Qemu/Windows Xp Fix Smb Not Working</a></li><li><a href="/blog/qemu-windows-xp-installation">Qemu/Windows Xp Installation</a></li><li><a href="/blog/tg1672G-default-wifi-password">Misc/Finding the Default Wireless Password to TG1672G Routers</a></li><li><a href="/blog/portable-ollama-installation">Misc/Running Ollama Portably</a></li><li><a href="/blog/resetting-unifi-controller-password-with-mongodb-cli">Misc/Resetting Unifi Controller Password with MongoDB CLI</a></li><li><a href="/blog/turning-a-firestick-into-a-portable-pc">Misc/Turning an Amazon FireStick into a Portable Computer</a></li><li><a href="/blog/cloning-bios-drive-to-uefi-with-disimilar-hardware">Windows/Cloning a Bios Boot Drive to Disimilar Hardware with UEFI</a></li><li><a href="/blog/automating-chkdsk-scan-with-powershell-and-email-alerts">Windows/Automatic CHKDSK Scans Using Powershell & Email Alerts</a></li><li><a href="/blog/creating-decent-portable-terminal">Windows/Creating a Decent Portable Terminal</a></li><li><a href="/blog/template">Windows/Merging HyperV Snapshots With Powershell</a></li><li><a href="/blog/simulating-bad-blocks-on-ntfs-drive">Windows/Simulating Bad Blocks on NTFS Filesystems</a></li><li><a href="/blog/windows-server-create-and-view-storport-trace">Windows/Creating and Viewing a Storport on Windows Server</a></li><li><a href="/blog/windows-11-powershell-upgrade-script">Windows/Windows 11 PowerShell Upgrade Script</a></li><li><a href="/blog/mikrotik-creating-client-to-site-vpn">Mikrotik/Creating a Client to Site VPN With</a></li><li><a href="/blog/mikrotik-securing-router-with-firewall">Mikrotik/Securing Router With Firewall</a></li><li><a href="/blog/mikrotik-setup-dynamic-dns-with-no-ip-api">Mikrotik Setup Dynamically Changing IP With No-IP Api</a></li></ul></div><div id="sidebar-main"></div><div id="sidebar-header"><svg id="hamburger" viewBox="0 0 24 24" onclick="sidebarShow()"><path d="M21,6H3V5h18V6z M21,11H3v1h18V11z M21,17H3v1h18V17z"></path></svg><a href="/">Homepage</a></div><div id="sidebar-content"><div id="sidebar"><ul><li><a href="/">Homepage</a></li><li><a href="/blog/inventory/">Queztaz/Tech Inventory</a></li><li><a href="/blog/emacs-eww-hacks/">Emacs/EWW Hacks</a></li><li><a href="/blog/emacs-with-bidirectional-google-calendar-sync/">Emacs/Emacs With BiDirectional Google Calendar Sync</a></li><li><a href="/blog/emacs-with-mu4e-and-multiple-gmail-accounts">Emacs/Setting up Mu4e and Multiple Gmail Accounts</a></li><li><a href="/blog/creating-offline-debian-mirror/">Linux/Creating an Offline Debian Mirror Repository</a></li><li><a href="/blog/migrate-wiki-js-to-another-server/">Linux/Migrate Wiki.js to Another Server</a></li><li><a href="/blog/adding-bitwarden-to-the-pinephone-pro/">Linux/Adding Bitwarden to the Pinephone Pro</a></li><li><a href="/blog/corebooting-thinkpad-x220-with-ch341-programmer/">Linux/Corebooting Thinkpad X220 With CH341A Programmer</a></li><li><a href="/blog/pbp-custom-kernel/">Pinebook Pro/Custom Kernel</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Keyboard Firmware Update</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Netbsd Installation</a></li><li><a href="/blog/pbp-setting-up-zram/">Pinebook Pro/Setting Up Zram</a></li><li><a href="/blog/pbp-troubleshooting-common-issues">Pinebook Troubleshooting/Pro Common Issues</a></li><li><a href="/blog/pbp-use-nvme-as-root">Pinebook Pro/Use NVME as Root</a></li><li><a href="/blog/pbp-write-to-spi-flash">Pinebook Pro/Write to SPI Flash</a></li><li><a href="/blog/qemu-chroot-into-different-architecture">Qemu/Chroot Into a Different Architecture</a></li><li><a href="/blog/qemu-chroot-into-img-file">Qemu/Choot Into an Img File</a></li><li><a href="/blog/qemu-mount-virtual-images">Qemu/Mount Virtual Images</a></li><li><a href="/blog/qemu-windows-xp-fix-smb-not-working">Qemu/Windows Xp Fix Smb Not Working</a></li><li><a href="/blog/qemu-windows-xp-installation">Qemu/Windows Xp Installation</a></li><li><a href="/blog/tg1672G-default-wifi-password">Misc/Finding the Default Wireless Password to TG1672G Routers</a></li><li><a href="/blog/portable-ollama-installation">Misc/Running Ollama Portably</a></li><li><a href="/blog/resetting-unifi-controller-password-with-mongodb-cli">Misc/Resetting Unifi Controller Password with MongoDB CLI</a></li><li><a href="/blog/turning-a-firestick-into-a-portable-pc">Misc/Turning an Amazon FireStick into a Portable Computer</a></li><li><a href="/blog/cloning-bios-drive-to-uefi-with-disimilar-hardware">Windows/Cloning a Bios Boot Drive to Disimilar Hardware with UEFI</a></li><li><a href="/blog/automating-chkdsk-scan-with-powershell-and-email-alerts">Windows/Automatic CHKDSK Scans Using Powershell & Email Alerts</a></li><li><a href="/blog/creating-decent-portable-terminal">Windows/Creating a Decent Portable Terminal</a></li><li><a href="/blog/template">Windows/Merging HyperV Snapshots With Powershell</a></li><li><a href="/blog/simulating-bad-blocks-on-ntfs-drive">Windows/Simulating Bad Blocks on NTFS Filesystems</a></li><li><a href="/blog/windows-server-create-and-view-storport-trace">Windows/Creating and Viewing a Storport on Windows Server</a></li><li><a href="/blog/windows-11-powershell-upgrade-script">Windows/Windows 11 PowerShell Upgrade Script</a></li><li><a href="/blog/mikrotik-creating-client-to-site-vpn">Mikrotik/Creating a Client to Site VPN With</a></li><li><a href="/blog/mikrotik-securing-router-with-firewall">Mikrotik/Securing Router With Firewall</a></li><li><a href="/blog/mikrotik-setup-dynamic-dns-with-no-ip-api">Mikrotik Setup Dynamically Changing IP With No-IP Api</a></li></ul></div><article><div class="title"><h1>Pinebook Pro/Use NVME as Root</h1></div><div class="toc"><div><div>Table of content</div><div>
 <ul>
-<li><a href="#one-17c9e685f7">Assumptions</a></li>
-<li><a href="#one-b8f66ca672">Mounting the system</a></li>
-<li><a href="#one-f08f60a2fa">Copying root files</a></li>
-<li><a href="#one-c00807cdcd">Changing the root to nvme</a>
+<li><a href="#one-9d6ff6deb1">Assumptions</a></li>
+<li><a href="#one-3366319316">Mounting the system</a></li>
+<li><a href="#one-54e7208315">Copying root files</a></li>
+<li><a href="#one-f549b568f8">Changing the root to nvme</a>
 <ul>
-<li><a href="#one-8bf90106f9">Fix for read only boot partition error</a></li>
+<li><a href="#one-df25895ba2">Fix for read only boot partition error</a></li>
 </ul>
 </li>
 </ul>
 </div></div></div><div><p>Directions on using the Pinebook Pro&apos;s NVME as a root partition and the EMMC as
 </p>
 </div>
-<div><h2 id="one-17c9e685f7">Assumptions</h2><div><ul><li><p>You have an NVME drive installed and formatted with a single EXT4 partition
+<div><h2 id="one-9d6ff6deb1">Assumptions</h2><div><ul><li><p>You have an NVME drive installed and formatted with a single EXT4 partition
 </p>
 </li>
 <li><p>Running Manjaro Arm or ALARM. Untested, though Debian may work the same as
@@ -22,18 +22,18 @@ well. This process relies on the existence of <code class="one-hl one-hl-inline"
 </ul>
 </div>
 </div>
-<div><h2 id="one-b8f66ca672">Mounting the system</h2><div><pre><code class="one-hl one-hl-block">mount /dev/nvme0n1p1 /mnt
+<div><h2 id="one-3366319316">Mounting the system</h2><div><pre><code class="one-hl one-hl-block">mount /dev/nvme0n1p1 /mnt
 <span class="one-hl-builtin">cd</span> /mnt
 mkdir dev sys proc mnt</code></pre>
 </div>
 </div>
-<div><h2 id="one-f08f60a2fa">Copying root files</h2><div><p>Use rsync to transfer the files. This excludes pseudo file systems.
+<div><h2 id="one-54e7208315">Copying root files</h2><div><p>Use rsync to transfer the files. This excludes pseudo file systems.
 </p>
 
 <pre><code class="one-hl one-hl-block">rsync -aHxv --numeric-ids --progress /* /mnt --exclude=/dev --exclude=/proc --exclude=/sys --exclude=/mnt</code></pre>
 </div>
 </div>
-<div><h2 id="one-c00807cdcd">Changing the root to nvme</h2><div><p>Rename the boot folder which was copied to the NVME. This isn&apos;t needed. Edit
+<div><h2 id="one-f549b568f8">Changing the root to nvme</h2><div><p>Rename the boot folder which was copied to the NVME. This isn&apos;t needed. Edit
 your extlinux.conf file on the EMMC, then change the setting for the root
 partition path.
 </p>
@@ -43,7 +43,7 @@ $ vim /boot/extlinux/extlinux.conf
 
 <span class="one-hl-comment-delimiter"># </span><span class="one-hl-comment">Change "root=LABEL=ROOT" to "root=/dev/nvme0n1p1"</span></code></pre>
 </div>
-<div><h3 id="one-8bf90106f9">Fix for read only boot partition error</h3><div><p>If the boot partition is &quot;read only&quot;, you can remount it with rw
+<div><h3 id="one-df25895ba2">Fix for read only boot partition error</h3><div><p>If the boot partition is &quot;read only&quot;, you can remount it with rw
 permissions as so:
 </p>
 
@@ -51,7 +51,7 @@ permissions as so:
 </div>
 </div>
 </div>
-<div class="nav"><a href="/blog/pbp-troubleshooting-common-issues">PREV</a><a href="/blog/adding-bitwarden-to-the-pinephone-pro/">RANDOM</a><a href="/blog/pbp-write-to-spi-flash">NEXT</a></div></article></div></body><script>
+<div class="nav"><a href="/blog/pbp-troubleshooting-common-issues">PREV</a><a href="/blog/cloning-bios-drive-to-uefi-with-disimilar-hardware">RANDOM</a><a href="/blog/pbp-write-to-spi-flash">NEXT</a></div></article></div></body><script>
 function sidebarShow() {
   if (window.innerWidth < 481)
     document.getElementById('sidebar-left').style.width = '75vw';

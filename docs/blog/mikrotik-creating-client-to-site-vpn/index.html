@@ -1,17 +1,17 @@
 <!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1" /><link rel="stylesheet" type="text/css" href="/one.css" /><title>Mikrotik/Creating a Client to Site VPN With</title></head><body><div id="sidebar-left" onclick="followSidebarLink()"><div><div>Pages</div></div><ul><li><a href="/">Homepage</a></li><li><a href="/blog/inventory/">Queztaz/Tech Inventory</a></li><li><a href="/blog/emacs-eww-hacks/">Emacs/EWW Hacks</a></li><li><a href="/blog/emacs-with-bidirectional-google-calendar-sync/">Emacs/Emacs With BiDirectional Google Calendar Sync</a></li><li><a href="/blog/emacs-with-mu4e-and-multiple-gmail-accounts">Emacs/Setting up Mu4e and Multiple Gmail Accounts</a></li><li><a href="/blog/creating-offline-debian-mirror/">Linux/Creating an Offline Debian Mirror Repository</a></li><li><a href="/blog/migrate-wiki-js-to-another-server/">Linux/Migrate Wiki.js to Another Server</a></li><li><a href="/blog/adding-bitwarden-to-the-pinephone-pro/">Linux/Adding Bitwarden to the Pinephone Pro</a></li><li><a href="/blog/corebooting-thinkpad-x220-with-ch341-programmer/">Linux/Corebooting Thinkpad X220 With CH341A Programmer</a></li><li><a href="/blog/pbp-custom-kernel/">Pinebook Pro/Custom Kernel</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Keyboard Firmware Update</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Netbsd Installation</a></li><li><a href="/blog/pbp-setting-up-zram/">Pinebook Pro/Setting Up Zram</a></li><li><a href="/blog/pbp-troubleshooting-common-issues">Pinebook Troubleshooting/Pro Common Issues</a></li><li><a href="/blog/pbp-use-nvme-as-root">Pinebook Pro/Use NVME as Root</a></li><li><a href="/blog/pbp-write-to-spi-flash">Pinebook Pro/Write to SPI Flash</a></li><li><a href="/blog/qemu-chroot-into-different-architecture">Qemu/Chroot Into a Different Architecture</a></li><li><a href="/blog/qemu-chroot-into-img-file">Qemu/Choot Into an Img File</a></li><li><a href="/blog/qemu-mount-virtual-images">Qemu/Mount Virtual Images</a></li><li><a href="/blog/qemu-windows-xp-fix-smb-not-working">Qemu/Windows Xp Fix Smb Not Working</a></li><li><a href="/blog/qemu-windows-xp-installation">Qemu/Windows Xp Installation</a></li><li><a href="/blog/tg1672G-default-wifi-password">Misc/Finding the Default Wireless Password to TG1672G Routers</a></li><li><a href="/blog/portable-ollama-installation">Misc/Running Ollama Portably</a></li><li><a href="/blog/resetting-unifi-controller-password-with-mongodb-cli">Misc/Resetting Unifi Controller Password with MongoDB CLI</a></li><li><a href="/blog/turning-a-firestick-into-a-portable-pc">Misc/Turning an Amazon FireStick into a Portable Computer</a></li><li><a href="/blog/cloning-bios-drive-to-uefi-with-disimilar-hardware">Windows/Cloning a Bios Boot Drive to Disimilar Hardware with UEFI</a></li><li><a href="/blog/automating-chkdsk-scan-with-powershell-and-email-alerts">Windows/Automatic CHKDSK Scans Using Powershell & Email Alerts</a></li><li><a href="/blog/creating-decent-portable-terminal">Windows/Creating a Decent Portable Terminal</a></li><li><a href="/blog/template">Windows/Merging HyperV Snapshots With Powershell</a></li><li><a href="/blog/simulating-bad-blocks-on-ntfs-drive">Windows/Simulating Bad Blocks on NTFS Filesystems</a></li><li><a href="/blog/windows-server-create-and-view-storport-trace">Windows/Creating and Viewing a Storport on Windows Server</a></li><li><a href="/blog/windows-11-powershell-upgrade-script">Windows/Windows 11 PowerShell Upgrade Script</a></li><li><a href="/blog/mikrotik-creating-client-to-site-vpn">Mikrotik/Creating a Client to Site VPN With</a></li><li><a href="/blog/mikrotik-securing-router-with-firewall">Mikrotik/Securing Router With Firewall</a></li><li><a href="/blog/mikrotik-setup-dynamic-dns-with-no-ip-api">Mikrotik Setup Dynamically Changing IP With No-IP Api</a></li></ul></div><div id="sidebar-main"></div><div id="sidebar-header"><svg id="hamburger" viewBox="0 0 24 24" onclick="sidebarShow()"><path d="M21,6H3V5h18V6z M21,11H3v1h18V11z M21,17H3v1h18V17z"></path></svg><a href="/">Homepage</a></div><div id="sidebar-content"><div id="sidebar"><ul><li><a href="/">Homepage</a></li><li><a href="/blog/inventory/">Queztaz/Tech Inventory</a></li><li><a href="/blog/emacs-eww-hacks/">Emacs/EWW Hacks</a></li><li><a href="/blog/emacs-with-bidirectional-google-calendar-sync/">Emacs/Emacs With BiDirectional Google Calendar Sync</a></li><li><a href="/blog/emacs-with-mu4e-and-multiple-gmail-accounts">Emacs/Setting up Mu4e and Multiple Gmail Accounts</a></li><li><a href="/blog/creating-offline-debian-mirror/">Linux/Creating an Offline Debian Mirror Repository</a></li><li><a href="/blog/migrate-wiki-js-to-another-server/">Linux/Migrate Wiki.js to Another Server</a></li><li><a href="/blog/adding-bitwarden-to-the-pinephone-pro/">Linux/Adding Bitwarden to the Pinephone Pro</a></li><li><a href="/blog/corebooting-thinkpad-x220-with-ch341-programmer/">Linux/Corebooting Thinkpad X220 With CH341A Programmer</a></li><li><a href="/blog/pbp-custom-kernel/">Pinebook Pro/Custom Kernel</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Keyboard Firmware Update</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Netbsd Installation</a></li><li><a href="/blog/pbp-setting-up-zram/">Pinebook Pro/Setting Up Zram</a></li><li><a href="/blog/pbp-troubleshooting-common-issues">Pinebook Troubleshooting/Pro Common Issues</a></li><li><a href="/blog/pbp-use-nvme-as-root">Pinebook Pro/Use NVME as Root</a></li><li><a href="/blog/pbp-write-to-spi-flash">Pinebook Pro/Write to SPI Flash</a></li><li><a href="/blog/qemu-chroot-into-different-architecture">Qemu/Chroot Into a Different Architecture</a></li><li><a href="/blog/qemu-chroot-into-img-file">Qemu/Choot Into an Img File</a></li><li><a href="/blog/qemu-mount-virtual-images">Qemu/Mount Virtual Images</a></li><li><a href="/blog/qemu-windows-xp-fix-smb-not-working">Qemu/Windows Xp Fix Smb Not Working</a></li><li><a href="/blog/qemu-windows-xp-installation">Qemu/Windows Xp Installation</a></li><li><a href="/blog/tg1672G-default-wifi-password">Misc/Finding the Default Wireless Password to TG1672G Routers</a></li><li><a href="/blog/portable-ollama-installation">Misc/Running Ollama Portably</a></li><li><a href="/blog/resetting-unifi-controller-password-with-mongodb-cli">Misc/Resetting Unifi Controller Password with MongoDB CLI</a></li><li><a href="/blog/turning-a-firestick-into-a-portable-pc">Misc/Turning an Amazon FireStick into a Portable Computer</a></li><li><a href="/blog/cloning-bios-drive-to-uefi-with-disimilar-hardware">Windows/Cloning a Bios Boot Drive to Disimilar Hardware with UEFI</a></li><li><a href="/blog/automating-chkdsk-scan-with-powershell-and-email-alerts">Windows/Automatic CHKDSK Scans Using Powershell & Email Alerts</a></li><li><a href="/blog/creating-decent-portable-terminal">Windows/Creating a Decent Portable Terminal</a></li><li><a href="/blog/template">Windows/Merging HyperV Snapshots With Powershell</a></li><li><a href="/blog/simulating-bad-blocks-on-ntfs-drive">Windows/Simulating Bad Blocks on NTFS Filesystems</a></li><li><a href="/blog/windows-server-create-and-view-storport-trace">Windows/Creating and Viewing a Storport on Windows Server</a></li><li><a href="/blog/windows-11-powershell-upgrade-script">Windows/Windows 11 PowerShell Upgrade Script</a></li><li><a href="/blog/mikrotik-creating-client-to-site-vpn">Mikrotik/Creating a Client to Site VPN With</a></li><li><a href="/blog/mikrotik-securing-router-with-firewall">Mikrotik/Securing Router With Firewall</a></li><li><a href="/blog/mikrotik-setup-dynamic-dns-with-no-ip-api">Mikrotik Setup Dynamically Changing IP With No-IP Api</a></li></ul></div><article><div class="title"><h1>Mikrotik/Creating a Client to Site VPN With</h1></div><div class="toc"><div><div>Table of content</div><div>
 <ul>
-<li><a href="#one-7b94d75ac1">Server Configuration</a></li>
-<li><a href="#one-20bc657a3a">Create Wireguard interface</a></li>
-<li><a href="#one-ffba506229">Copy the server PUB and PRIV key</a></li>
-<li><a href="#one-c391e09c9e">Allow Wireguard traffic through the Mikrotiks firewall.</a>
+<li><a href="#one-497a39d6a4">Server Configuration</a></li>
+<li><a href="#one-389c0c52bd">Create Wireguard interface</a></li>
+<li><a href="#one-2586fd8ce9">Copy the server PUB and PRIV key</a></li>
+<li><a href="#one-3647af7e15">Allow Wireguard traffic through the Mikrotiks firewall.</a>
 <ul>
-<li><a href="#one-6061e35899">Optional: Move firewall to first index</a></li>
+<li><a href="#one-e514a8185c">Optional: Move firewall to first index</a></li>
 </ul>
 </li>
-<li><a href="#one-7a883bd011">Client Setup</a>
+<li><a href="#one-5dc84ef523">Client Setup</a>
 <ul>
-<li><a href="#one-29ba9dedd4">Message from the future</a></li>
-<li><a href="#one-dba5a821a3">Generating Client Config</a></li>
+<li><a href="#one-6378fc6b5e">Message from the future</a></li>
+<li><a href="#one-6cd4fad0d2">Generating Client Config</a></li>
 </ul>
 </li>
 </ul>
@@ -20,8 +20,8 @@ Directions for setting up a Wireguard client-to-site server on a Mikrotik. This
 is done using the command line from SSH or Winbox.
 </p>
 </div>
-<div><h2 id="one-7b94d75ac1">Server Configuration</h2></div>
-<div><h2 id="one-20bc657a3a">Create Wireguard interface</h2><div><p>Add a new wireguard interface and give it the name &quot;Wireguard1&quot; The listening
+<div><h2 id="one-497a39d6a4">Server Configuration</h2></div>
+<div><h2 id="one-389c0c52bd">Create Wireguard interface</h2><div><p>Add a new wireguard interface and give it the name &quot;Wireguard1&quot; The listening
 port is set to the default port number that the wireguard devs intended. The MTU
 value is default to what Mikrotik auto-fills
 </p>
@@ -29,7 +29,7 @@ value is default to what Mikrotik auto-fills
 <pre><code class="one-hl one-hl-block">/interface/wireguard/add listen-port=51820 <span class="one-hl-variable-name">mtu</span>=1420 <span class="one-hl-variable-name">name</span>=wireguard1</code></pre>
 </div>
 </div>
-<div><h2 id="one-ffba506229">Copy the server PUB and PRIV key</h2><div><p>Now let&apos;s print out the servers private and public keys. This will be used when
+<div><h2 id="one-2586fd8ce9">Copy the server PUB and PRIV key</h2><div><p>Now let&apos;s print out the servers private and public keys. This will be used when
 creating the client configuration files.
 </p>
 
@@ -44,9 +44,9 @@ creating the client configuration files.
 <pre><code class="one-hl one-hl-block">/ip/address/add <span class="one-hl-variable-name">address</span>=192.168.150.1/24 <span class="one-hl-variable-name">interface</span>=wireguard1 <span class="one-hl-variable-name">network</span>=192.168.150.0</code></pre>
 </div>
 </div>
-<div><h2 id="one-c391e09c9e">Allow Wireguard traffic through the Mikrotiks firewall.</h2><div><pre><code class="one-hl one-hl-block">/ip/firewall/filter/add <span class="one-hl-variable-name">action</span>=accept <span class="one-hl-variable-name">chain</span>=input dst-port=51820 <span class="one-hl-variable-name">protocol</span>=udp</code></pre>
+<div><h2 id="one-3647af7e15">Allow Wireguard traffic through the Mikrotiks firewall.</h2><div><pre><code class="one-hl one-hl-block">/ip/firewall/filter/add <span class="one-hl-variable-name">action</span>=accept <span class="one-hl-variable-name">chain</span>=input dst-port=51820 <span class="one-hl-variable-name">protocol</span>=udp</code></pre>
 </div>
-<div><h3 id="one-6061e35899">Optional: Move firewall to first index</h3><div><p>I had some other custom firewall rules I didn&apos;t want to conflict with
+<div><h3 id="one-e514a8185c">Optional: Move firewall to first index</h3><div><p>I had some other custom firewall rules I didn&apos;t want to conflict with
 Wireguard. This next step is completely optional, but I&apos;m going to move my
 Wireguard rule to INDEX 1 of the filter chain.
 </p>
@@ -60,12 +60,12 @@ Wireguard rule to INDEX 1 of the filter chain.
 </div>
 </div>
 </div>
-<div><h2 id="one-7a883bd011">Client Setup</h2><div><h3 id="one-29ba9dedd4">Message from the future</h3><div><p>Apologies for only including a powershell script on creating the configuration
+<div><h2 id="one-5dc84ef523">Client Setup</h2><div><h3 id="one-6378fc6b5e">Message from the future</h3><div><p>Apologies for only including a powershell script on creating the configuration
 file.
 </p>
 </div>
 </div>
-<div><h3 id="one-dba5a821a3">Generating Client Config</h3><div><p>Create a PowerShell script with the following content
+<div><h3 id="one-6cd4fad0d2">Generating Client Config</h3><div><p>Create a PowerShell script with the following content
 </p>
 
 <pre><code class="one-hl one-hl-block"><span class="one-hl-keyword">Param</span><span class="one-hl-rainbow-delimiters-depth-1">(</span>
@@ -163,7 +163,7 @@ Flags: X - disabled
 </div>
 </div>
 </div>
-<div class="nav"><a href="/blog/windows-11-powershell-upgrade-script">PREV</a><a href="/blog/windows-server-create-and-view-storport-trace">RANDOM</a><a href="/blog/mikrotik-securing-router-with-firewall">NEXT</a></div></article></div></body><script>
+<div class="nav"><a href="/blog/windows-11-powershell-upgrade-script">PREV</a><a href="/blog/cloning-bios-drive-to-uefi-with-disimilar-hardware">RANDOM</a><a href="/blog/mikrotik-securing-router-with-firewall">NEXT</a></div></article></div></body><script>
 function sidebarShow() {
   if (window.innerWidth < 481)
     document.getElementById('sidebar-left').style.width = '75vw';

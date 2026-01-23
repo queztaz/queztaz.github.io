@@ -28,7 +28,7 @@ This is my blog! It's statically built using [[https://github.com/tonyaldon/one.
 are stored in one emacs org document! WOW!
 
 I post about computers and anything I'm working on. There's currently no set
-pattern to it. Whatever I intuitively comes to mind I post.
+pattern to it. Whatever intuitively comes to mind I post.
 
 * Queztaz/Tech Inventory
 :PROPERTIES:
@@ -36,28 +36,28 @@ pattern to it. Whatever I intuitively comes to mind I post.
 :CUSTOM_ID: /blog/inventory/
 :CREATED: <2025-11-02 Sun 21:07>
 :END:
-** Google Pixel 7
-Terminess is installed to remotely connect to my VPS. I access emacs and tmux
-exclusively through this.
+** Primary PC
+*** Description
+My primary computer is an android phone running DexMode. It connects to a
+portable monitor as a display.
 
-Termux is setup
-- Daily Driver Phone 
-- All applications disabled apart from messaging and a web browser.
-- Great Google integration. No USB-C Alt Mode support because greed.
-- Termux and Todoist are manly used.
+My VPS is accessed through a Tailscale VPN instance. I use SSH and RDP to
+remotely access the box.
 
-** Thinkpad X220
-Favorite laptop of recent years. Running Debian. Corbooted.
+I game over the cloud, split screen, using the GeoForce now application. A
+second powered USB C to HDMI is used to connect to a larger TV Screen. Up to 6
+devices can connect to bluetooth.
 
-** Portable Laptop
-CrowView portable monitor with keyboard and battery with the RPI 5 adapter installed.
-<insert image here>
+image:tech-inventory/PXL_20260122_201608759.jpg
 
-** Remote server
-Remote into a VPS to run emacs and tmux.
+image:tech-inventory/PXL_20260122_201320708.jpg
 
-** Freedom Mode
-Thinkpad with Tail's linux.
+*** Part List
+- 6 Inch USB C to USB C cable https://www.amazon.com/dp/B0CRR3KBTZ
+- Flat magnetic USB C adapter https://www.amazon.com/dp/B0C4SVY9YJ
+- Straight magnetic USB c adapter https://www.amazon.com/dp/B0BMX53FF9
+- Magnetic Phone Holder for laptop https://www.amazon.com/dp/B08ZNDNMD3
+- Portable Monitor with Keyboard https://www.amazon.com/dp/B0DJ96HX4L
 
 * Emacs/EWW Hacks
 :PROPERTIES:
