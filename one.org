@@ -1,4 +1,4 @@
-* Homepage 
+* Queztaz.org
 :PROPERTIES:
 :ONE: one-default-doc
 :CUSTOM_ID: /
@@ -58,6 +58,22 @@ image:tech-inventory/PXL_20260122_201320708.jpg
 - Straight magnetic USB c adapter https://www.amazon.com/dp/B0BMX53FF9
 - Magnetic Phone Holder for laptop https://www.amazon.com/dp/B08ZNDNMD3
 - Portable Monitor with Keyboard https://www.amazon.com/dp/B0DJ96HX4L
+
+* Queztaz/Colemaks Everywhere
+** Android Phone
+Key Mapper Android
+
+** Windows
+Autohotkey Daemon is the most reliable. Windows layout creator is okay but
+unable to modify the caps lock behavior
+
+** TTY
+Haven't had to do this yet
+
+** Linux
+Haven't had to do this yet cuz keyboard
+
+** Razer Synapse
 
 * Emacs/EWW Hacks
 :PROPERTIES:
@@ -1570,7 +1586,7 @@ image:corebooting-thinkpad-x220-with-CH341A-programmer/VWip.jpg
 ** Image of original BIOS 
 View my github below with the original BIOS images I took prior to corebooting.
 
-https://github.com/peterunix/ThinkpadX220BIOS
+https://github.com/queztaz/ThinkpadX220BIOS
 
 * Pinebook Pro/Custom Kernel
 :PROPERTIES:
@@ -2636,7 +2652,7 @@ response in your RMM software. There are fail-safes in place to prevent the
 script from running multiple times due to alert spam.
 
 **Important**: A python EXE file is used to send the emails out. The source code
-to script is on my github [[https://github.com/peterunix/Python-Sendmail][LINK]]. The build in this project is compiled from that.
+to script is on my github [[https://github.com/queztaz/Python-Sendmail][LINK]]. The build in this project is compiled from that.
 
 ** How to implement with RMM
 - Edit the script and add your SMTP credentials on the last line.
@@ -2657,7 +2673,7 @@ scheduler. My suggestion is have it run daily at some arbitrary hour.
 Edit or remove the lines for email alerts
 
 ** Source Code
-Repository: [[https://github.com/peterunix/PS-ScheduleCHKDSKandScans][https://github.com/peterunix/PS-ScheduleCHKDSKandScans]]
+Repository: [[https://github.com/queztaz/PS-ScheduleCHKDSKandScans][https://github.com/queztaz/PS-ScheduleCHKDSKandScans]]
 
 #+begin_src powershell
 
@@ -2690,7 +2706,7 @@ device monitoring alerts in RMM. There's are failsafe methods to
 ensure that this script doesn't run multiple times for the same alert.
 
 .LINK
-Github: https://github.com/peterunix/PS-ScheduleCHKDSKandScans
+Github: https://github.com/queztaz/PS-ScheduleCHKDSKandScans
 #>
 
 function _CreateEventLogEntry{
