@@ -1,16 +1,16 @@
-<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1" /><link rel="stylesheet" type="text/css" href="/one.css" /><title>Linux/Creating an Offline Debian Mirror Repository</title></head><body><div id="sidebar-left" onclick="followSidebarLink()"><div><div>Pages</div></div><ul><li><a href="/">Queztaz.org</a></li><li><a href="/blog/inventory/">Queztaz/Tech Inventory</a></li><li><a href="/blog/emacs-eww-hacks/">Emacs/EWW Hacks</a></li><li><a href="/blog/emacs-with-bidirectional-google-calendar-sync/">Emacs/Emacs With BiDirectional Google Calendar Sync</a></li><li><a href="/blog/emacs-with-mu4e-and-multiple-gmail-accounts">Emacs/Setting up Mu4e and Multiple Gmail Accounts</a></li><li><a href="/blog/creating-offline-debian-mirror/">Linux/Creating an Offline Debian Mirror Repository</a></li><li><a href="/blog/migrate-wiki-js-to-another-server/">Linux/Migrate Wiki.js to Another Server</a></li><li><a href="/blog/adding-bitwarden-to-the-pinephone-pro/">Linux/Adding Bitwarden to the Pinephone Pro</a></li><li><a href="/blog/corebooting-thinkpad-x220-with-ch341-programmer/">Linux/Corebooting Thinkpad X220 With CH341A Programmer</a></li><li><a href="/blog/pbp-custom-kernel/">Pinebook Pro/Custom Kernel</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Keyboard Firmware Update</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Netbsd Installation</a></li><li><a href="/blog/pbp-setting-up-zram/">Pinebook Pro/Setting Up Zram</a></li><li><a href="/blog/pbp-troubleshooting-common-issues">Pinebook Troubleshooting/Pro Common Issues</a></li><li><a href="/blog/pbp-use-nvme-as-root">Pinebook Pro/Use NVME as Root</a></li><li><a href="/blog/pbp-write-to-spi-flash">Pinebook Pro/Write to SPI Flash</a></li><li><a href="/blog/qemu-chroot-into-different-architecture">Qemu/Chroot Into a Different Architecture</a></li><li><a href="/blog/qemu-chroot-into-img-file">Qemu/Choot Into an Img File</a></li><li><a href="/blog/qemu-mount-virtual-images">Qemu/Mount Virtual Images</a></li><li><a href="/blog/qemu-windows-xp-fix-smb-not-working">Qemu/Windows Xp Fix Smb Not Working</a></li><li><a href="/blog/qemu-windows-xp-installation">Qemu/Windows Xp Installation</a></li><li><a href="/blog/tg1672G-default-wifi-password">Misc/Finding the Default Wireless Password to TG1672G Routers</a></li><li><a href="/blog/portable-ollama-installation">Misc/Running Ollama Portably</a></li><li><a href="/blog/resetting-unifi-controller-password-with-mongodb-cli">Misc/Resetting Unifi Controller Password with MongoDB CLI</a></li><li><a href="/blog/turning-a-firestick-into-a-portable-pc">Misc/Turning an Amazon FireStick into a Portable Computer</a></li><li><a href="/blog/cloning-bios-drive-to-uefi-with-disimilar-hardware">Windows/Cloning a Bios Boot Drive to Disimilar Hardware with UEFI</a></li><li><a href="/blog/automating-chkdsk-scan-with-powershell-and-email-alerts">Windows/Automatic CHKDSK Scans Using Powershell & Email Alerts</a></li><li><a href="/blog/creating-decent-portable-terminal">Windows/Creating a Decent Portable Terminal</a></li><li><a href="/blog/template">Windows/Merging HyperV Snapshots With Powershell</a></li><li><a href="/blog/simulating-bad-blocks-on-ntfs-drive">Windows/Simulating Bad Blocks on NTFS Filesystems</a></li><li><a href="/blog/windows-server-create-and-view-storport-trace">Windows/Creating and Viewing a Storport on Windows Server</a></li><li><a href="/blog/windows-11-powershell-upgrade-script">Windows/Windows 11 PowerShell Upgrade Script</a></li><li><a href="/blog/mikrotik-creating-client-to-site-vpn">Mikrotik/Creating a Client to Site VPN With</a></li><li><a href="/blog/mikrotik-securing-router-with-firewall">Mikrotik/Securing Router With Firewall</a></li><li><a href="/blog/mikrotik-setup-dynamic-dns-with-no-ip-api">Mikrotik Setup Dynamically Changing IP With No-IP Api</a></li></ul></div><div id="sidebar-main"></div><div id="sidebar-header"><svg id="hamburger" viewBox="0 0 24 24" onclick="sidebarShow()"><path d="M21,6H3V5h18V6z M21,11H3v1h18V11z M21,17H3v1h18V17z"></path></svg><a href="/">Queztaz.org</a></div><div id="sidebar-content"><div id="sidebar"><ul><li><a href="/">Queztaz.org</a></li><li><a href="/blog/inventory/">Queztaz/Tech Inventory</a></li><li><a href="/blog/emacs-eww-hacks/">Emacs/EWW Hacks</a></li><li><a href="/blog/emacs-with-bidirectional-google-calendar-sync/">Emacs/Emacs With BiDirectional Google Calendar Sync</a></li><li><a href="/blog/emacs-with-mu4e-and-multiple-gmail-accounts">Emacs/Setting up Mu4e and Multiple Gmail Accounts</a></li><li><a href="/blog/creating-offline-debian-mirror/">Linux/Creating an Offline Debian Mirror Repository</a></li><li><a href="/blog/migrate-wiki-js-to-another-server/">Linux/Migrate Wiki.js to Another Server</a></li><li><a href="/blog/adding-bitwarden-to-the-pinephone-pro/">Linux/Adding Bitwarden to the Pinephone Pro</a></li><li><a href="/blog/corebooting-thinkpad-x220-with-ch341-programmer/">Linux/Corebooting Thinkpad X220 With CH341A Programmer</a></li><li><a href="/blog/pbp-custom-kernel/">Pinebook Pro/Custom Kernel</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Keyboard Firmware Update</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Netbsd Installation</a></li><li><a href="/blog/pbp-setting-up-zram/">Pinebook Pro/Setting Up Zram</a></li><li><a href="/blog/pbp-troubleshooting-common-issues">Pinebook Troubleshooting/Pro Common Issues</a></li><li><a href="/blog/pbp-use-nvme-as-root">Pinebook Pro/Use NVME as Root</a></li><li><a href="/blog/pbp-write-to-spi-flash">Pinebook Pro/Write to SPI Flash</a></li><li><a href="/blog/qemu-chroot-into-different-architecture">Qemu/Chroot Into a Different Architecture</a></li><li><a href="/blog/qemu-chroot-into-img-file">Qemu/Choot Into an Img File</a></li><li><a href="/blog/qemu-mount-virtual-images">Qemu/Mount Virtual Images</a></li><li><a href="/blog/qemu-windows-xp-fix-smb-not-working">Qemu/Windows Xp Fix Smb Not Working</a></li><li><a href="/blog/qemu-windows-xp-installation">Qemu/Windows Xp Installation</a></li><li><a href="/blog/tg1672G-default-wifi-password">Misc/Finding the Default Wireless Password to TG1672G Routers</a></li><li><a href="/blog/portable-ollama-installation">Misc/Running Ollama Portably</a></li><li><a href="/blog/resetting-unifi-controller-password-with-mongodb-cli">Misc/Resetting Unifi Controller Password with MongoDB CLI</a></li><li><a href="/blog/turning-a-firestick-into-a-portable-pc">Misc/Turning an Amazon FireStick into a Portable Computer</a></li><li><a href="/blog/cloning-bios-drive-to-uefi-with-disimilar-hardware">Windows/Cloning a Bios Boot Drive to Disimilar Hardware with UEFI</a></li><li><a href="/blog/automating-chkdsk-scan-with-powershell-and-email-alerts">Windows/Automatic CHKDSK Scans Using Powershell & Email Alerts</a></li><li><a href="/blog/creating-decent-portable-terminal">Windows/Creating a Decent Portable Terminal</a></li><li><a href="/blog/template">Windows/Merging HyperV Snapshots With Powershell</a></li><li><a href="/blog/simulating-bad-blocks-on-ntfs-drive">Windows/Simulating Bad Blocks on NTFS Filesystems</a></li><li><a href="/blog/windows-server-create-and-view-storport-trace">Windows/Creating and Viewing a Storport on Windows Server</a></li><li><a href="/blog/windows-11-powershell-upgrade-script">Windows/Windows 11 PowerShell Upgrade Script</a></li><li><a href="/blog/mikrotik-creating-client-to-site-vpn">Mikrotik/Creating a Client to Site VPN With</a></li><li><a href="/blog/mikrotik-securing-router-with-firewall">Mikrotik/Securing Router With Firewall</a></li><li><a href="/blog/mikrotik-setup-dynamic-dns-with-no-ip-api">Mikrotik Setup Dynamically Changing IP With No-IP Api</a></li></ul></div><article><div class="title"><h1>Linux/Creating an Offline Debian Mirror Repository</h1></div><div class="toc"><div><div>Table of content</div><div>
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1" /><link rel="stylesheet" type="text/css" href="/one.css" /><title>Linux/Creating an Offline Debian Mirror Repository</title></head><body><div id="sidebar-left" onclick="followSidebarLink()"><div><div>Pages</div></div><ul><li><a href="/">Queztaz.org</a></li><li><a href="/blog/blog/">Queztaz/Blog</a></li><li><a href="/blog/inventory/">Queztaz/Tech Inventory</a></li><li><a href="/blog/emacs-eww-hacks/">Emacs/EWW Hacks</a></li><li><a href="/blog/emacs-with-bidirectional-google-calendar-sync/">Emacs/Emacs With BiDirectional Google Calendar Sync</a></li><li><a href="/blog/emacs-with-mu4e-and-multiple-gmail-accounts">Emacs/Setting up Mu4e and Multiple Gmail Accounts</a></li><li><a href="/blog/creating-offline-debian-mirror/">Linux/Creating an Offline Debian Mirror Repository</a></li><li><a href="/blog/migrate-wiki-js-to-another-server/">Linux/Migrate Wiki.js to Another Server</a></li><li><a href="/blog/adding-bitwarden-to-the-pinephone-pro/">Linux/Adding Bitwarden to the Pinephone Pro</a></li><li><a href="/blog/corebooting-thinkpad-x220-with-ch341-programmer/">Linux/Corebooting Thinkpad X220 With CH341A Programmer</a></li><li><a href="/blog/pbp-custom-kernel/">Pinebook Pro/Custom Kernel</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Keyboard Firmware Update</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Netbsd Installation</a></li><li><a href="/blog/pbp-setting-up-zram/">Pinebook Pro/Setting Up Zram</a></li><li><a href="/blog/pbp-troubleshooting-common-issues">Pinebook Troubleshooting/Pro Common Issues</a></li><li><a href="/blog/pbp-use-nvme-as-root">Pinebook Pro/Use NVME as Root</a></li><li><a href="/blog/pbp-write-to-spi-flash">Pinebook Pro/Write to SPI Flash</a></li><li><a href="/blog/qemu-chroot-into-different-architecture">Qemu/Chroot Into a Different Architecture</a></li><li><a href="/blog/qemu-chroot-into-img-file">Qemu/Choot Into an Img File</a></li><li><a href="/blog/qemu-mount-virtual-images">Qemu/Mount Virtual Images</a></li><li><a href="/blog/qemu-windows-xp-fix-smb-not-working">Qemu/Windows Xp Fix Smb Not Working</a></li><li><a href="/blog/qemu-windows-xp-installation">Qemu/Windows Xp Installation</a></li><li><a href="/blog/tg1672G-default-wifi-password">Misc/Finding the Default Wireless Password to TG1672G Routers</a></li><li><a href="/blog/portable-ollama-installation">Misc/Running Ollama Portably</a></li><li><a href="/blog/resetting-unifi-controller-password-with-mongodb-cli">Misc/Resetting Unifi Controller Password with MongoDB CLI</a></li><li><a href="/blog/turning-a-firestick-into-a-portable-pc">Misc/Turning an Amazon FireStick into a Portable Computer</a></li><li><a href="/blog/cloning-bios-drive-to-uefi-with-disimilar-hardware">Windows/Cloning a Bios Boot Drive to Disimilar Hardware with UEFI</a></li><li><a href="/blog/automating-chkdsk-scan-with-powershell-and-email-alerts">Windows/Automatic CHKDSK Scans Using Powershell & Email Alerts</a></li><li><a href="/blog/creating-decent-portable-terminal">Windows/Creating a Decent Portable Terminal</a></li><li><a href="/blog/template">Windows/Merging HyperV Snapshots With Powershell</a></li><li><a href="/blog/simulating-bad-blocks-on-ntfs-drive">Windows/Simulating Bad Blocks on NTFS Filesystems</a></li><li><a href="/blog/windows-server-create-and-view-storport-trace">Windows/Creating and Viewing a Storport on Windows Server</a></li><li><a href="/blog/windows-11-powershell-upgrade-script">Windows/Windows 11 PowerShell Upgrade Script</a></li><li><a href="/blog/mikrotik-creating-client-to-site-vpn">Mikrotik/Creating a Client to Site VPN With</a></li><li><a href="/blog/mikrotik-securing-router-with-firewall">Mikrotik/Securing Router With Firewall</a></li><li><a href="/blog/mikrotik-setup-dynamic-dns-with-no-ip-api">Mikrotik Setup Dynamically Changing IP With No-IP Api</a></li></ul></div><div id="sidebar-main"></div><div id="sidebar-header"><svg id="hamburger" viewBox="0 0 24 24" onclick="sidebarShow()"><path d="M21,6H3V5h18V6z M21,11H3v1h18V11z M21,17H3v1h18V17z"></path></svg><a href="/">Queztaz.org</a></div><div id="sidebar-content"><div id="sidebar"><ul><li><a href="/">Queztaz.org</a></li><li><a href="/blog/blog/">Queztaz/Blog</a></li><li><a href="/blog/inventory/">Queztaz/Tech Inventory</a></li><li><a href="/blog/emacs-eww-hacks/">Emacs/EWW Hacks</a></li><li><a href="/blog/emacs-with-bidirectional-google-calendar-sync/">Emacs/Emacs With BiDirectional Google Calendar Sync</a></li><li><a href="/blog/emacs-with-mu4e-and-multiple-gmail-accounts">Emacs/Setting up Mu4e and Multiple Gmail Accounts</a></li><li><a href="/blog/creating-offline-debian-mirror/">Linux/Creating an Offline Debian Mirror Repository</a></li><li><a href="/blog/migrate-wiki-js-to-another-server/">Linux/Migrate Wiki.js to Another Server</a></li><li><a href="/blog/adding-bitwarden-to-the-pinephone-pro/">Linux/Adding Bitwarden to the Pinephone Pro</a></li><li><a href="/blog/corebooting-thinkpad-x220-with-ch341-programmer/">Linux/Corebooting Thinkpad X220 With CH341A Programmer</a></li><li><a href="/blog/pbp-custom-kernel/">Pinebook Pro/Custom Kernel</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Keyboard Firmware Update</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Netbsd Installation</a></li><li><a href="/blog/pbp-setting-up-zram/">Pinebook Pro/Setting Up Zram</a></li><li><a href="/blog/pbp-troubleshooting-common-issues">Pinebook Troubleshooting/Pro Common Issues</a></li><li><a href="/blog/pbp-use-nvme-as-root">Pinebook Pro/Use NVME as Root</a></li><li><a href="/blog/pbp-write-to-spi-flash">Pinebook Pro/Write to SPI Flash</a></li><li><a href="/blog/qemu-chroot-into-different-architecture">Qemu/Chroot Into a Different Architecture</a></li><li><a href="/blog/qemu-chroot-into-img-file">Qemu/Choot Into an Img File</a></li><li><a href="/blog/qemu-mount-virtual-images">Qemu/Mount Virtual Images</a></li><li><a href="/blog/qemu-windows-xp-fix-smb-not-working">Qemu/Windows Xp Fix Smb Not Working</a></li><li><a href="/blog/qemu-windows-xp-installation">Qemu/Windows Xp Installation</a></li><li><a href="/blog/tg1672G-default-wifi-password">Misc/Finding the Default Wireless Password to TG1672G Routers</a></li><li><a href="/blog/portable-ollama-installation">Misc/Running Ollama Portably</a></li><li><a href="/blog/resetting-unifi-controller-password-with-mongodb-cli">Misc/Resetting Unifi Controller Password with MongoDB CLI</a></li><li><a href="/blog/turning-a-firestick-into-a-portable-pc">Misc/Turning an Amazon FireStick into a Portable Computer</a></li><li><a href="/blog/cloning-bios-drive-to-uefi-with-disimilar-hardware">Windows/Cloning a Bios Boot Drive to Disimilar Hardware with UEFI</a></li><li><a href="/blog/automating-chkdsk-scan-with-powershell-and-email-alerts">Windows/Automatic CHKDSK Scans Using Powershell & Email Alerts</a></li><li><a href="/blog/creating-decent-portable-terminal">Windows/Creating a Decent Portable Terminal</a></li><li><a href="/blog/template">Windows/Merging HyperV Snapshots With Powershell</a></li><li><a href="/blog/simulating-bad-blocks-on-ntfs-drive">Windows/Simulating Bad Blocks on NTFS Filesystems</a></li><li><a href="/blog/windows-server-create-and-view-storport-trace">Windows/Creating and Viewing a Storport on Windows Server</a></li><li><a href="/blog/windows-11-powershell-upgrade-script">Windows/Windows 11 PowerShell Upgrade Script</a></li><li><a href="/blog/mikrotik-creating-client-to-site-vpn">Mikrotik/Creating a Client to Site VPN With</a></li><li><a href="/blog/mikrotik-securing-router-with-firewall">Mikrotik/Securing Router With Firewall</a></li><li><a href="/blog/mikrotik-setup-dynamic-dns-with-no-ip-api">Mikrotik Setup Dynamically Changing IP With No-IP Api</a></li></ul></div><article><div class="title"><h1>Linux/Creating an Offline Debian Mirror Repository</h1></div><div class="toc"><div><div>Table of content</div><div>
 <ul>
-<li><a href="#one-d14c5aa962">Creating the offline mirror</a></li>
-<li><a href="#one-8464806c28">Overview</a></li>
-<li><a href="#one-f1fe05addb">Mirror Script</a></li>
-<li><a href="#one-7a9e5a497b">Sync the Mirror Repo to a local folder</a></li>
-<li><a href="#one-9ec9237537">Generate a package list</a></li>
-<li><a href="#one-7e069a4b39">Using the mirror</a></li>
-<li><a href="#one-408492f8f7">Source Code</a>
+<li><a href="#one-885ce1227d">Creating the offline mirror</a></li>
+<li><a href="#one-8d799dede4">Overview</a></li>
+<li><a href="#one-4d8ff95016">Mirror Script</a></li>
+<li><a href="#one-3ef87dc844">Sync the Mirror Repo to a local folder</a></li>
+<li><a href="#one-dc64b36196">Generate a package list</a></li>
+<li><a href="#one-c4a4c40ce1">Using the mirror</a></li>
+<li><a href="#one-3a39c14adf">Source Code</a>
 <ul>
-<li><a href="#one-87a4468d38">Mirror.sh</a></li>
-<li><a href="#one-76f18d3033">debmirror.conf</a></li>
-<li><a href="#one-3983386168">cron-debmirror</a></li>
+<li><a href="#one-f4499cc49b">Mirror.sh</a></li>
+<li><a href="#one-6149b45234">debmirror.conf</a></li>
+<li><a href="#one-de9505182f">cron-debmirror</a></li>
 </ul>
 </li>
 </ul>
@@ -18,8 +18,8 @@
 not all, packages available.
 </p>
 </div>
-<div><h2 id="one-d14c5aa962">Creating the offline mirror</h2></div>
-<div><h2 id="one-8464806c28">Overview</h2><div><ul><li><p>Install <a href="https://github.com/xr09/debian-mini-repo/blob/master/cron-debmirror">xr09&apos;s mirror script</a>
+<div><h2 id="one-885ce1227d">Creating the offline mirror</h2></div>
+<div><h2 id="one-8d799dede4">Overview</h2><div><ul><li><p>Install <a href="https://github.com/xr09/debian-mini-repo/blob/master/cron-debmirror">xr09&apos;s mirror script</a>
 </p>
 </li>
 <li><p>Download Packages to folder
@@ -34,7 +34,7 @@ not all, packages available.
 </ul>
 </div>
 </div>
-<div><h2 id="one-f1fe05addb">Mirror Script</h2><div><p>Clone this repo: <a href="https://github.com/xr09/debian-mini-repo/blob/master/cron-debmirror">https://github.com/xr09/debian-mini-repo/blob/master/cron-debmirror</a>
+<div><h2 id="one-4d8ff95016">Mirror Script</h2><div><p>Clone this repo: <a href="https://github.com/xr09/debian-mini-repo/blob/master/cron-debmirror">https://github.com/xr09/debian-mini-repo/blob/master/cron-debmirror</a>
 </p>
 
 <p>Edit the script and change the <code class="one-hl one-hl-inline">REPOS_DIR</code> variable in the mirror.sh file. This
@@ -51,13 +51,13 @@ script will expect to find the file in <code class="one-hl one-hl-inline">/opt/<
 </p>
 </div>
 </div>
-<div><h2 id="one-7a9e5a497b">Sync the Mirror Repo to a local folder</h2><div><p>Run the mirror script. This will begin downloading all the Debian packages.
+<div><h2 id="one-3ef87dc844">Sync the Mirror Repo to a local folder</h2><div><p>Run the mirror script. This will begin downloading all the Debian packages.
 </p>
 
 <pre><code class="one-hl one-hl-block">./mirror.sh</code></pre>
 </div>
 </div>
-<div><h2 id="one-9ec9237537">Generate a package list</h2><div><p>Everytime you re-synchronize your mirror, run this command to recreate the
+<div><h2 id="one-dc64b36196">Generate a package list</h2><div><p>Everytime you re-synchronize your mirror, run this command to recreate the
 package.gz index file. Apt won&apos;t work without this.
 </p>
 
@@ -67,7 +67,7 @@ package.gz index file. Apt won&apos;t work without this.
 <pre><code class="one-hl one-hl-block">dpkg-scanpackages . /dev/null | gzip -9 &gt; Packages.gz</code></pre>
 </div>
 </div>
-<div><h2 id="one-7e069a4b39">Using the mirror</h2><div><p>Add the mirror to your sources.list file. Be mindful of keeping remote
+<div><h2 id="one-c4a4c40ce1">Using the mirror</h2><div><p>Add the mirror to your sources.list file. Be mindful of keeping remote
 repositories in this list. For stability I would suggest only leaving the
 offline repo in your sources file unless otherwise needed.
 </p>
@@ -83,11 +83,11 @@ deb <span class="one-hl-rainbow-delimiters-depth-1">[</span><span class="one-hl-
 apt install ranger</code></pre>
 </div>
 </div>
-<div><h2 id="one-408492f8f7">Source Code</h2><div><p>I modified the mirror.sh script to use a SCRIPT_DIR variable. The debmirror.conf
+<div><h2 id="one-3a39c14adf">Source Code</h2><div><p>I modified the mirror.sh script to use a SCRIPT_DIR variable. The debmirror.conf
 file has debian as the host. The crontab file is unchanged.
 </p>
 </div>
-<div><h3 id="one-87a4468d38">Mirror.sh</h3><div><pre><code class="one-hl one-hl-block"><span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">!/usr/bin/</span><span class="one-hl-keyword">env</span><span class="one-hl-comment"> bash
+<div><h3 id="one-f4499cc49b">Mirror.sh</h3><div><pre><code class="one-hl one-hl-block"><span class="one-hl-comment-delimiter">#</span><span class="one-hl-comment">!/usr/bin/</span><span class="one-hl-keyword">env</span><span class="one-hl-comment"> bash
 </span>
 <span class="one-hl-variable-name">SCRIPT_DIR</span>=$<span class="one-hl-rainbow-delimiters-depth-1">(</span><span class="one-hl-sh-quoted-exec">dirname "$(realpath "$1"</span><span class="one-hl-string">)"</span><span class="one-hl-rainbow-delimiters-depth-1">)</span>
 <span class="one-hl-variable-name">REPOS_DIR</span>=<span class="one-hl-string">"/mnt/Debian/"</span>
@@ -344,7 +344,7 @@ debmirror --method=http --config-file=$<span class="one-hl-variable-name">SCRIPT
           --exclude=<span class="one-hl-string">'(/debian-installer-netboot-images.*)'</span></code></pre>
 </div>
 </div>
-<div><h3 id="one-76f18d3033">debmirror.conf</h3><div><pre><code class="one-hl one-hl-block"># Output options
+<div><h3 id="one-6149b45234">debmirror.conf</h3><div><pre><code class="one-hl one-hl-block"># Output options
 $verbose=1;
 $progress=1;
 $debug=0;
@@ -398,7 +398,7 @@ $diff_mode=&quot;use&quot;;
 1;</code></pre>
 </div>
 </div>
-<div><h3 id="one-3983386168">cron-debmirror</h3><div><pre><code class="one-hl one-hl-block"># place this file at /etc/cron.d/debmirror
+<div><h3 id="one-de9505182f">cron-debmirror</h3><div><pre><code class="one-hl one-hl-block"># place this file at /etc/cron.d/debmirror
 
 
 # change the paths if you need to
@@ -408,7 +408,7 @@ $diff_mode=&quot;use&quot;;
 </div>
 </div>
 </div>
-<div class="nav"><a href="/blog/emacs-with-mu4e-and-multiple-gmail-accounts">PREV</a><a href="/blog/qemu-mount-virtual-images">RANDOM</a><a href="/blog/migrate-wiki-js-to-another-server/">NEXT</a></div></article></div></body><script>
+<div class="nav"><a href="/blog/emacs-with-mu4e-and-multiple-gmail-accounts">PREV</a><a href="/blog/turning-a-firestick-into-a-portable-pc">RANDOM</a><a href="/blog/migrate-wiki-js-to-another-server/">NEXT</a></div></article></div></body><script>
 function sidebarShow() {
   if (window.innerWidth < 481)
     document.getElementById('sidebar-left').style.width = '75vw';

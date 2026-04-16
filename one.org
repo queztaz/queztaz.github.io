@@ -30,6 +30,33 @@ are stored in one emacs org document! WOW!
 I post about computers and anything I'm working on. There's currently no set
 pattern to it. Whatever intuitively comes to mind I post.
 
+* Queztaz/Blog
+:PROPERTIES:
+:ONE: one-default-doc
+:CUSTOM_ID: /blog/blog/
+:CREATED: <2026-04-16 Thu 10:08>
+:END:
+** First blog post <2026-04-16 Thu 09:18>
+Welcome! I'm not exactly sure what I'll be including on this page. I have many projects I don't ever finish until completion. Right now, for instance, I would like to start learning how to trade stocks. I've told myself I have to start first with waking up early, as that should be the easiest and mandatory step in this process. I've said that if I spend the next 10 years of my life reading about stocks, I should actually become half decent at trading. The goal is to make money in the game of capitalism. I don't want to work all of my life
+
+Today on my walk I considered detoxing from my phone. It's proving to be less exciting since i use my phone for everything. Instead i'll try to integrated and be mindful of my usage.
+
+This is my favorite quote of this last two weeks
+
+#+begin_quote
+I am Neo
+
+You are Neo
+
+We are all Neo & perceived reality is being disturbed
+#+end_quote
+
+I saw someone being negative constantly the text chat of an overwatch game. The one thing i was thinking was that this guy was literally Neo from the matrix, and he's using his power to be negative. His mood was a reaction to his perceptions, and he made a choice to influence the perceived reality of others by being a negative baby (he lost the game ha).
+
+This is just a fun concept for me rn. Not to be taken literal.
+
+~ Queztaz
+
 * Queztaz/Tech Inventory
 :PROPERTIES:
 :ONE: one-default-doc
@@ -47,6 +74,8 @@ remotely access the box.
 I game over the cloud, split screen, using the GeoForce now application. A
 second powered USB C to HDMI is used to connect to a larger TV Screen. Up to 6
 devices can connect to bluetooth.
+
+image:tech-inventory/20260322_182158.jpg
 
 image:tech-inventory/PXL_20260122_201608759.jpg
 
