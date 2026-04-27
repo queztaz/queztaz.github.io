@@ -1,0 +1,150 @@
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1" /><link rel="stylesheet" type="text/css" href="/one.css" /><title>Windows/Simulating Bad Blocks on NTFS Filesystems</title></head><body><div id="sidebar-left" onclick="followSidebarLink()"><div><div>Pages</div></div><ul><li><a href="/">Queztaz.org</a></li><li><a href="/blog/book-list/">Queztaz/Book List</a></li><li><a href="/blog/inventory/">Queztaz/Tech Inventory</a></li><li><a href="/blog/emacs-eww-hacks/">Emacs/EWW Hacks</a></li><li><a href="/blog/emacs-with-bidirectional-google-calendar-sync/">Emacs/Emacs With BiDirectional Google Calendar Sync</a></li><li><a href="/blog/emacs-with-mu4e-and-multiple-gmail-accounts">Emacs/Setting up Mu4e and Multiple Gmail Accounts</a></li><li><a href="/blog/creating-offline-debian-mirror/">Linux/Creating an Offline Debian Mirror Repository</a></li><li><a href="/blog/migrate-wiki-js-to-another-server/">Linux/Migrate Wiki.js to Another Server</a></li><li><a href="/blog/adding-bitwarden-to-the-pinephone-pro/">Linux/Adding Bitwarden to the Pinephone Pro</a></li><li><a href="/blog/corebooting-thinkpad-x220-with-ch341-programmer/">Linux/Corebooting Thinkpad X220 With CH341A Programmer</a></li><li><a href="/blog/pbp-custom-kernel/">Pinebook Pro/Custom Kernel</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Keyboard Firmware Update</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Netbsd Installation</a></li><li><a href="/blog/pbp-setting-up-zram/">Pinebook Pro/Setting Up Zram</a></li><li><a href="/blog/pbp-troubleshooting-common-issues">Pinebook Troubleshooting/Pro Common Issues</a></li><li><a href="/blog/pbp-use-nvme-as-root">Pinebook Pro/Use NVME as Root</a></li><li><a href="/blog/pbp-write-to-spi-flash">Pinebook Pro/Write to SPI Flash</a></li><li><a href="/blog/qemu-chroot-into-different-architecture">Qemu/Chroot Into a Different Architecture</a></li><li><a href="/blog/qemu-chroot-into-img-file">Qemu/Choot Into an Img File</a></li><li><a href="/blog/qemu-mount-virtual-images">Qemu/Mount Virtual Images</a></li><li><a href="/blog/qemu-windows-xp-fix-smb-not-working">Qemu/Windows Xp Fix Smb Not Working</a></li><li><a href="/blog/qemu-windows-xp-installation">Qemu/Windows Xp Installation</a></li><li><a href="/blog/tg1672G-default-wifi-password">Misc/Finding the Default Wireless Password to TG1672G Routers</a></li><li><a href="/blog/portable-ollama-installation">Misc/Running Ollama Portably</a></li><li><a href="/blog/resetting-unifi-controller-password-with-mongodb-cli">Misc/Resetting Unifi Controller Password with MongoDB CLI</a></li><li><a href="/blog/turning-a-firestick-into-a-portable-pc">Misc/Turning an Amazon FireStick into a Portable Computer</a></li><li><a href="/blog/cloning-bios-drive-to-uefi-with-disimilar-hardware">Windows/Cloning a Bios Boot Drive to Disimilar Hardware with UEFI</a></li><li><a href="/blog/automating-chkdsk-scan-with-powershell-and-email-alerts">Windows/Automatic CHKDSK Scans Using Powershell & Email Alerts</a></li><li><a href="/blog/creating-decent-portable-terminal">Windows/Creating a Decent Portable Terminal</a></li><li><a href="/blog/template">Windows/Merging HyperV Snapshots With Powershell</a></li><li><a href="/blog/simulating-bad-blocks-on-ntfs-drive">Windows/Simulating Bad Blocks on NTFS Filesystems</a></li><li><a href="/blog/windows-server-create-and-view-storport-trace">Windows/Creating and Viewing a Storport on Windows Server</a></li><li><a href="/blog/windows-11-powershell-upgrade-script">Windows/Windows 11 PowerShell Upgrade Script</a></li><li><a href="/blog/mikrotik-creating-client-to-site-vpn">Mikrotik/Creating a Client to Site VPN With</a></li><li><a href="/blog/mikrotik-securing-router-with-firewall">Mikrotik/Securing Router With Firewall</a></li><li><a href="/blog/mikrotik-setup-dynamic-dns-with-no-ip-api">Mikrotik Setup Dynamically Changing IP With No-IP Api</a></li></ul></div><div id="sidebar-main"></div><div id="sidebar-header"><svg id="hamburger" viewBox="0 0 24 24" onclick="sidebarShow()"><path d="M21,6H3V5h18V6z M21,11H3v1h18V11z M21,17H3v1h18V17z"></path></svg><a href="/">Queztaz.org</a></div><div id="sidebar-content"><div id="sidebar"><ul><li><a href="/">Queztaz.org</a></li><li><a href="/blog/book-list/">Queztaz/Book List</a></li><li><a href="/blog/inventory/">Queztaz/Tech Inventory</a></li><li><a href="/blog/emacs-eww-hacks/">Emacs/EWW Hacks</a></li><li><a href="/blog/emacs-with-bidirectional-google-calendar-sync/">Emacs/Emacs With BiDirectional Google Calendar Sync</a></li><li><a href="/blog/emacs-with-mu4e-and-multiple-gmail-accounts">Emacs/Setting up Mu4e and Multiple Gmail Accounts</a></li><li><a href="/blog/creating-offline-debian-mirror/">Linux/Creating an Offline Debian Mirror Repository</a></li><li><a href="/blog/migrate-wiki-js-to-another-server/">Linux/Migrate Wiki.js to Another Server</a></li><li><a href="/blog/adding-bitwarden-to-the-pinephone-pro/">Linux/Adding Bitwarden to the Pinephone Pro</a></li><li><a href="/blog/corebooting-thinkpad-x220-with-ch341-programmer/">Linux/Corebooting Thinkpad X220 With CH341A Programmer</a></li><li><a href="/blog/pbp-custom-kernel/">Pinebook Pro/Custom Kernel</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Keyboard Firmware Update</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Netbsd Installation</a></li><li><a href="/blog/pbp-setting-up-zram/">Pinebook Pro/Setting Up Zram</a></li><li><a href="/blog/pbp-troubleshooting-common-issues">Pinebook Troubleshooting/Pro Common Issues</a></li><li><a href="/blog/pbp-use-nvme-as-root">Pinebook Pro/Use NVME as Root</a></li><li><a href="/blog/pbp-write-to-spi-flash">Pinebook Pro/Write to SPI Flash</a></li><li><a href="/blog/qemu-chroot-into-different-architecture">Qemu/Chroot Into a Different Architecture</a></li><li><a href="/blog/qemu-chroot-into-img-file">Qemu/Choot Into an Img File</a></li><li><a href="/blog/qemu-mount-virtual-images">Qemu/Mount Virtual Images</a></li><li><a href="/blog/qemu-windows-xp-fix-smb-not-working">Qemu/Windows Xp Fix Smb Not Working</a></li><li><a href="/blog/qemu-windows-xp-installation">Qemu/Windows Xp Installation</a></li><li><a href="/blog/tg1672G-default-wifi-password">Misc/Finding the Default Wireless Password to TG1672G Routers</a></li><li><a href="/blog/portable-ollama-installation">Misc/Running Ollama Portably</a></li><li><a href="/blog/resetting-unifi-controller-password-with-mongodb-cli">Misc/Resetting Unifi Controller Password with MongoDB CLI</a></li><li><a href="/blog/turning-a-firestick-into-a-portable-pc">Misc/Turning an Amazon FireStick into a Portable Computer</a></li><li><a href="/blog/cloning-bios-drive-to-uefi-with-disimilar-hardware">Windows/Cloning a Bios Boot Drive to Disimilar Hardware with UEFI</a></li><li><a href="/blog/automating-chkdsk-scan-with-powershell-and-email-alerts">Windows/Automatic CHKDSK Scans Using Powershell & Email Alerts</a></li><li><a href="/blog/creating-decent-portable-terminal">Windows/Creating a Decent Portable Terminal</a></li><li><a href="/blog/template">Windows/Merging HyperV Snapshots With Powershell</a></li><li><a href="/blog/simulating-bad-blocks-on-ntfs-drive">Windows/Simulating Bad Blocks on NTFS Filesystems</a></li><li><a href="/blog/windows-server-create-and-view-storport-trace">Windows/Creating and Viewing a Storport on Windows Server</a></li><li><a href="/blog/windows-11-powershell-upgrade-script">Windows/Windows 11 PowerShell Upgrade Script</a></li><li><a href="/blog/mikrotik-creating-client-to-site-vpn">Mikrotik/Creating a Client to Site VPN With</a></li><li><a href="/blog/mikrotik-securing-router-with-firewall">Mikrotik/Securing Router With Firewall</a></li><li><a href="/blog/mikrotik-setup-dynamic-dns-with-no-ip-api">Mikrotik Setup Dynamically Changing IP With No-IP Api</a></li></ul></div><article><div class="title"><h1>Windows/Simulating Bad Blocks on NTFS Filesystems</h1></div><div class="toc"><div><div>Table of content</div><div>
+<ul>
+<li><a href="#one-714575cec0">Simulating Corruption</a>
+<ul>
+<li><a href="#one-b0a394f350">Creating the test environment</a></li>
+</ul>
+</li>
+<li><a href="#one-c420f7b682">Setting up the NTFS Volume</a>
+<ul>
+<li><a href="#one-22a0cb7485">Creating a filesystem</a></li>
+<li><a href="#one-183d6b7648">Output Example</a></li>
+<li><a href="#one-5713d4f7a0">CHKDSK Sample Output</a></li>
+</ul>
+</li>
+</ul>
+</div></div></div><div><p>Directions for simulating a file system corruption error on an NTFS drive on a
+Windows host system. This is useful when you are testing tools that require this
+error exist.
+</p>
+</div>
+<div><h2 id="one-714575cec0">Simulating Corruption</h2><div><p><a href="https://github.com/jamersonpro/ntfsmarkbad">https://github.com/jamersonpro/ntfsmarkbad</a>
+</p>
+</div>
+<div><h3 id="one-b0a394f350">Creating the test environment</h3><div><p>Create the folder for our demo environment
+</p>
+
+<pre><code class="one-hl one-hl-block">mkdir BadBlocktest
+cd BadBlockTest</code></pre>
+
+<p>Download the NtfsMarkBad tool
+</p>
+
+<pre><code class="one-hl one-hl-block"><span class="one-hl-function-name">Invoke-WebRequest</span> <span class="one-hl-constant">-Uri</span> <span class="one-hl-string">"https://github.com/jamersonpro/ntfsmarkbad/releases/download/v0.0.2/NtfsMarkBad.exe"</span> <span class="one-hl-constant">-Outfile</span> <span class="one-hl-string">"NtfsMarkBad.exe"</span> <span class="one-hl-constant">-UseBasicParsing</span></code></pre>
+
+<p>Create a virtual hard disk file
+</p>
+
+<pre><code class="one-hl one-hl-block"><span class="one-hl-function-name">New-VHD</span> <span class="one-hl-constant">-Path</span> <span class="one-hl-string">"BadBlocks.vhd"</span> <span class="one-hl-constant">-Fixed</span> <span class="one-hl-constant">-SizeBytes</span> 100MB
+<span class="one-hl-function-name">Mount-VHD</span> .\BadBlocks.vhd</code></pre>
+</div>
+</div>
+</div>
+<div><h2 id="one-c420f7b682">Setting up the NTFS Volume</h2><div><h3 id="one-22a0cb7485">Creating a filesystem</h3><div><p>Open DiskMGMT.msc. The first prompt will be to format the
+drive. Select GPT and format the device using NTFS with the default
+settings.
+</p>
+
+<p>Now use NtfsMarkbad.exe with the drive letter of the mounted VHD. Copy the
+&quot;First Volume Sector&quot; value for later.
+</p>
+
+<pre><code class="one-hl one-hl-block">./NtfsMarkbad.exe G:
+
+Output:
+NTFSMARKBAD 0.0.2 x64     https://github.com/jamersonpro/ntfsmarkbad
+
+Scanning volume...
+First volume sector: 128 **MAKE NOTE OF THIS**
+Last volume sector: 16511
+Bytes per sector: 512
+Sectors per cluster: 8
+Total cluster count: 2047
+Completed.</code></pre>
+
+<p>These commands will create a file slightly larger than 1MB in size. Files less
+than this will get stored directly in the MFT Table instead of on sectors of the
+FS
+</p>
+
+<pre><code class="one-hl one-hl-block">fsutil.exe file createnew G:\file.txt 1048576
+fsutil.exe file queryextents G:\file.txt
+
+Output: VCN: 0x0        Clusters: 0x100      LCN: 0x5c0</code></pre>
+
+<p>The NtfsMarkBad.exe software requires a range of sectors to mark as bad. Using
+the data from the <code class="one-hl one-hl-inline">queryextents</code> command, copy this template to mark your drive as
+bad. The sections you need to replace with your own values are commented
+</p>
+
+<pre><code class="one-hl one-hl-block"><span class="one-hl-variable-name">$SectorsPerCluster</span>=8
+<span class="one-hl-variable-name">$FirstVolumeSector</span>=1000
+<span class="one-hl-variable-name">$VCN</span>=<span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-1">[</span></span><span class="one-hl-type">uint32</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-1">]</span></span><span class="one-hl-string">"0x0"</span>        <span class="one-hl-comment"># Change this
+</span><span class="one-hl-variable-name">$CLUSTERS</span>=<span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-1">[</span></span><span class="one-hl-type">uint32</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-1">]</span></span><span class="one-hl-string">"0x100"</span> <span class="one-hl-comment"># Change this
+</span><span class="one-hl-variable-name">$LCN</span>=<span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-1">[</span></span><span class="one-hl-type">uint32</span><span class="one-hl-type"><span class="one-hl-rainbow-delimiters-depth-1">]</span></span><span class="one-hl-string">"0x5c0"</span>      <span class="one-hl-comment"># Change this
+</span>
+<span class="one-hl-variable-name">$LCN</span> = <span class="one-hl-rainbow-delimiters-depth-1">(</span><span class="one-hl-variable-name">$VCN</span> + <span class="one-hl-variable-name">$LCN</span><span class="one-hl-rainbow-delimiters-depth-1">)</span>
+<span class="one-hl-variable-name">$StartingSector</span> = <span class="one-hl-rainbow-delimiters-depth-1">(</span><span class="one-hl-rainbow-delimiters-depth-2">(</span><span class="one-hl-variable-name">$LCN</span> * <span class="one-hl-variable-name">$SectorsPerCluster</span><span class="one-hl-rainbow-delimiters-depth-2">)</span> + <span class="one-hl-variable-name">$FirstVolumeSector</span><span class="one-hl-rainbow-delimiters-depth-1">)</span>
+<span class="one-hl-variable-name">$EndingSector</span> = <span class="one-hl-rainbow-delimiters-depth-1">(</span><span class="one-hl-rainbow-delimiters-depth-2">(</span><span class="one-hl-rainbow-delimiters-depth-3">(</span><span class="one-hl-variable-name">$LCN</span> + <span class="one-hl-variable-name">$CLUSTERS</span> -1<span class="one-hl-rainbow-delimiters-depth-3">)</span> * <span class="one-hl-variable-name">$SectorsPerCluster</span><span class="one-hl-rainbow-delimiters-depth-2">)</span> + <span class="one-hl-variable-name">$FirstVolumeSector</span><span class="one-hl-rainbow-delimiters-depth-1">)</span>
+
+./NtfsMarkBad.exe G: <span class="one-hl-variable-name">$StartingSector</span> <span class="one-hl-variable-name">$EndingSector</span></code></pre>
+</div>
+</div>
+<div><h3 id="one-183d6b7648">Output Example</h3><div><pre><code class="one-hl one-hl-block">PS F:\Programs\Forensics&gt;   ./NtfsMarkBad.exe D: $StartingSector $EndingSector
+NTFSMARKBAD 0.0.2 x64     https://github.com/jamersonpro/ntfsmarkbad
+
+Scanning volume...
+First volume sector: 128
+Last volume sector: 200831
+Bytes per sector: 512
+Sectors per cluster: 8
+Total cluster count: 25087
+The number of clusters skipped since they already marked bad: 0
+The number of clusters skipped since they are in use: 1360
+The number of selected clusters: 108
+Adding 108 clusters to the Bad Clusters File...
+Completed.
+PS F:\Programs\Forensics&gt;</code></pre>
+
+<p>PS C:&gt;   ./NtfsMarkBad.exe G: $StartingSector $EndingSector
+NTFSMARKBAD 0.0.2 x64     <a href="https://github.com/jamersonpro/ntfsmarkbad">https://github.com/jamersonpro/ntfsmarkbad</a>
+</p>
+
+<p>Scanning volume...
+First volume sector: 128
+Last volume sector: 16511
+Bytes per sector: 512
+Sectors per cluster: 8
+Total cluster count: 2047
+The number of clusters skipped since they already marked bad: 0
+The number of clusters skipped since they are in use: 131
+The number of selected clusters: 0
+No clusters to add to the Bad Clusters File.
+</p>
+</div>
+</div>
+<div><h3 id="one-5713d4f7a0">CHKDSK Sample Output</h3><div><pre><code class="one-hl one-hl-block">PS C:\Users\Peter\BadBlocksTest&gt; chkdsk /f G:
+The type of the file system is NTFS.
+
+Chkdsk cannot run because the volume is <span class="one-hl-keyword">in</span> use by another
+<span class="one-hl-keyword">process</span>.  Chkdsk may run <span class="one-hl-keyword">if</span> this volume is dismounted first.
+ALL OPENED HANDLES TO THIS VOLUME WOULD THEN BE INVALID.
+Would you like to force a dismount on this volume? <span class="one-hl-rainbow-delimiters-depth-1">(</span>Y/N<span class="one-hl-rainbow-delimiters-depth-1">)</span></code></pre>
+</div>
+</div>
+</div>
+<div class="nav"><a href="/blog/template">PREV</a><a href="/blog/creating-decent-portable-terminal">RANDOM</a><a href="/blog/windows-server-create-and-view-storport-trace">NEXT</a></div></article></div></body><script>
+function sidebarShow() {
+  if (window.innerWidth < 481)
+    document.getElementById('sidebar-left').style.width = '75vw';
+  else {
+    document.getElementById('sidebar-left').style.width = 'min(300px, 34vw)';
+  }
+  document.getElementById('sidebar-main').setAttribute('onclick', 'sidebarHide()');
+  document.getElementById('sidebar-main').style.display = 'block';
+}
+function sidebarHide() {
+  document.getElementById('sidebar-left').style.width = '0';
+  document.getElementById('sidebar-main').style.display = 'none';
+}
+</script></html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1" /><link rel="stylesheet" type="text/css" href="/one.css" /><title>Windows/Windows 11 PowerShell Upgrade Script</title></head><body><div id="sidebar-left" onclick="followSidebarLink()"><div><div>Pages</div></div><ul><li><a href="/">Queztaz.org</a></li><li><a href="/blog/book-list/">Queztaz/Book List</a></li><li><a href="/blog/inventory/">Queztaz/Tech Inventory</a></li><li><a href="/blog/emacs-eww-hacks/">Emacs/EWW Hacks</a></li><li><a href="/blog/emacs-with-bidirectional-google-calendar-sync/">Emacs/Emacs With BiDirectional Google Calendar Sync</a></li><li><a href="/blog/emacs-with-mu4e-and-multiple-gmail-accounts">Emacs/Setting up Mu4e and Multiple Gmail Accounts</a></li><li><a href="/blog/creating-offline-debian-mirror/">Linux/Creating an Offline Debian Mirror Repository</a></li><li><a href="/blog/migrate-wiki-js-to-another-server/">Linux/Migrate Wiki.js to Another Server</a></li><li><a href="/blog/adding-bitwarden-to-the-pinephone-pro/">Linux/Adding Bitwarden to the Pinephone Pro</a></li><li><a href="/blog/corebooting-thinkpad-x220-with-ch341-programmer/">Linux/Corebooting Thinkpad X220 With CH341A Programmer</a></li><li><a href="/blog/pbp-custom-kernel/">Pinebook Pro/Custom Kernel</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Keyboard Firmware Update</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Netbsd Installation</a></li><li><a href="/blog/pbp-setting-up-zram/">Pinebook Pro/Setting Up Zram</a></li><li><a href="/blog/pbp-troubleshooting-common-issues">Pinebook Troubleshooting/Pro Common Issues</a></li><li><a href="/blog/pbp-use-nvme-as-root">Pinebook Pro/Use NVME as Root</a></li><li><a href="/blog/pbp-write-to-spi-flash">Pinebook Pro/Write to SPI Flash</a></li><li><a href="/blog/qemu-chroot-into-different-architecture">Qemu/Chroot Into a Different Architecture</a></li><li><a href="/blog/qemu-chroot-into-img-file">Qemu/Choot Into an Img File</a></li><li><a href="/blog/qemu-mount-virtual-images">Qemu/Mount Virtual Images</a></li><li><a href="/blog/qemu-windows-xp-fix-smb-not-working">Qemu/Windows Xp Fix Smb Not Working</a></li><li><a href="/blog/qemu-windows-xp-installation">Qemu/Windows Xp Installation</a></li><li><a href="/blog/tg1672G-default-wifi-password">Misc/Finding the Default Wireless Password to TG1672G Routers</a></li><li><a href="/blog/portable-ollama-installation">Misc/Running Ollama Portably</a></li><li><a href="/blog/resetting-unifi-controller-password-with-mongodb-cli">Misc/Resetting Unifi Controller Password with MongoDB CLI</a></li><li><a href="/blog/turning-a-firestick-into-a-portable-pc">Misc/Turning an Amazon FireStick into a Portable Computer</a></li><li><a href="/blog/cloning-bios-drive-to-uefi-with-disimilar-hardware">Windows/Cloning a Bios Boot Drive to Disimilar Hardware with UEFI</a></li><li><a href="/blog/automating-chkdsk-scan-with-powershell-and-email-alerts">Windows/Automatic CHKDSK Scans Using Powershell & Email Alerts</a></li><li><a href="/blog/creating-decent-portable-terminal">Windows/Creating a Decent Portable Terminal</a></li><li><a href="/blog/template">Windows/Merging HyperV Snapshots With Powershell</a></li><li><a href="/blog/simulating-bad-blocks-on-ntfs-drive">Windows/Simulating Bad Blocks on NTFS Filesystems</a></li><li><a href="/blog/windows-server-create-and-view-storport-trace">Windows/Creating and Viewing a Storport on Windows Server</a></li><li><a href="/blog/windows-11-powershell-upgrade-script">Windows/Windows 11 PowerShell Upgrade Script</a></li><li><a href="/blog/mikrotik-creating-client-to-site-vpn">Mikrotik/Creating a Client to Site VPN With</a></li><li><a href="/blog/mikrotik-securing-router-with-firewall">Mikrotik/Securing Router With Firewall</a></li><li><a href="/blog/mikrotik-setup-dynamic-dns-with-no-ip-api">Mikrotik Setup Dynamically Changing IP With No-IP Api</a></li></ul></div><div id="sidebar-main"></div><div id="sidebar-header"><svg id="hamburger" viewBox="0 0 24 24" onclick="sidebarShow()"><path d="M21,6H3V5h18V6z M21,11H3v1h18V11z M21,17H3v1h18V17z"></path></svg><a href="/">Queztaz.org</a></div><div id="sidebar-content"><div id="sidebar"><ul><li><a href="/">Queztaz.org</a></li><li><a href="/blog/book-list/">Queztaz/Book List</a></li><li><a href="/blog/inventory/">Queztaz/Tech Inventory</a></li><li><a href="/blog/emacs-eww-hacks/">Emacs/EWW Hacks</a></li><li><a href="/blog/emacs-with-bidirectional-google-calendar-sync/">Emacs/Emacs With BiDirectional Google Calendar Sync</a></li><li><a href="/blog/emacs-with-mu4e-and-multiple-gmail-accounts">Emacs/Setting up Mu4e and Multiple Gmail Accounts</a></li><li><a href="/blog/creating-offline-debian-mirror/">Linux/Creating an Offline Debian Mirror Repository</a></li><li><a href="/blog/migrate-wiki-js-to-another-server/">Linux/Migrate Wiki.js to Another Server</a></li><li><a href="/blog/adding-bitwarden-to-the-pinephone-pro/">Linux/Adding Bitwarden to the Pinephone Pro</a></li><li><a href="/blog/corebooting-thinkpad-x220-with-ch341-programmer/">Linux/Corebooting Thinkpad X220 With CH341A Programmer</a></li><li><a href="/blog/pbp-custom-kernel/">Pinebook Pro/Custom Kernel</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Keyboard Firmware Update</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Netbsd Installation</a></li><li><a href="/blog/pbp-setting-up-zram/">Pinebook Pro/Setting Up Zram</a></li><li><a href="/blog/pbp-troubleshooting-common-issues">Pinebook Troubleshooting/Pro Common Issues</a></li><li><a href="/blog/pbp-use-nvme-as-root">Pinebook Pro/Use NVME as Root</a></li><li><a href="/blog/pbp-write-to-spi-flash">Pinebook Pro/Write to SPI Flash</a></li><li><a href="/blog/qemu-chroot-into-different-architecture">Qemu/Chroot Into a Different Architecture</a></li><li><a href="/blog/qemu-chroot-into-img-file">Qemu/Choot Into an Img File</a></li><li><a href="/blog/qemu-mount-virtual-images">Qemu/Mount Virtual Images</a></li><li><a href="/blog/qemu-windows-xp-fix-smb-not-working">Qemu/Windows Xp Fix Smb Not Working</a></li><li><a href="/blog/qemu-windows-xp-installation">Qemu/Windows Xp Installation</a></li><li><a href="/blog/tg1672G-default-wifi-password">Misc/Finding the Default Wireless Password to TG1672G Routers</a></li><li><a href="/blog/portable-ollama-installation">Misc/Running Ollama Portably</a></li><li><a href="/blog/resetting-unifi-controller-password-with-mongodb-cli">Misc/Resetting Unifi Controller Password with MongoDB CLI</a></li><li><a href="/blog/turning-a-firestick-into-a-portable-pc">Misc/Turning an Amazon FireStick into a Portable Computer</a></li><li><a href="/blog/cloning-bios-drive-to-uefi-with-disimilar-hardware">Windows/Cloning a Bios Boot Drive to Disimilar Hardware with UEFI</a></li><li><a href="/blog/automating-chkdsk-scan-with-powershell-and-email-alerts">Windows/Automatic CHKDSK Scans Using Powershell & Email Alerts</a></li><li><a href="/blog/creating-decent-portable-terminal">Windows/Creating a Decent Portable Terminal</a></li><li><a href="/blog/template">Windows/Merging HyperV Snapshots With Powershell</a></li><li><a href="/blog/simulating-bad-blocks-on-ntfs-drive">Windows/Simulating Bad Blocks on NTFS Filesystems</a></li><li><a href="/blog/windows-server-create-and-view-storport-trace">Windows/Creating and Viewing a Storport on Windows Server</a></li><li><a href="/blog/windows-11-powershell-upgrade-script">Windows/Windows 11 PowerShell Upgrade Script</a></li><li><a href="/blog/mikrotik-creating-client-to-site-vpn">Mikrotik/Creating a Client to Site VPN With</a></li><li><a href="/blog/mikrotik-securing-router-with-firewall">Mikrotik/Securing Router With Firewall</a></li><li><a href="/blog/mikrotik-setup-dynamic-dns-with-no-ip-api">Mikrotik Setup Dynamically Changing IP With No-IP Api</a></li></ul></div><article><div class="title"><h1>Windows/Windows 11 PowerShell Upgrade Script</h1></div><div class="toc"><div><div>Table of content</div><div>
+<ul>
+<li><a href="#one-7d00a0385">Script Source</a></li>
+</ul>
+</div></div></div><div><p>This is a script I wrote to upgrade Windows 10 computers to Windows 11 by
+downloading an ISO file. It deploys some fixes and checks to increase the
+success rate of computers upgrading when deployed VIA RMM
+</p>
+
+<ul><li><p>Install 7ZIP and copy <code class="one-hl one-hl-inline">7z.exe</code> and <code class="one-hl one-hl-inline">7x.dll</code> from <code class="one-hl one-hl-inline">C:\Program Files\7-Zip</code> into the
+same folder as the script
+</p>
+</li>
+<li><p>Update the URL to the ISO file using the massgrave.dev link in the script comments
+</p>
+</li>
+</ul>
+</div>
+<div><h2 id="one-7d00a0385">Script Source</h2><div><pre><code class="one-hl one-hl-block"><span class="one-hl-comment-delimiter"># </span><span class="one-hl-comment">Source for direct links: https://massgrave.dev/windows_11_links
+</span><span class="one-hl-comment-delimiter"># </span><span class="one-hl-comment">Use that page to replace this one if it breaks
+</span><span class="one-hl-variable-name">$ISOURL</span>=<span class="one-hl-string">"https://software-static.download.prss.microsoft.com/dbazure/888969d5-f34g-4e03-ac9d-1f9786c66749/26200.6584.250915-1905.25h2_ge_release_svc_refresh_CLIENT_CONSUMER_x64FRE_en-us.iso"</span>
+
+<span class="one-hl-builtin">$ProgressPreference</span>=<span class="one-hl-string">"SilentlyContinue"</span>
+<span class="one-hl-comment-delimiter"># </span><span class="one-hl-comment">https://social.technet.microsoft.com/Forums/windows/en-US/51104081-4ed7-4fdd-8b12-5d1f5be532ae/windows-10-feature-update-via-cmd-powershell-or-gpo
+</span><span class="one-hl-comment-delimiter"># </span><span class="one-hl-comment">Exit if not running Windows 10
+</span><span class="one-hl-variable-name">$WINVER</span> = <span class="one-hl-rainbow-delimiters-depth-1">(</span><span class="one-hl-function-name">Get-CimInstance</span> <span class="one-hl-constant">-ClassName</span> Win32_OperatingSystem<span class="one-hl-rainbow-delimiters-depth-1">)</span>.Caption
+<span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-1">(</span> <span class="one-hl-variable-name">$WINVER</span> <span class="one-hl-builtin">-notlike</span> <span class="one-hl-string">"*Windows 10*"</span><span class="one-hl-rainbow-delimiters-depth-1">){</span>
+  <span class="one-hl-function-name">Write-Host</span> <span class="one-hl-string">"This script only works with Windows 10. Current OSVersion: $WINVER"</span>
+  <span class="one-hl-keyword">Exit</span> 1
+<span class="one-hl-rainbow-delimiters-depth-1">}</span>
+
+<span class="one-hl-comment-delimiter"># </span><span class="one-hl-comment">Exit if TPM2.0 is not present
+</span><span class="one-hl-variable-name">$tpm</span>=<span class="one-hl-rainbow-delimiters-depth-1">(</span><span class="one-hl-function-name">Get-WmiObject</span> <span class="one-hl-constant">-Namespace</span> <span class="one-hl-string">"Root\CIMV2\Security\MicrosoftTpm"</span> <span class="one-hl-constant">-Class</span> Win32_Tpm | select specversion | <span class="one-hl-function-name">Select-String</span> <span class="one-hl-string">"2.0"</span><span class="one-hl-rainbow-delimiters-depth-1">)</span>
+
+<span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-1">(</span><span class="one-hl-builtin">-not</span> <span class="one-hl-variable-name">$tpm</span><span class="one-hl-rainbow-delimiters-depth-1">){</span>
+   <span class="one-hl-string">"TPM 2.0 is not available. Please attempt to upgrade manually. Exiting script to prevent hangs"</span>
+   <span class="one-hl-keyword">Exit</span> 1
+<span class="one-hl-rainbow-delimiters-depth-1">}</span>
+
+<span class="one-hl-comment-delimiter"># </span><span class="one-hl-comment">These folders can cause Windows Updates to fail
+</span><span class="one-hl-function-name">Stop-Service</span> <span class="one-hl-constant">-Name</span> wuauserv
+<span class="one-hl-function-name">Remove-Item</span> <span class="one-hl-string">'C:\$Windows.~WS'</span> <span class="one-hl-constant">-Recurse</span> <span class="one-hl-constant">-Force</span> <span class="one-hl-constant">-ErrorAction</span> SilentlyContinue
+<span class="one-hl-function-name">Remove-Item</span> <span class="one-hl-string">'C:\$Windows.~BT'</span> <span class="one-hl-constant">-Recurse</span> <span class="one-hl-constant">-Force</span> <span class="one-hl-constant">-ErrorAction</span> SilentlyContinue
+<span class="one-hl-function-name">Remove-Item</span> <span class="one-hl-string">'C:\$GetCurrent'</span> <span class="one-hl-constant">-Recurse</span> <span class="one-hl-constant">-Force</span> <span class="one-hl-constant">-ErrorAction</span> SilentlyContinue
+<span class="one-hl-function-name">Start-Service</span> <span class="one-hl-constant">-Name</span> wuauserv
+
+<span class="one-hl-comment-delimiter"># </span><span class="one-hl-comment">Restarting the Windows installer Service
+</span><span class="one-hl-function-name">Stop-Service</span> <span class="one-hl-constant">-Name</span> msiserver
+<span class="one-hl-function-name">Start-Service</span> <span class="one-hl-constant">-Name</span> msiserver
+
+<span class="one-hl-comment-delimiter"># </span><span class="one-hl-comment">Removing Registry keys that specifically block Windows 11 upgrades
+</span><span class="one-hl-comment-delimiter"># </span><span class="one-hl-comment">These keys would have been manually added by a technician
+</span>reg DELETE HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate /v <span class="one-hl-string">"ProductVersion"</span>/f
+reg DELETE HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate /v <span class="one-hl-string">"TargetReleaseVersion"</span> /f
+reg DELETE HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate /v <span class="one-hl-string">"TargetReleaseVersionInfo"</span> /f
+reg DELETE HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate /v <span class="one-hl-string">"DeferFeatureUpdates"</span> /f
+reg DELETE HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate /v <span class="one-hl-string">"DeferFeatureUpdatesPeriodInDay"</span> /f
+
+<span class="one-hl-comment-delimiter"># </span><span class="one-hl-comment">Clear local group policy
+</span><span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-1">(</span><span class="one-hl-variable-name">$</span><span class="one-hl-underline"><span class="one-hl-type">env</span></span><span class="one-hl-variable-name">:ClearLocalGP</span> <span class="one-hl-builtin">-eq</span> <span class="one-hl-builtin">$true</span><span class="one-hl-rainbow-delimiters-depth-1">){</span>
+  <span class="one-hl-function-name">Remove-Item</span> <span class="one-hl-string">"$env:WinDir\System32\GroupPolicyUsers"</span> <span class="one-hl-constant">-Recurse</span> <span class="one-hl-constant">-Force</span> <span class="one-hl-constant">-ErrorAction</span> SilentlyContinue
+  <span class="one-hl-function-name">Remove-Item</span> <span class="one-hl-string">"$env:WinDir\System32\GroupPolicy"</span> <span class="one-hl-constant">-Recurse</span> <span class="one-hl-constant">-Force</span> <span class="one-hl-constant">-ErrorAction</span> SilentlyContinue
+<span class="one-hl-rainbow-delimiters-depth-1">}</span>
+
+<span class="one-hl-comment-delimiter"># </span><span class="one-hl-comment">Uninstalls the Windows 10 Update Assistant.
+</span><span class="one-hl-function-name">Stop-Process</span> <span class="one-hl-constant">-Name</span> <span class="one-hl-string">"Windows10UpgraderApp"</span> <span class="one-hl-constant">-Force</span>
+<span class="one-hl-function-name">Start-Process</span> <span class="one-hl-constant">-FilePath</span> <span class="one-hl-string">"C:\Program Files (x86)\WindowsInstallationAssistant\Windows10UpgraderApp.exe"</span> <span class="one-hl-constant">-ArgumentList</span> <span class="one-hl-string">"/forceuninstall"</span> <span class="one-hl-constant">-wait</span>
+<span class="one-hl-variable-name">$dir</span>=<span class="one-hl-string">"C:\Windows\Temp\Windows11UpgradeFiles"</span>
+
+<span class="one-hl-comment-delimiter"># </span><span class="one-hl-comment">Downloading the ISO file
+</span><span class="one-hl-function-name">Write-Host</span> <span class="one-hl-string">"Starting upgrade using ISO File"</span>
+<span class="one-hl-keyword">if</span> <span class="one-hl-rainbow-delimiters-depth-1">(</span><span class="one-hl-function-name">Test-Path</span> <span class="one-hl-constant">-Path</span> <span class="one-hl-string">"$dir\ExtractedISO"</span><span class="one-hl-rainbow-delimiters-depth-1">)</span> <span class="one-hl-rainbow-delimiters-depth-1">{</span>
+  <span class="one-hl-function-name">Remove-Item</span> <span class="one-hl-constant">-Recurse</span> <span class="one-hl-constant">-Path</span> <span class="one-hl-string">"$dir\ExtractedISO"</span> <span class="one-hl-constant">-Force</span>
+<span class="one-hl-rainbow-delimiters-depth-1">}</span>
+mkdir <span class="one-hl-string">"$dir"</span>
+mkdir <span class="one-hl-string">"$dir\ExtractedISO"</span>
+<span class="one-hl-function-name">Write-Host</span> <span class="one-hl-string">"Downloading ISO from $ISOURL"</span>
+<span class="one-hl-function-name">Invoke-WebRequest</span> <span class="one-hl-constant">-URI</span> <span class="one-hl-string">"$ISOURL"</span> <span class="one-hl-constant">-OutFile</span> <span class="one-hl-string">"$dir\Windows11.iso"</span>
+  
+
+<span class="one-hl-function-name">Write-Host</span> <span class="one-hl-string">"Extracting ISO Setup Files"</span>
+./7z.exe x <span class="one-hl-string">"$dir\windows11.iso"</span> <span class="one-hl-constant">-o</span><span class="one-hl-string">"$dir\ExtractedISO\"</span>
+rm <span class="one-hl-string">"$dir\Windows11.iso"</span>
+
+<span class="one-hl-function-name">Write-Host</span> <span class="one-hl-string">"Running DISM"</span>
+dism /online /<span class="one-hl-function-name">cleanup-image</span> /restorehealth
+<span class="one-hl-function-name">Write-Host</span> <span class="one-hl-string">"Running SFC"</span>
+sfc /scannow
+
+<span class="one-hl-function-name">Start-Process</span> <span class="one-hl-constant">-FilePath</span> <span class="one-hl-string">"$dir\ExtractedISO\setup.exe"</span> <span class="one-hl-constant">-ArgumentList</span> <span class="one-hl-string">'/Auto Upgrade /DynamicUpdate Disable /Telemetry disable /compat IgnoreWarning /ShowOOBE none /EULA accept'</span> <span class="one-hl-constant">-Wait</span></code></pre>
+</div>
+</div>
+<div class="nav"><a href="/blog/windows-server-create-and-view-storport-trace">PREV</a><a href="/blog/adding-bitwarden-to-the-pinephone-pro/">RANDOM</a><a href="/blog/mikrotik-creating-client-to-site-vpn">NEXT</a></div></article></div></body><script>
+function sidebarShow() {
+  if (window.innerWidth < 481)
+    document.getElementById('sidebar-left').style.width = '75vw';
+  else {
+    document.getElementById('sidebar-left').style.width = 'min(300px, 34vw)';
+  }
+  document.getElementById('sidebar-main').setAttribute('onclick', 'sidebarHide()');
+  document.getElementById('sidebar-main').style.display = 'block';
+}
+function sidebarHide() {
+  document.getElementById('sidebar-left').style.width = '0';
+  document.getElementById('sidebar-main').style.display = 'none';
+}
+</script></html>
