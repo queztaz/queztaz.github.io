@@ -1,30 +1,30 @@
-<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1" /><link rel="stylesheet" type="text/css" href="/one.css" /><title>Emacs/Setting up Mu4e and Multiple Gmail Accounts</title></head><body><div id="sidebar-left" onclick="followSidebarLink()"><div><div>Pages</div></div><ul><li><a href="/">Queztaz.org</a></li><li><a href="/blog/book-list/">Queztaz/Book List</a></li><li><a href="/blog/inventory/">Queztaz/Tech Inventory</a></li><li><a href="/blog/emacs-eww-hacks/">Emacs/EWW Hacks</a></li><li><a href="/blog/emacs-with-bidirectional-google-calendar-sync/">Emacs/Emacs With BiDirectional Google Calendar Sync</a></li><li><a href="/blog/emacs-with-mu4e-and-multiple-gmail-accounts">Emacs/Setting up Mu4e and Multiple Gmail Accounts</a></li><li><a href="/blog/creating-offline-debian-mirror/">Linux/Creating an Offline Debian Mirror Repository</a></li><li><a href="/blog/migrate-wiki-js-to-another-server/">Linux/Migrate Wiki.js to Another Server</a></li><li><a href="/blog/adding-bitwarden-to-the-pinephone-pro/">Linux/Adding Bitwarden to the Pinephone Pro</a></li><li><a href="/blog/corebooting-thinkpad-x220-with-ch341-programmer/">Linux/Corebooting Thinkpad X220 With CH341A Programmer</a></li><li><a href="/blog/pbp-custom-kernel/">Pinebook Pro/Custom Kernel</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Keyboard Firmware Update</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Netbsd Installation</a></li><li><a href="/blog/pbp-setting-up-zram/">Pinebook Pro/Setting Up Zram</a></li><li><a href="/blog/pbp-troubleshooting-common-issues">Pinebook Troubleshooting/Pro Common Issues</a></li><li><a href="/blog/pbp-use-nvme-as-root">Pinebook Pro/Use NVME as Root</a></li><li><a href="/blog/pbp-write-to-spi-flash">Pinebook Pro/Write to SPI Flash</a></li><li><a href="/blog/qemu-chroot-into-different-architecture">Qemu/Chroot Into a Different Architecture</a></li><li><a href="/blog/qemu-chroot-into-img-file">Qemu/Choot Into an Img File</a></li><li><a href="/blog/qemu-mount-virtual-images">Qemu/Mount Virtual Images</a></li><li><a href="/blog/qemu-windows-xp-fix-smb-not-working">Qemu/Windows Xp Fix Smb Not Working</a></li><li><a href="/blog/qemu-windows-xp-installation">Qemu/Windows Xp Installation</a></li><li><a href="/blog/tg1672G-default-wifi-password">Misc/Finding the Default Wireless Password to TG1672G Routers</a></li><li><a href="/blog/portable-ollama-installation">Misc/Running Ollama Portably</a></li><li><a href="/blog/resetting-unifi-controller-password-with-mongodb-cli">Misc/Resetting Unifi Controller Password with MongoDB CLI</a></li><li><a href="/blog/turning-a-firestick-into-a-portable-pc">Misc/Turning an Amazon FireStick into a Portable Computer</a></li><li><a href="/blog/cloning-bios-drive-to-uefi-with-disimilar-hardware">Windows/Cloning a Bios Boot Drive to Disimilar Hardware with UEFI</a></li><li><a href="/blog/automating-chkdsk-scan-with-powershell-and-email-alerts">Windows/Automatic CHKDSK Scans Using Powershell & Email Alerts</a></li><li><a href="/blog/creating-decent-portable-terminal">Windows/Creating a Decent Portable Terminal</a></li><li><a href="/blog/template">Windows/Merging HyperV Snapshots With Powershell</a></li><li><a href="/blog/simulating-bad-blocks-on-ntfs-drive">Windows/Simulating Bad Blocks on NTFS Filesystems</a></li><li><a href="/blog/windows-server-create-and-view-storport-trace">Windows/Creating and Viewing a Storport on Windows Server</a></li><li><a href="/blog/windows-11-powershell-upgrade-script">Windows/Windows 11 PowerShell Upgrade Script</a></li><li><a href="/blog/mikrotik-creating-client-to-site-vpn">Mikrotik/Creating a Client to Site VPN With</a></li><li><a href="/blog/mikrotik-securing-router-with-firewall">Mikrotik/Securing Router With Firewall</a></li><li><a href="/blog/mikrotik-setup-dynamic-dns-with-no-ip-api">Mikrotik Setup Dynamically Changing IP With No-IP Api</a></li></ul></div><div id="sidebar-main"></div><div id="sidebar-header"><svg id="hamburger" viewBox="0 0 24 24" onclick="sidebarShow()"><path d="M21,6H3V5h18V6z M21,11H3v1h18V11z M21,17H3v1h18V17z"></path></svg><a href="/">Queztaz.org</a></div><div id="sidebar-content"><div id="sidebar"><ul><li><a href="/">Queztaz.org</a></li><li><a href="/blog/book-list/">Queztaz/Book List</a></li><li><a href="/blog/inventory/">Queztaz/Tech Inventory</a></li><li><a href="/blog/emacs-eww-hacks/">Emacs/EWW Hacks</a></li><li><a href="/blog/emacs-with-bidirectional-google-calendar-sync/">Emacs/Emacs With BiDirectional Google Calendar Sync</a></li><li><a href="/blog/emacs-with-mu4e-and-multiple-gmail-accounts">Emacs/Setting up Mu4e and Multiple Gmail Accounts</a></li><li><a href="/blog/creating-offline-debian-mirror/">Linux/Creating an Offline Debian Mirror Repository</a></li><li><a href="/blog/migrate-wiki-js-to-another-server/">Linux/Migrate Wiki.js to Another Server</a></li><li><a href="/blog/adding-bitwarden-to-the-pinephone-pro/">Linux/Adding Bitwarden to the Pinephone Pro</a></li><li><a href="/blog/corebooting-thinkpad-x220-with-ch341-programmer/">Linux/Corebooting Thinkpad X220 With CH341A Programmer</a></li><li><a href="/blog/pbp-custom-kernel/">Pinebook Pro/Custom Kernel</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Keyboard Firmware Update</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Netbsd Installation</a></li><li><a href="/blog/pbp-setting-up-zram/">Pinebook Pro/Setting Up Zram</a></li><li><a href="/blog/pbp-troubleshooting-common-issues">Pinebook Troubleshooting/Pro Common Issues</a></li><li><a href="/blog/pbp-use-nvme-as-root">Pinebook Pro/Use NVME as Root</a></li><li><a href="/blog/pbp-write-to-spi-flash">Pinebook Pro/Write to SPI Flash</a></li><li><a href="/blog/qemu-chroot-into-different-architecture">Qemu/Chroot Into a Different Architecture</a></li><li><a href="/blog/qemu-chroot-into-img-file">Qemu/Choot Into an Img File</a></li><li><a href="/blog/qemu-mount-virtual-images">Qemu/Mount Virtual Images</a></li><li><a href="/blog/qemu-windows-xp-fix-smb-not-working">Qemu/Windows Xp Fix Smb Not Working</a></li><li><a href="/blog/qemu-windows-xp-installation">Qemu/Windows Xp Installation</a></li><li><a href="/blog/tg1672G-default-wifi-password">Misc/Finding the Default Wireless Password to TG1672G Routers</a></li><li><a href="/blog/portable-ollama-installation">Misc/Running Ollama Portably</a></li><li><a href="/blog/resetting-unifi-controller-password-with-mongodb-cli">Misc/Resetting Unifi Controller Password with MongoDB CLI</a></li><li><a href="/blog/turning-a-firestick-into-a-portable-pc">Misc/Turning an Amazon FireStick into a Portable Computer</a></li><li><a href="/blog/cloning-bios-drive-to-uefi-with-disimilar-hardware">Windows/Cloning a Bios Boot Drive to Disimilar Hardware with UEFI</a></li><li><a href="/blog/automating-chkdsk-scan-with-powershell-and-email-alerts">Windows/Automatic CHKDSK Scans Using Powershell & Email Alerts</a></li><li><a href="/blog/creating-decent-portable-terminal">Windows/Creating a Decent Portable Terminal</a></li><li><a href="/blog/template">Windows/Merging HyperV Snapshots With Powershell</a></li><li><a href="/blog/simulating-bad-blocks-on-ntfs-drive">Windows/Simulating Bad Blocks on NTFS Filesystems</a></li><li><a href="/blog/windows-server-create-and-view-storport-trace">Windows/Creating and Viewing a Storport on Windows Server</a></li><li><a href="/blog/windows-11-powershell-upgrade-script">Windows/Windows 11 PowerShell Upgrade Script</a></li><li><a href="/blog/mikrotik-creating-client-to-site-vpn">Mikrotik/Creating a Client to Site VPN With</a></li><li><a href="/blog/mikrotik-securing-router-with-firewall">Mikrotik/Securing Router With Firewall</a></li><li><a href="/blog/mikrotik-setup-dynamic-dns-with-no-ip-api">Mikrotik Setup Dynamically Changing IP With No-IP Api</a></li></ul></div><article><div class="title"><h1>Emacs/Setting up Mu4e and Multiple Gmail Accounts</h1></div><div class="toc"><div><div>Table of content</div><div>
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1" /><link rel="stylesheet" type="text/css" href="/one.css" /><title>Emacs/Setting up Mu4e and Multiple Gmail Accounts</title></head><body><div id="sidebar-left" onclick="followSidebarLink()"><div><div>Pages</div></div><ul><li><a href="/">Queztaz.org</a></li><li><a href="/blog/blog/">Queztaz/Blog</a></li><li><a href="/blog/book-list/">Queztaz/Book List</a></li><li><a href="/blog/inventory/">Queztaz/Tech Inventory</a></li><li><a href="/blog/emacs-eww-hacks/">Emacs/EWW Hacks</a></li><li><a href="/blog/emacs-with-bidirectional-google-calendar-sync/">Emacs/Emacs With BiDirectional Google Calendar Sync</a></li><li><a href="/blog/emacs-with-mu4e-and-multiple-gmail-accounts">Emacs/Setting up Mu4e and Multiple Gmail Accounts</a></li><li><a href="/blog/creating-offline-debian-mirror/">Linux/Creating an Offline Debian Mirror Repository</a></li><li><a href="/blog/migrate-wiki-js-to-another-server/">Linux/Migrate Wiki.js to Another Server</a></li><li><a href="/blog/adding-bitwarden-to-the-pinephone-pro/">Linux/Adding Bitwarden to the Pinephone Pro</a></li><li><a href="/blog/corebooting-thinkpad-x220-with-ch341-programmer/">Linux/Corebooting Thinkpad X220 With CH341A Programmer</a></li><li><a href="/blog/pbp-custom-kernel/">Pinebook Pro/Custom Kernel</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Keyboard Firmware Update</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Netbsd Installation</a></li><li><a href="/blog/pbp-setting-up-zram/">Pinebook Pro/Setting Up Zram</a></li><li><a href="/blog/pbp-troubleshooting-common-issues">Pinebook Troubleshooting/Pro Common Issues</a></li><li><a href="/blog/pbp-use-nvme-as-root">Pinebook Pro/Use NVME as Root</a></li><li><a href="/blog/pbp-write-to-spi-flash">Pinebook Pro/Write to SPI Flash</a></li><li><a href="/blog/qemu-chroot-into-different-architecture">Qemu/Chroot Into a Different Architecture</a></li><li><a href="/blog/qemu-chroot-into-img-file">Qemu/Choot Into an Img File</a></li><li><a href="/blog/qemu-mount-virtual-images">Qemu/Mount Virtual Images</a></li><li><a href="/blog/qemu-windows-xp-fix-smb-not-working">Qemu/Windows Xp Fix Smb Not Working</a></li><li><a href="/blog/qemu-windows-xp-installation">Qemu/Windows Xp Installation</a></li><li><a href="/blog/tg1672G-default-wifi-password">Misc/Finding the Default Wireless Password to TG1672G Routers</a></li><li><a href="/blog/portable-ollama-installation">Misc/Running Ollama Portably</a></li><li><a href="/blog/resetting-unifi-controller-password-with-mongodb-cli">Misc/Resetting Unifi Controller Password with MongoDB CLI</a></li><li><a href="/blog/turning-a-firestick-into-a-portable-pc">Misc/Turning an Amazon FireStick into a Portable Computer</a></li><li><a href="/blog/cloning-bios-drive-to-uefi-with-disimilar-hardware">Windows/Cloning a Bios Boot Drive to Disimilar Hardware with UEFI</a></li><li><a href="/blog/automating-chkdsk-scan-with-powershell-and-email-alerts">Windows/Automatic CHKDSK Scans Using Powershell & Email Alerts</a></li><li><a href="/blog/creating-decent-portable-terminal">Windows/Creating a Decent Portable Terminal</a></li><li><a href="/blog/template">Windows/Merging HyperV Snapshots With Powershell</a></li><li><a href="/blog/simulating-bad-blocks-on-ntfs-drive">Windows/Simulating Bad Blocks on NTFS Filesystems</a></li><li><a href="/blog/windows-server-create-and-view-storport-trace">Windows/Creating and Viewing a Storport on Windows Server</a></li><li><a href="/blog/windows-11-powershell-upgrade-script">Windows/Windows 11 PowerShell Upgrade Script</a></li><li><a href="/blog/mikrotik-creating-client-to-site-vpn">Mikrotik/Creating a Client to Site VPN With</a></li><li><a href="/blog/mikrotik-securing-router-with-firewall">Mikrotik/Securing Router With Firewall</a></li><li><a href="/blog/mikrotik-setup-dynamic-dns-with-no-ip-api">Mikrotik Setup Dynamically Changing IP With No-IP Api</a></li></ul></div><div id="sidebar-main"></div><div id="sidebar-header"><svg id="hamburger" viewBox="0 0 24 24" onclick="sidebarShow()"><path d="M21,6H3V5h18V6z M21,11H3v1h18V11z M21,17H3v1h18V17z"></path></svg><a href="/">Queztaz.org</a></div><div id="sidebar-content"><div id="sidebar"><ul><li><a href="/">Queztaz.org</a></li><li><a href="/blog/blog/">Queztaz/Blog</a></li><li><a href="/blog/book-list/">Queztaz/Book List</a></li><li><a href="/blog/inventory/">Queztaz/Tech Inventory</a></li><li><a href="/blog/emacs-eww-hacks/">Emacs/EWW Hacks</a></li><li><a href="/blog/emacs-with-bidirectional-google-calendar-sync/">Emacs/Emacs With BiDirectional Google Calendar Sync</a></li><li><a href="/blog/emacs-with-mu4e-and-multiple-gmail-accounts">Emacs/Setting up Mu4e and Multiple Gmail Accounts</a></li><li><a href="/blog/creating-offline-debian-mirror/">Linux/Creating an Offline Debian Mirror Repository</a></li><li><a href="/blog/migrate-wiki-js-to-another-server/">Linux/Migrate Wiki.js to Another Server</a></li><li><a href="/blog/adding-bitwarden-to-the-pinephone-pro/">Linux/Adding Bitwarden to the Pinephone Pro</a></li><li><a href="/blog/corebooting-thinkpad-x220-with-ch341-programmer/">Linux/Corebooting Thinkpad X220 With CH341A Programmer</a></li><li><a href="/blog/pbp-custom-kernel/">Pinebook Pro/Custom Kernel</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Keyboard Firmware Update</a></li><li><a href="/blog/pbp-keyboard-firmware-update/">Pinebook Pro/Netbsd Installation</a></li><li><a href="/blog/pbp-setting-up-zram/">Pinebook Pro/Setting Up Zram</a></li><li><a href="/blog/pbp-troubleshooting-common-issues">Pinebook Troubleshooting/Pro Common Issues</a></li><li><a href="/blog/pbp-use-nvme-as-root">Pinebook Pro/Use NVME as Root</a></li><li><a href="/blog/pbp-write-to-spi-flash">Pinebook Pro/Write to SPI Flash</a></li><li><a href="/blog/qemu-chroot-into-different-architecture">Qemu/Chroot Into a Different Architecture</a></li><li><a href="/blog/qemu-chroot-into-img-file">Qemu/Choot Into an Img File</a></li><li><a href="/blog/qemu-mount-virtual-images">Qemu/Mount Virtual Images</a></li><li><a href="/blog/qemu-windows-xp-fix-smb-not-working">Qemu/Windows Xp Fix Smb Not Working</a></li><li><a href="/blog/qemu-windows-xp-installation">Qemu/Windows Xp Installation</a></li><li><a href="/blog/tg1672G-default-wifi-password">Misc/Finding the Default Wireless Password to TG1672G Routers</a></li><li><a href="/blog/portable-ollama-installation">Misc/Running Ollama Portably</a></li><li><a href="/blog/resetting-unifi-controller-password-with-mongodb-cli">Misc/Resetting Unifi Controller Password with MongoDB CLI</a></li><li><a href="/blog/turning-a-firestick-into-a-portable-pc">Misc/Turning an Amazon FireStick into a Portable Computer</a></li><li><a href="/blog/cloning-bios-drive-to-uefi-with-disimilar-hardware">Windows/Cloning a Bios Boot Drive to Disimilar Hardware with UEFI</a></li><li><a href="/blog/automating-chkdsk-scan-with-powershell-and-email-alerts">Windows/Automatic CHKDSK Scans Using Powershell & Email Alerts</a></li><li><a href="/blog/creating-decent-portable-terminal">Windows/Creating a Decent Portable Terminal</a></li><li><a href="/blog/template">Windows/Merging HyperV Snapshots With Powershell</a></li><li><a href="/blog/simulating-bad-blocks-on-ntfs-drive">Windows/Simulating Bad Blocks on NTFS Filesystems</a></li><li><a href="/blog/windows-server-create-and-view-storport-trace">Windows/Creating and Viewing a Storport on Windows Server</a></li><li><a href="/blog/windows-11-powershell-upgrade-script">Windows/Windows 11 PowerShell Upgrade Script</a></li><li><a href="/blog/mikrotik-creating-client-to-site-vpn">Mikrotik/Creating a Client to Site VPN With</a></li><li><a href="/blog/mikrotik-securing-router-with-firewall">Mikrotik/Securing Router With Firewall</a></li><li><a href="/blog/mikrotik-setup-dynamic-dns-with-no-ip-api">Mikrotik Setup Dynamically Changing IP With No-IP Api</a></li></ul></div><article><div class="title"><h1>Emacs/Setting up Mu4e and Multiple Gmail Accounts</h1></div><div class="toc"><div><div>Table of content</div><div>
 <ul>
-<li><a href="#one-79aae87731">Gmail</a>
+<li><a href="#one-de3d12571c">Gmail</a>
 <ul>
-<li><a href="#one-fec038f0f3">Creating a Gmail App Password</a></li>
+<li><a href="#one-fd9f489d01">Creating a Gmail App Password</a></li>
 </ul>
 </li>
-<li><a href="#one-81ec3c887d">Compile Mu4e</a>
+<li><a href="#one-c71862c6d7">Compile Mu4e</a>
 <ul>
-<li><a href="#one-bde41c9069">Dependencies</a></li>
-<li><a href="#one-99518d7487">Compiling Mu4e</a></li>
-<li><a href="#one-17355df08">GPG Keys (Encrypting Password)</a></li>
+<li><a href="#one-70bcfcef2b">Dependencies</a></li>
+<li><a href="#one-17a83315ae">Compiling Mu4e</a></li>
+<li><a href="#one-f6609afebf">GPG Keys (Encrypting Password)</a></li>
 </ul>
 </li>
-<li><a href="#one-47b057fcac">Offline Imap (Downloading Emails)</a>
+<li><a href="#one-d5cc19453a">Offline Imap (Downloading Emails)</a>
 <ul>
-<li><a href="#one-f95804841b">Create Email Folder</a></li>
-<li><a href="#one-d992eb22d2">Create password decrypting script</a></li>
-<li><a href="#one-92ce27047b">Create main configuration file</a></li>
-<li><a href="#one-e672621aec">Downloading and Indexing Emails</a></li>
+<li><a href="#one-5e1176f37f">Create Email Folder</a></li>
+<li><a href="#one-a9168c045e">Create password decrypting script</a></li>
+<li><a href="#one-d49c934fd5">Create main configuration file</a></li>
+<li><a href="#one-3d4c099c45">Downloading and Indexing Emails</a></li>
 </ul>
 </li>
-<li><a href="#one-9fde8ad28e">Configuring Emacs</a>
+<li><a href="#one-636fc87a09">Configuring Emacs</a>
 <ul>
-<li><a href="#one-d5e8a1d1d7">Basic Config</a></li>
-<li><a href="#one-2d4a2b9dae">Creating .authinfo.gpg file</a></li>
-<li><a href="#one-2474065f82">Using Mu4e</a></li>
+<li><a href="#one-5865efd0e6">Basic Config</a></li>
+<li><a href="#one-d971f78466">Creating .authinfo.gpg file</a></li>
+<li><a href="#one-11ddc9d827">Using Mu4e</a></li>
 </ul>
 </li>
 </ul>
@@ -33,7 +33,7 @@ contain the directions for using app password authentication. It will be updated
 when XOAUTH2.0 is required.
 </p>
 </div>
-<div><h2 id="one-79aae87731">Gmail</h2><div><p>I&apos;m using app passwords while they still last. Eventually this section will
+<div><h2 id="one-de3d12571c">Gmail</h2><div><p>I&apos;m using app passwords while they still last. Eventually this section will
 contain information on setting up XOAUTH 2.0 when app passwords are fully phased
 out.
 </p>
@@ -42,7 +42,7 @@ out.
 &quot;context&quot; and account dependent keybindings.
 </p>
 </div>
-<div><h3 id="one-fec038f0f3">Creating a Gmail App Password</h3><div><ul><li><p>Open the Gmail account settings
+<div><h3 id="one-fd9f489d01">Creating a Gmail App Password</h3><div><ul><li><p>Open the Gmail account settings
 </p>
 </li>
 <li><p>Enable two factor authentication
@@ -59,13 +59,13 @@ account. Create app passwords for both your email accounts.
 </div>
 </div>
 </div>
-<div><h2 id="one-81ec3c887d">Compile Mu4e</h2><div><p>The application will be compiled from source
+<div><h2 id="one-c71862c6d7">Compile Mu4e</h2><div><p>The application will be compiled from source
 </p>
 </div>
-<div><h3 id="one-bde41c9069">Dependencies</h3><div><pre><code class="one-hl one-hl-block">sudo apt install -y git meson libgmime-3.0-dev libxapian-dev gnutls-bin texinfo libcld2-dev cmake guile-3.0</code></pre>
+<div><h3 id="one-70bcfcef2b">Dependencies</h3><div><pre><code class="one-hl one-hl-block">sudo apt install -y git meson libgmime-3.0-dev libxapian-dev gnutls-bin texinfo libcld2-dev cmake guile-3.0</code></pre>
 </div>
 </div>
-<div><h3 id="one-99518d7487">Compiling Mu4e</h3><div><pre><code class="one-hl one-hl-block">mkdir -p ~/Sources
+<div><h3 id="one-17a83315ae">Compiling Mu4e</h3><div><pre><code class="one-hl one-hl-block">mkdir -p ~/Sources
 git clone https://github.com/emacsmirror/mu4e ~/Sources/mu4e
 <span class="one-hl-builtin">cd</span> ~/Sources/mu4e
 ./autogen.sh
@@ -73,7 +73,7 @@ make
 sudo make install</code></pre>
 </div>
 </div>
-<div><h3 id="one-17355df08">GPG Keys (Encrypting Password)</h3><div><p>Generate your own GPG pair. This will be used to decrypt your password by
+<div><h3 id="one-f6609afebf">GPG Keys (Encrypting Password)</h3><div><p>Generate your own GPG pair. This will be used to decrypt your password by
 offlineimap. Please use the full-key-gen flag instead of following the example
 below. I&apos;m creating a passwordless GPG pair. Its absolutely not secure. This
 avoids having to type a passphrase to decrypt your password files
@@ -85,17 +85,17 @@ pass init &lt;GPGID&gt;</code></pre>
 </div>
 </div>
 </div>
-<div><h2 id="one-47b057fcac">Offline Imap (Downloading Emails)</h2><div><p>OfflineImap will be used to download the emails. Emacs will be used to send the
+<div><h2 id="one-d5cc19453a">Offline Imap (Downloading Emails)</h2><div><p>OfflineImap will be used to download the emails. Emacs will be used to send the
 emails using its SMTP functionality
 </p>
 </div>
-<div><h3 id="one-f95804841b">Create Email Folder</h3><div><p>Create a folder to store your emails
+<div><h3 id="one-5e1176f37f">Create Email Folder</h3><div><p>Create a folder to store your emails
 </p>
 
 <pre><code class="one-hl one-hl-block">mkdir -p ~/Mail/first@gmail.com</code></pre>
 </div>
 </div>
-<div><h3 id="one-d992eb22d2">Create password decrypting script</h3><div><p>Create the following .offlineimap.py script. This will be used in the
+<div><h3 id="one-a9168c045e">Create password decrypting script</h3><div><p>Create the following .offlineimap.py script. This will be used in the
 .offlineimaprc to decrypt our password file
 </p>
 
@@ -108,7 +108,7 @@ def get_pass(account):
 OEM</span></code></pre>
 </div>
 </div>
-<div><h3 id="one-92ce27047b">Create main configuration file</h3><div><p>Now create the main configuration used to download the emails. The only thing
+<div><h3 id="one-d49c934fd5">Create main configuration file</h3><div><p>Now create the main configuration used to download the emails. The only thing
 you need to replace is any reference to first@gmail.com
 </p>
 
@@ -185,7 +185,7 @@ ssl_version = tls1_2
 OEM</span></code></pre>
 </div>
 </div>
-<div><h3 id="one-e672621aec">Downloading and Indexing Emails</h3><div><p>Run the following to commands. <code class="one-hl one-hl-inline">offlineimap</code> is used to start the email
+<div><h3 id="one-3d4c099c45">Downloading and Indexing Emails</h3><div><p>Run the following to commands. <code class="one-hl one-hl-inline">offlineimap</code> is used to start the email
 download. Mu will index the downloaded emails.
 </p>
 
@@ -198,7 +198,7 @@ mu init --maildir=~/Mail <span class="one-hl-sh-escaped-newline">\</span>
 </div>
 </div>
 </div>
-<div><h2 id="one-9fde8ad28e">Configuring Emacs</h2><div><p>At this point you would have installed the emacs mu4e package from source,
+<div><h2 id="one-636fc87a09">Configuring Emacs</h2><div><p>At this point you would have installed the emacs mu4e package from source,
 downloaded your emails to a folder, and lastly indexed it with Mu4e.
 </p>
 
@@ -212,7 +212,7 @@ improvements to Mu4e and the installation of these plugins are out of the scope
 of this guide.
 </p>
 </div>
-<div><h3 id="one-d5e8a1d1d7">Basic Config</h3><div><pre><code class="one-hl one-hl-block"><span class="one-hl-comment-delimiter">;; </span><span class="one-hl-comment">Load mu4e (Maildir email client for Emacs) if its directory exists
+<div><h3 id="one-5865efd0e6">Basic Config</h3><div><pre><code class="one-hl one-hl-block"><span class="one-hl-comment-delimiter">;; </span><span class="one-hl-comment">Load mu4e (Maildir email client for Emacs) if its directory exists
 </span><span class="one-hl-rainbow-delimiters-depth-1">(</span><span class="one-hl-keyword">when</span> <span class="one-hl-rainbow-delimiters-depth-2">(</span>file-directory-p <span class="one-hl-string">"/usr/local/share/emacs/site-lisp/mu4e"</span><span class="one-hl-rainbow-delimiters-depth-2">)</span>
   <span class="one-hl-comment-delimiter">;; </span><span class="one-hl-comment">Load mu4e and its contribution library
 </span>  <span class="one-hl-rainbow-delimiters-depth-2">(</span><span class="one-hl-keyword">require</span> '<span class="one-hl-constant">mu4e</span><span class="one-hl-rainbow-delimiters-depth-2">)</span>
@@ -390,7 +390,7 @@ of this guide.
              <span class="one-hl-rainbow-delimiters-depth-4">(</span>mu4e-context-name <span class="one-hl-rainbow-delimiters-depth-5">(</span>mu4e-context-current<span class="one-hl-rainbow-delimiters-depth-5">)</span><span class="one-hl-rainbow-delimiters-depth-4">)</span><span class="one-hl-rainbow-delimiters-depth-3">)</span><span class="one-hl-rainbow-delimiters-depth-2">)</span><span class="one-hl-rainbow-delimiters-depth-1">)</span></code></pre>
 </div>
 </div>
-<div><h3 id="one-2d4a2b9dae">Creating .authinfo.gpg file</h3><div><p>This file will contain your SMTP password used by emacs to send emails.
+<div><h3 id="one-d971f78466">Creating .authinfo.gpg file</h3><div><p>This file will contain your SMTP password used by emacs to send emails.
 </p>
 
 
@@ -398,14 +398,14 @@ of this guide.
 machine smtp.gmail.com login second@gmail.com password PASSWORDHERE port 587 </code></pre>
 </div>
 </div>
-<div><h3 id="one-2474065f82">Using Mu4e</h3><div><p>Evaluate the code blocks above and launch Mu4e
+<div><h3 id="one-11ddc9d827">Using Mu4e</h3><div><p>Evaluate the code blocks above and launch Mu4e
 </p>
 
 <pre><code class="one-hl one-hl-block">M-x mu4e</code></pre>
 </div>
 </div>
 </div>
-<div class="nav"><a href="/blog/emacs-with-bidirectional-google-calendar-sync/">PREV</a><a href="/blog/emacs-eww-hacks/">RANDOM</a><a href="/blog/creating-offline-debian-mirror/">NEXT</a></div></article></div></body><script>
+<div class="nav"><a href="/blog/emacs-with-bidirectional-google-calendar-sync/">PREV</a><a href="/blog/creating-offline-debian-mirror/">RANDOM</a><a href="/blog/creating-offline-debian-mirror/">NEXT</a></div></article></div></body><script>
 function sidebarShow() {
   if (window.innerWidth < 481)
     document.getElementById('sidebar-left').style.width = '75vw';
