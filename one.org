@@ -39,7 +39,7 @@ experience in your life" ~ Tony Robins
 * Queztaz/Blog
 :PROPERTIES:
 :ONE: one-default-doc
-:CUSTOM_ID: /blog/blog/
+:CUSTOM_ID: /blog/
 :CREATED: <2026-04-16 Thu 09:18>
 :END:
 
