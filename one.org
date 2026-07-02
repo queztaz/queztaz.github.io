@@ -47,14 +47,20 @@ experience in your life" ~ Tony Robins
 - The Power of Now by Eckhart Tolle
 - The Proximity Principle by Ken Coleman
 - How to Win Friends and Influence People by Dale Carnegie
+- The Great Mental Models Volume 1: General Thinking Concepts by Shane Parrish
+- Flowers for Algernon by Daniel Keyes
+- Fourth Wing: Empyrean, Book 1 by Rebecca Yarros
+- Blink, The Power of Thinking Without Thinking, by Malcolm Gladwell
+
 
 ** Books started and not finished
-- Flowers for Algernon by Daniel Keyes
-- The Five Love Languages by Gary Chapman
-- Blink, The Power of Thinking Without Thinking, by Malcolm Gladwell
+- The Great Mental Models Volume 2: General Thinking Concepts by Shane Parrish
+- Paul Ekman - Emotions Revealed.
 
 ** Books recommended to me
 #+begin_quote
+The Five Love Languages by Gary Chapman
+
 Albert Camu - the stranger : guy who feels indifferent about life
 
 Franz Kafka - the metamorphisis : family man starts to become a big bug overnight and gradually transforms
