@@ -3825,6 +3825,112 @@ sfc /scannow
 Start-Process -FilePath "$dir\ExtractedISO\setup.exe" -ArgumentList '/Auto Upgrade /DynamicUpdate Disable /Telemetry disable /compat IgnoreWarning /ShowOOBE none /EULA accept' -Wait
 #+end_src
 
+* Windows/Prepare system for Virtualbox Virtualization
+:PROPERTIES:
+:ONE: one-default-doc
+:CUSTOM_ID: /blog/windows-11-prepare-system-for-virtualbox-virtualization
+:CREATED: <2026-07-19 Sun 12:00>
+:END:
+
+Virtualbox on Windows 11 does not run with virtualization by default. There are
+some security features enabled by default which cause the turtle status icon in
+VBox to appear. I read online that this means that HyperV is enabled on the
+host, so the virtual machine will run without hardware acceleration mode enabled
+(super slow).
+
+This batch script will change all the settings necessary to make Virtualbox VM's
+run as fast as possible. The turtle icon should vanish after running these
+commands.
+
+I forgot if I used AI, or had AI revised a batch script batch script I gave it
+from a YouTube video. Anyways, create a batch file with this file content and
+run it as administrator to fix slow virtualbox VMs
+
+#+begin_src bat
+@echo off
+echo ============================================
+echo Disabling Credential Guard, VBS, Hyper-V
+echo ============================================
+
+REM ------------------------------------------------
+REM 1. Disable Credential Guard (Registry)
+REM ------------------------------------------------
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Lsa" ^
+ /v LsaCfgFlags /t REG_DWORD /d 0 /f
+
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard" ^
+ /v LsaCfgFlags /t REG_DWORD /d 0 /f
+
+REM ------------------------------------------------
+REM 2. Disable Credential Guard with UEFI lock
+REM ------------------------------------------------
+mountvol X: /s
+
+copy "%WINDIR%\System32\SecConfig.efi" ^
+ "X:\EFI\Microsoft\Boot\SecConfig.efi" /Y
+
+bcdedit /create {0cb3b571-2f2e-4343-a879-d86a476d7215} ^
+ /d "DebugTool" /application osloader
+
+bcdedit /set {0cb3b571-2f2e-4343-a879-d86a476d7215} ^
+ path "\EFI\Microsoft\Boot\SecConfig.efi"
+
+bcdedit /set {bootmgr} bootsequence ^
+ {0cb3b571-2f2e-4343-a879-d86a476d7215}
+
+bcdedit /set {0cb3b571-2f2e-4343-a879-d86a476d7215} ^
+ loadoptions DISABLE-LSA-ISO
+
+bcdedit /set {0cb3b571-2f2e-4343-a879-d86a476d7215} ^
+ device partition=X:
+
+mountvol X: /d
+
+REM ------------------------------------------------
+REM 3. Disable VBS (Registry – delete keys)
+REM ------------------------------------------------
+reg delete "HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard" ^
+ /v EnableVirtualizationBasedSecurity /f
+
+reg delete "HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard" ^
+ /v RequirePlatformSecurityFeatures /f
+
+REM ------------------------------------------------
+REM 4. Disable VBS + LSA ISO via BCDEdit
+REM ------------------------------------------------
+bcdedit /set {0cb3b571-2f2e-4343-a879-d86a476d7215} ^
+ loadoptions DISABLE-LSA-ISO,DISABLE-VBS
+
+bcdedit /set vsmlaunchtype off
+
+REM ------------------------------------------------
+REM 5. Disable VBS via Group Policy equivalent
+REM (Turn On Virtualization Based Security = Disabled)
+REM ------------------------------------------------
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard" ^
+ /v EnableVirtualizationBasedSecurity /t REG_DWORD /d 0 /f
+
+REM ------------------------------------------------
+REM 6. Disable Core Isolation (Memory Integrity)
+REM ------------------------------------------------
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity" ^
+ /v Enabled /t REG_DWORD /d 0 /f
+
+REM ------------------------------------------------
+REM 7. Disable Windows Features
+REM ------------------------------------------------
+dism /online /disable-feature /featurename:Microsoft-Hyper-V-All /norestart
+dism /online /disable-feature /featurename:VirtualMachinePlatform /norestart
+dism /online /disable-feature /featurename:Microsoft-Windows-Subsystem-Linux /norestart
+
+REM ------------------------------------------------
+REM 8. Reboot
+REM ------------------------------------------------
+echo.
+echo All changes applied.
+echo System will reboot in 10 seconds...
+#+end_src
+
 * Mikrotik/Creating a Client to Site VPN With 
 :PROPERTIES:
 :ONE: one-default-doc
